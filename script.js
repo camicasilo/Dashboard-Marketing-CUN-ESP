@@ -1,0 +1,831 @@
+// ==========================================================================
+// DATOS HISTÓRICOS REALES CANÓNICOS (ENERO - MAYO 2026)
+// ==========================================================================
+const datosReales = {
+  meses: ['Ene', 'Feb', 'Mar', 'Abr', 'May'],
+  ventas: [5500, 8800, 6700, 7900, 10200],
+  pauta: [2200, 3300, 2700, 3100, 3900],
+  visitas: [1100, 1650, 1350, 1480, 1580],
+  adquiridos: [55, 85, 65, 78, 92],
+  csat: [7.5, 4.2, 6.8, 9.4, 8.1],
+  encuestas: [110, 145, 135, 165, 158],
+  clientes_ini: [1000, 1100, 1250, 1400, 1550],
+  clientes_fin: [1100, 1250, 1400, 1550, 1700],
+  total_clientes: [1155, 1335, 1465, 1628, 1792],
+  cpa: [40.00, 38.82, 41.54, 39.74, 42.39],
+  margen: [60.00, 64.71, 61.54, 61.54, 68.48],
+  cr: [5.00, 5.15, 4.81, 5.27, 5.82],
+  retencion: [110.0, 113.64, 112.0, 110.71, 109.68],
+  ratio: [0.1875, 0.1082, 0.1637, 0.2365, 0.1911],
+  roas: [2.50, 2.67, 2.48, 2.55, 2.62]
+};
+
+// ESTADO DE LA SIMULACIÓN
+let simState = {
+  gasto: 3100,
+  soporte: 15,
+  visitas: 1480,
+  tasaConv: 5.27,
+  clientes: 78,
+  pautaNeta: 2635,
+  gastoCX: 465,
+  cpa: 33.78,
+  ventas: 7917,
+  csat: 9.4,
+  margen: 67.72,
+  roas: 2.55,
+  ratio: 0.2783
+};
+
+let tabActiva = 1;
+// ABRE SIEMPRE CON EL MODO MARTE POR DEFECTO
+let currentTheme = 'marte';
+let chartInstance = null;
+
+// Elementos DOM
+const appBody = document.getElementById('app-body');
+const rngGasto = document.getElementById('rng-gasto');
+const rngSoporte = document.getElementById('rng-soporte');
+const rngVisitas = document.getElementById('rng-visitas');
+
+const txtGasto = document.getElementById('txt-gasto');
+const txtSoporte = document.getElementById('txt-soporte');
+const txtVisitas = document.getElementById('txt-visitas');
+
+const kpiVentas = document.getElementById('kpi-ventas');
+const kpiRoas = document.getElementById('kpi-roas');
+const kpiClientes = document.getElementById('kpi-clientes');
+const kpiTasaConv = document.getElementById('kpi-tasa-conv');
+const kpiCpa = document.getElementById('kpi-cpa');
+const kpiCpaStatus = document.getElementById('kpi-cpa-status');
+const kpiCsat = document.getElementById('kpi-csat');
+const kpiCsatStatus = document.getElementById('kpi-csat-status');
+const kpiMargen = document.getElementById('kpi-margen');
+const kpiRatio = document.getElementById('kpi-ratio');
+
+const lblMiniMargen = document.getElementById('lbl-mini-margen');
+const lblMiniCX = document.getElementById('lbl-mini-cx');
+const lblMiniPauta = document.getElementById('lbl-mini-pauta');
+
+const badgeEstado = document.getElementById('badge-estado');
+const boxDiagnostico = document.getElementById('box-diagnostico');
+const boxInterpretacion = document.getElementById('box-interpretacion-grafica');
+const tabDescripcion = document.getElementById('tab-descripcion');
+const txtExplicacionCorta = document.getElementById('txt-explicacion-corta');
+
+const btnThemeToggle = document.getElementById('btn-theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+const themeLabel = document.getElementById('theme-label');
+
+// ==========================================================================
+// FUNCIÓN PARA CAMBIAR ENTRE MODO MARTE Y MODO GERENCIAL MONOCROMO
+// ==========================================================================
+function toggleTheme() {
+  if (currentTheme === 'marte') {
+    currentTheme = 'gerencial';
+    appBody.classList.remove('theme-marte');
+    appBody.classList.add('theme-gerencial');
+    themeIcon.textContent = '🪐';
+    themeLabel.textContent = 'Modo Marte';
+    btnThemeToggle.className = 'text-[11px] px-2.5 py-1 rounded font-bold transition flex items-center gap-1.5 border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200';
+  } else {
+    currentTheme = 'marte';
+    appBody.classList.remove('theme-gerencial');
+    appBody.classList.add('theme-marte');
+    themeIcon.textContent = '👔';
+    themeLabel.textContent = 'Modo Gerencial';
+    btnThemeToggle.className = 'text-[11px] px-2.5 py-1 rounded font-bold transition flex items-center gap-1.5 border border-[#571C1D] bg-[#2A0E13] hover:bg-[#3D141B] text-[#FFD8B0]';
+  }
+  actualizarUI();
+}
+
+// ==========================================================================
+// MODELO PARAMÉTRICO DE SIMULACIÓN EN TIEMPO REAL
+// ==========================================================================
+function calcularParametros() {
+  const gasto = parseFloat(rngGasto.value);
+  const soporte = parseFloat(rngSoporte.value);
+  const visitas = parseFloat(rngVisitas.value);
+
+  // Conversión calibrada con los datos reales
+  const factorSaturacion = Math.max(0.85, 1 - (visitas - 1100) * 0.0001);
+  const tasaConv = Math.min(6.2, Math.max(4.5, (5.2 * factorSaturacion)));
+  const clientes = Math.round(visitas * (tasaConv / 100));
+
+  const gastoCX = Math.round(gasto * (soporte / 100));
+  const pautaNeta = gasto - gastoCX;
+  const cpa = clientes > 0 ? (pautaNeta / clientes) : 0;
+  const precioUnitario = 101.5;
+  const ventas = Math.round(clientes * precioUnitario);
+  const margen = precioUnitario - cpa;
+  const roas = gasto > 0 ? (ventas / gasto).toFixed(2) : 0;
+
+  // Modelo dinámico de Satisfacción
+  let csatBase = 7.5;
+  const sobrecarga = (clientes - 55) * 0.085;
+  const alivioSoporte = (soporte / 15) * 3.3;
+  let csat = Math.min(9.8, Math.max(3.2, csatBase - sobrecarga + alivioSoporte));
+  const ratio = cpa > 0 ? (csat / cpa).toFixed(4) : 0;
+
+  simState = {
+    gasto, soporte, visitas, tasaConv, clientes, pautaNeta, gastoCX,
+    cpa, ventas, csat, margen, roas, ratio
+  };
+
+  actualizarUI();
+}
+
+function actualizarUI() {
+  txtGasto.textContent = `$${simState.gasto.toLocaleString('es-CO')}`;
+  txtSoporte.textContent = `${simState.soporte} %`;
+  txtVisitas.textContent = simState.visitas.toLocaleString('es-CO');
+
+  kpiVentas.textContent = `$${simState.ventas.toLocaleString('es-CO')}`;
+  kpiRoas.textContent = `ROAS: ${simState.roas}x`;
+  kpiClientes.textContent = simState.clientes;
+  kpiTasaConv.textContent = `CR: ${simState.tasaConv.toFixed(2)}%`;
+  kpiCpa.textContent = `$${simState.cpa.toFixed(2)}`;
+  kpiCsat.textContent = `${simState.csat.toFixed(1)} / 10`;
+  kpiMargen.textContent = `$${simState.margen.toFixed(2)}`;
+  kpiRatio.textContent = simState.ratio;
+
+  lblMiniMargen.textContent = `$${simState.margen.toFixed(2)} USD`;
+  lblMiniCX.textContent = `$${simState.gastoCX} USD`;
+  lblMiniPauta.textContent = `$${simState.pautaNeta} USD`;
+
+  if (simState.csat >= 8.5) {
+    kpiCsatStatus.textContent = 'Excelente (Óptimo)';
+    kpiCsatStatus.className = 'text-[9px] text-emerald-400 font-semibold';
+    kpiCsat.className = 'text-base font-black text-emerald-400 mt-0.5';
+  } else if (simState.csat >= 6.5) {
+    kpiCsatStatus.textContent = 'Aceptable';
+    kpiCsatStatus.className = 'text-[9px] text-amber-400 font-semibold';
+    kpiCsat.className = 'text-base font-black text-amber-400 mt-0.5';
+  } else {
+    kpiCsatStatus.textContent = '¡Alerta de Colapso!';
+    kpiCsatStatus.className = 'text-[9px] text-rose-400 font-semibold animate-pulse';
+    kpiCsat.className = 'text-base font-black text-rose-400 mt-0.5';
+  }
+
+  actualizarDiagnostico();
+  actualizarInterpretacionGrafica();
+  renderizarGraficaActiva();
+}
+
+function actualizarDiagnostico() {
+  let badge = 'EQUILIBRIO SALUDABLE';
+  let badgeClase = 'badge-exito';
+  let html = '';
+
+  if (simState.csat < 5.5) {
+    badge = 'PELIGRO: CRISIS TIPO FEBRERO';
+    badgeClase = 'badge-alerta';
+    html = `
+      <p class="text-rose-400 font-bold">⚠️ Estás repitiendo la crisis de febrero de 2026.</p>
+      <p class="text-slate-300">Captaste <strong>${simState.clientes} clientes</strong> pero solo dejaste un <strong>${simState.soporte}% en soporte</strong>. El CPA parece barato ($${simState.cpa.toFixed(2)}), pero la satisfacción cayó a <strong>${simState.csat.toFixed(1)}/10</strong>. Los clientes no volverán a comprar repuestos ni misiones.</p>
+      <div class="p-1.5 rounded bg-rose-950/40 border border-rose-800/40 text-rose-300 text-[10px]">
+        <strong>Solución:</strong> Sube la palanca de soporte a mínimo 12-15%.
+      </div>
+    `;
+  } else if (simState.cpa > 43.0) {
+    badge = 'ALERTA: RENDIMIENTOS DECRECIENTES';
+    badgeClase = 'badge-advertencia';
+    html = `
+      <p class="text-amber-400 font-bold">⚠️ Saturación publicitaria en curso (Efecto Mayo).</p>
+      <p class="text-slate-300">El CPA subió a <strong>$${simState.cpa.toFixed(2)} USD</strong>. Estás pagando una prima muy alta por atraer tráfico frío a la misión.</p>
+    `;
+  } else if (simState.csat >= 8.8 && simState.cpa <= 41.0) {
+    badge = 'EXCELENCIA ESTRATÉGICA (TIPO ABRIL)';
+    badgeClase = 'badge-exito';
+    html = `
+      <p class="text-emerald-400 font-bold">⭐ Punto de Oro Gerencial.</p>
+      <p class="text-slate-300">Con <strong>${simState.soporte}% en soporte</strong> mantienes la satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong> y el margen limpio en <strong>$${simState.margen.toFixed(2)} USD</strong> por vehículo. Es la propuesta a defender en el ACA.</p>
+    `;
+  } else {
+    badge = 'ZONA ESTABLE DE CONTROL';
+    badgeClase = 'badge-advertencia';
+    html = `
+      <p class="text-slate-200 font-bold">ℹ️ Operación en rango aceptable.</p>
+      <p class="text-slate-300">Margen de <strong>$${simState.margen.toFixed(2)} USD</strong> y satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong>. Se puede optimizar aumentando el cuidado de los clientes.</p>
+    `;
+  }
+
+  badgeEstado.textContent = badge;
+  badgeEstado.className = `text-[9px] px-2 py-0.5 rounded font-bold border ${badgeClase}`;
+  boxDiagnostico.innerHTML = html;
+}
+
+// ==========================================================================
+// MOTOR PEDAGÓGICO COMPLETO: INTERPRETACIÓN DE LA GRÁFICA ("CON PALITOS Y PIEDRITAS")
+// ==========================================================================
+function actualizarInterpretacionGrafica() {
+  const isMarte = (currentTheme === 'marte');
+  const tagColor = isMarte ? 'text-[#FF9E4A]' : 'text-[#00F0FF]';
+  const colorNeonNombre = isMarte ? 'Naranja Neón Marciano' : 'Cyan Neón Eléctrico';
+  let html = '';
+
+  switch (tabActiva) {
+    // ------------------------------------------------------------------------
+    case 1:
+      html = `
+        <div class="space-y-1.5">
+          <div class="border-b border-slate-700/60 pb-1">
+            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 1: El Dilema Central (CPA vs CSAT)</strong>
+          </div>
+          <div class="text-[10px] space-y-1 text-slate-300">
+            <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
+            <ul class="list-disc pl-3.5 space-y-0.5">
+              <li><strong>Eje X (Horizontal):</strong> Costo de Adquisición (CPA) en dólares ($30 a $48 USD). <em>Hacia la izquierda es más barato, hacia la derecha es más caro.</em></li>
+              <li><strong>Eje Y (Vertical):</strong> Índice de Satisfacción del Cliente (CSAT) de 2 a 10 puntos. <em>Hacia arriba es mayor calidad y felicidad del cliente.</em></li>
+              <li><strong>Elementos del Gráfico:</strong> Los círculos son los meses reales (Enero a Mayo). El <span class="${tagColor} font-bold">Triángulo ${colorNeonNombre}</span> es tu simulación actual.</li>
+            </ul>
+            <p class="mt-1"><strong>🎯 Qué muestra y para qué sirve:</strong></p>
+            <p>Destaca con círculos de colores el peligro de febrero (punto rojo abajo a la izquierda: adquisición barata pero satisfacción destruida en 4.2) frente a abril (punto verde arriba: el equilibrio perfecto entre costo y calidad en 9.4).</p>
+            <p class="mt-1 p-1 rounded bg-slate-900/80 border border-slate-700/60">
+              👉 <strong>Tu resultado actual:</strong> Tu triángulo se ubica en <strong class="text-white">CPA $${simState.cpa.toFixed(2)} USD</strong> y <strong class="text-white">CSAT ${simState.csat.toFixed(1)}/10</strong>. El objetivo del gerente es mantener el triángulo en el cuadrante superior izquierdo (bajo costo y máxima satisfacción).
+            </p>
+          </div>
+        </div>
+      `;
+      break;
+
+    // ------------------------------------------------------------------------
+    case 2:
+      html = `
+        <div class="space-y-1.5">
+          <div class="border-b border-slate-700/60 pb-1">
+            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 2: La Trampa de la Ecuación de Satisfacción</strong>
+          </div>
+          <div class="text-[10px] space-y-1 text-slate-300">
+            <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
+            <ul class="list-disc pl-3.5 space-y-0.5">
+              <li><strong>Eje X (Horizontal):</strong> Los meses analizados (Enero a Mayo + Columna de Simulación).</li>
+              <li><strong>Eje Y Izquierdo (Barras):</strong> Cantidad de encuestas de satisfacción respondidas (0 a 200).</li>
+              <li><strong>Eje Y Derecho (Línea):</strong> Calificación promedio de satisfacción de 0 a 10 puntos.</li>
+              <li><strong>Elementos:</strong> Barras grises = volumen de quejas/encuestas. <span class="${tagColor} font-bold">Elemento ${colorNeonNombre}</span> = tu proyección.</li>
+            </ul>
+            <p class="mt-1"><strong>🎯 La ecuación en cuestión:</strong> <em>Promedio = ∑ calificaciones / total encuestas</em>.</p>
+            <p><strong>Por qué no aplica calcularla:</strong> La tabla del profesor ya entrega el promedio calculado (7.5, 4.2, 6.8, 9.4, 8.1). En febrero contestaron 145 personas con un doloroso 4.2. Intentar "hacer la fórmula" es una pérdida de tiempo; lo que importa es explicar que la avalancha de clientes colapsó el canal de atención.</p>
+            <p class="mt-1 p-1 rounded bg-slate-900/80 border border-slate-700/60">
+              👉 <strong>Tu proyección actual:</strong> Proyectas 160 encuestas con una nota de <strong class="text-white">${simState.csat.toFixed(1)}/10</strong>. Con ${simState.soporte}% en soporte garantizas atención rápida y evitas la crisis de febrero.
+            </p>
+          </div>
+        </div>
+      `;
+      break;
+
+    // ------------------------------------------------------------------------
+    case 3:
+      html = `
+        <div class="space-y-1.5">
+          <div class="border-b border-slate-700/60 pb-1">
+            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 3: La Trampa de la Ecuación de Retención (>100 %)</strong>
+          </div>
+          <div class="text-[10px] space-y-1 text-slate-300">
+            <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
+            <ul class="list-disc pl-3.5 space-y-0.5">
+              <li><strong>Eje X (Horizontal):</strong> Meses de operación comercial.</li>
+              <li><strong>Eje Y (Vertical):</strong> Cantidad total de vehículos/clientes en la flota (0 a 2.000 unidades).</li>
+              <li><strong>Elementos:</strong> Barra gris = Clientes al inicio del mes. Barra de color = Clientes retenidos al final del mes. <span class="${tagColor} font-bold">Barra ${colorNeonNombre}</span> = tu proyección.</li>
+            </ul>
+            <p class="mt-1"><strong>🎯 La ecuación en cuestión:</strong> <em>Retención = (Clientes Fin - Adquiridos) / Clientes Inicio</em>.</p>
+            <p><strong>Por qué da resultados extraños:</strong> En los libros de texto la retención nunca supera el 100 %. Pero en la tabla del profesor da 110%, 113.6%, 112%... La gráfica demuestra que la empresa no está perdiendo clientes netos, sino expandiendo su base instalada (de 1.000 a 1.700 clientes).</p>
+            <p class="mt-1 p-1 rounded bg-slate-900/80 border border-slate-700/60">
+              👉 <strong>Tu proyección:</strong> Con <strong class="text-white">${simState.clientes} nuevos clientes</strong>, la flota total retenida supera las 1.770 unidades sin riesgo de deserción si mantienes el soporte activo.
+            </p>
+          </div>
+        </div>
+      `;
+      break;
+
+    // ------------------------------------------------------------------------
+    case 4:
+      html = `
+        <div class="space-y-1.5">
+          <div class="border-b border-slate-700/60 pb-1">
+            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 4: Ley de Rendimientos Decrecientes en Pauta</strong>
+          </div>
+          <div class="text-[10px] space-y-1 text-slate-300">
+            <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
+            <ul class="list-disc pl-3.5 space-y-0.5">
+              <li><strong>Eje X (Horizontal):</strong> Cronología de meses.</li>
+              <li><strong>Eje Y Izquierdo (Línea continua):</strong> Dólares gastados en marketing ($1.500 a $4.500 USD).</li>
+              <li><strong>Eje Y Derecho (Línea punteada):</strong> Costo por Adquisición unitario pagado ($30 a $48 USD).</li>
+              <li><strong>Elementos:</strong> El punto final <span class="${tagColor} font-bold">${colorNeonNombre}</span> muestra tu CPA simulado frente al presupuesto.</li>
+            </ul>
+            <p class="mt-1"><strong>🎯 Qué muestra y el mensaje gerencial:</strong></p>
+            <p>Muestra la curva de inversión publicitaria frente al costo de adquirir cada cliente. En enero invertimos $2.200 USD y cada cliente costó $40,00. En mayo metimos $3.900 USD (casi el doble) y el costo por cliente se disparó a $42,39 USD. Demuestra que seguir aumentando el gasto en marketing en frío se vuelve cada vez más ineficiente.</p>
+            <p class="mt-1 p-1 rounded bg-slate-900/80 border border-slate-700/60">
+              👉 <strong>Tu presupuesto actual:</strong> Con <strong class="text-white">$${simState.gasto} USD</strong> pagas un CPA de <strong class="text-white">$${simState.cpa.toFixed(2)} USD</strong>. Si superas los $3.800 USD, cada cliente nuevo te saldrá más caro por saturación.
+            </p>
+          </div>
+        </div>
+      `;
+      break;
+
+    // ------------------------------------------------------------------------
+    case 5:
+      html = `
+        <div class="space-y-1.5">
+          <div class="border-b border-slate-700/60 pb-1">
+            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 5: Dinámica del Embudo de Conversión (Visitas vs Compras)</strong>
+          </div>
+          <div class="text-[10px] space-y-1 text-slate-300">
+            <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
+            <ul class="list-disc pl-3.5 space-y-0.5">
+              <li><strong>Eje X (Horizontal):</strong> Meses evaluados.</li>
+              <li><strong>Eje Y Izquierdo (Columnas):</strong> Sesiones web / visitas que llegaron a la web (0 a 2.600).</li>
+              <li><strong>Eje Y Derecho (Línea flotante):</strong> Porcentaje de visitantes que compraron (3% a 7%).</li>
+              <li><strong>Elementos:</strong> Las barras de fondo son el tráfico. La <span class="${tagColor} font-bold">Línea ${colorNeonNombre}</span> flota por encima mostrando la conversión.</li>
+            </ul>
+            <p class="mt-1"><strong>🎯 La ecuación en cuestión:</strong> <em>Conversión = Clientes Compradores / Visitas Web</em>.</p>
+            <p><strong>Qué revela:</strong> En marzo el porcentaje de conversión bajó a 4,81 % porque la empresa desaceleró la pauta para corregir los errores de febrero. En mayo subió al 5,82 %. La gráfica demuestra que el embudo de ventas maduró y aprendió a seleccionar mejor a los interesados.</p>
+            <p class="mt-1 p-1 rounded bg-slate-900/80 border border-slate-700/60">
+              👉 <strong>Tu embudo hoy:</strong> Con <strong class="text-white">${simState.visitas} visitas</strong> conviertes al <strong class="text-white">${simState.tasaConv.toFixed(2)}%</strong>, cerrando <strong class="text-white">${simState.clientes} Rovers</strong> vendidos.
+            </p>
+          </div>
+        </div>
+      `;
+      break;
+
+    // ------------------------------------------------------------------------
+    case 6:
+      html = `
+        <div class="space-y-1.5">
+          <div class="border-b border-slate-700/60 pb-1">
+            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 6: Economía Unitaria y Margen Limpio por Rover</strong>
+          </div>
+          <div class="text-[10px] space-y-1 text-slate-300">
+            <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
+            <ul class="list-disc pl-3.5 space-y-0.5">
+              <li><strong>Eje Y (Vertical):</strong> Las 3 variables clave: Precio de venta, Costo de adquisición (CPA) y Ganancia limpia.</li>
+              <li><strong>Eje X (Horizontal):</strong> Valor en dólares ($0 a $120 USD por cliente).</li>
+              <li><strong>Elementos:</strong> Barra superior = Precio facturado ($101.5 USD). Barra media = Lo que se gasta en pauta. <span class="${tagColor} font-bold">Barra inferior ${colorNeonNombre}</span> = Ganancia neta libre en bolsillo.</li>
+            </ul>
+            <p class="mt-1"><strong>🎯 La prueba de viabilidad financiera:</strong></p>
+            <p>Cada cliente que compra un Rover paga entre $100 y $110 USD. Muestra en color carmesí lo que nos cuesta captarlo ($38 a $42 USD) y en color neón lo que nos queda libre en el bolsillo: entre $60 y $68,48 USD por cliente. Esto demuestra numéricamente al profesor que el proyecto es un éxito financiero rotundo.</p>
+            <p class="mt-1 p-1 rounded bg-slate-900/80 border border-slate-700/60">
+              👉 <strong>Tu margen limpio:</strong> Pagando un CPA de $${simState.cpa.toFixed(2)} USD, le quedan a la empresa <strong class="text-emerald-400 font-bold">$${simState.margen.toFixed(2)} USD limpios</strong> por cada Rover (un saludable ${((simState.margen/101.5)*100).toFixed(1)}% de margen).
+            </p>
+          </div>
+        </div>
+      `;
+      break;
+
+    // ------------------------------------------------------------------------
+    case 7:
+      html = `
+        <div class="space-y-1.5">
+          <div class="border-b border-slate-700/60 pb-1">
+            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 7: El Ratio Maestro (CSAT / CPA)</strong>
+          </div>
+          <div class="text-[10px] space-y-1 text-slate-300">
+            <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
+            <ul class="list-disc pl-3.5 space-y-0.5">
+              <li><strong>Eje X (Horizontal):</strong> Meses evaluados.</li>
+              <li><strong>Eje Y (Vertical):</strong> Puntos de satisfacción ganados por cada $1 dólar invertido (0.00 a 0.35).</li>
+              <li><strong>Elementos:</strong> Columnas por mes. La columna <span class="${tagColor} font-bold">${colorNeonNombre}</span> es tu simulación actual.</li>
+            </ul>
+            <p class="mt-1"><strong>🎯 El indicador creado y qué significa:</strong></p>
+            <p>Divide la calificación de satisfacción entre el costo de captación. Mide cuántos "puntos de felicidad" compramos por cada dólar gastado. Febrero se desploma a 0,10 (un desastre de gestión), mientras que abril salta a 0,23 (el mes de máxima productividad gerencial).</p>
+            <p class="mt-1 p-1 rounded bg-slate-900/80 border border-slate-700/60">
+              👉 <strong>Tu ratio actual:</strong> Generas <strong class="text-white">${simState.ratio} puntos/USD</strong>. Superar 0.22 demuestra excelencia directiva.
+            </p>
+          </div>
+        </div>
+      `;
+      break;
+
+    // ------------------------------------------------------------------------
+    case 8:
+      html = `
+        <div class="space-y-1.5">
+          <div class="border-b border-slate-700/60 pb-1">
+            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 8: Correlación Causal de Crecimiento (Ventas vs Gasto y ROAS)</strong>
+          </div>
+          <div class="text-[10px] space-y-1 text-slate-300">
+            <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
+            <ul class="list-disc pl-3.5 space-y-0.5">
+              <li><strong>Eje X (Horizontal):</strong> Meses de facturación.</li>
+              <li><strong>Eje Y (Vertical):</strong> Dólares ($0 a $12.000 USD).</li>
+              <li><strong>Elementos:</strong> Barra principal = Ventas totales facturadas. Barra secundaria = Dinero invertido en publicidad. <span class="${tagColor} font-bold">Barra ${colorNeonNombre}</span> = tu proyección.</li>
+            </ul>
+            <p class="mt-1"><strong>🎯 El ROAS (Return On Ad Spend):</strong></p>
+            <p>Demuestra que el negocio tiene un multiplicador estable de 2,56: por cada $1 dólar invertido en pauta publicitaria, ingresan $2,56 dólares en ventas.</p>
+            <p class="mt-1 p-1 rounded bg-slate-900/80 border border-slate-700/60">
+              👉 <strong>Tu proyección de ventas:</strong> Inviertes <strong class="text-white">$${simState.gasto} USD</strong> y facturas <strong class="text-white">$${simState.ventas} USD</strong>, logrando un ROAS de <strong class="text-white">${simState.roas}x</strong>.
+            </p>
+          </div>
+        </div>
+      `;
+      break;
+
+    // ------------------------------------------------------------------------
+    case 9:
+      html = `
+        <div class="space-y-1.5">
+          <div class="border-b border-slate-700/60 pb-1">
+            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 9: Evolución de Cartera Total de la Misión</strong>
+          </div>
+          <div class="text-[10px] space-y-1 text-slate-300">
+            <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
+            <ul class="list-disc pl-3.5 space-y-0.5">
+              <li><strong>Eje X (Horizontal):</strong> Meses de acumulación de clientes.</li>
+              <li><strong>Eje Y (Vertical):</strong> Masa crítica acumulada de clientes en Marte (1.000 a 2.000 clientes).</li>
+              <li><strong>Elementos:</strong> Línea punteada = Cartera base retenida. <span class="${tagColor} font-bold">Línea sólida ${colorNeonNombre}</span> = Cartera total con tu 6.º punto proyectado.</li>
+            </ul>
+            <p class="mt-1"><strong>🎯 Qué muestra la acumulación:</strong></p>
+            <p>El crecimiento acumulado de la empresa, pasando de 1.155 clientes en enero a 1.792 clientes en mayo (+55 % de expansión institucional en el mercado aeroespacial).</p>
+            <p class="mt-1 p-1 rounded bg-slate-900/80 border border-slate-700/60">
+              👉 <strong>Tu impacto acumulado:</strong> Sumando tus <strong class="text-white">${simState.clientes} nuevos clientes</strong> a los 1.792 de mayo, la empresa alcanza una flota histórica de <strong class="text-white">${1792 + simState.clientes} clientes</strong> en Marte.
+            </p>
+          </div>
+        </div>
+      `;
+      break;
+
+    // ------------------------------------------------------------------------
+    case 10:
+      html = `
+        <div class="space-y-1.5">
+          <div class="border-b border-slate-700/60 pb-1">
+            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 10: La Decisión Estratégica Directiva (Reasignación del 15 %)</strong>
+          </div>
+          <div class="text-[10px] space-y-1 text-slate-300">
+            <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
+            <ul class="list-disc pl-3.5 space-y-0.5">
+              <li><strong>Eje X (Horizontal):</strong> Dos escenarios comparados: Estrategia Actual (Gasto ciego) vs Estrategia Optimizada SIM.</li>
+              <li><strong>Eje Y (Vertical):</strong> Presupuesto total de marketing en dólares ($0 a $4.500 USD).</li>
+              <li><strong>Elementos:</strong> Barra apilada: Segmento oscuro = Pauta en captación. <span class="${tagColor} font-bold">Segmento ${colorNeonNombre}</span> = Dinero reasignado a blindar el soporte técnico y posventa (CX).</li>
+            </ul>
+            <p class="mt-1"><strong>🎯 La propuesta final que aprueba el ACA:</strong></p>
+            <p>Muestra el escenario actual (gastar los $3.900 USD completos en pauta ciega arriesgando saturación) versus la estrategia recomendada: $3.315 USD a captación y $585 USD (15 %) destinados a blindar el soporte técnico y posventa, asegurando que la satisfacción nunca vuelva a caer de 9,0.</p>
+            <p class="mt-1 p-1 rounded bg-slate-900/80 border border-slate-700/60">
+              👉 <strong>Tu decisión hoy:</strong> Destinas <strong class="text-white">$${simState.pautaNeta} USD</strong> a captación y <strong class="text-white">$${simState.gastoCX} USD (${simState.soporte}%)</strong> a soporte, blindando la lealtad de la marca.
+            </p>
+          </div>
+        </div>
+      `;
+      break;
+  }
+
+  boxInterpretacion.innerHTML = html;
+}
+
+function cambiarTab(num) {
+  tabActiva = num;
+  const isMarte = (currentTheme === 'marte');
+  const activeBg = isMarte ? 'bg-[#381216] text-[#FF6B00] border-[#FF6B00]' : 'bg-[#1F2430] text-[#00F0FF] border-[#00F0FF]';
+
+  for (let i = 1; i <= 10; i++) {
+    const btn = document.getElementById(`tab-${i}`);
+    if (i === num) {
+      btn.className = `tab-btn active text-[10px] px-2 py-1 rounded font-bold border ${activeBg}`;
+    } else {
+      btn.className = "tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800";
+    }
+  }
+
+  tabDescripcion.innerHTML = `Gráfica ${num}: ${document.getElementById(`tab-${num}`).textContent}`;
+  txtExplicacionCorta.innerHTML = `📌 <strong>Lectura Ejecutiva:</strong> El elemento neón resalta tu decisión simulada frente a los datos históricos reales.`;
+  actualizarInterpretacionGrafica();
+  renderizarGraficaActiva();
+}
+
+// ==========================================================================
+// RENDERIZADO DE LAS 10 GRÁFICAS ADAPTADAS AL TEMA (CON RESALTADO NEÓN ÚNICO)
+// ==========================================================================
+function renderizarGraficaActiva() {
+  const ctx = document.getElementById('lienzo-grafico').getContext('2d');
+  if (chartInstance) chartInstance.destroy();
+
+  const isMarte = (currentTheme === 'marte');
+  // COLOR NEÓN INSIGNIA PARA LA SIMULACIÓN
+  const colorSimulacion = isMarte ? '#FF6B00' : '#00F0FF';
+  const colorSimulacionTrans = isMarte ? 'rgba(255, 107, 0, 0.25)' : 'rgba(0, 240, 255, 0.25)';
+
+  // Paleta base para datos históricos (Monocromo en Gerencial, Rojizo carbón en Marte)
+  const barHistoricoColor = isMarte ? '#451D24' : '#333A48';
+  const lineHistoricoColor = isMarte ? '#EA580C' : '#94A3B8';
+  const gridColor = isMarte ? '#3A1418' : '#1E232F';
+  const textColor = isMarte ? '#FDBA74' : '#94A3B8';
+
+  const commonOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { labels: { color: textColor, font: { size: 10 } } }
+    },
+    scales: {
+      x: { ticks: { color: textColor, font: { size: 9 } }, grid: { color: gridColor } },
+      y: { ticks: { color: textColor, font: { size: 9 } }, grid: { color: gridColor } }
+    }
+  };
+
+  switch (tabActiva) {
+    // 1. Dilema Central: CPA vs CSAT
+    case 1:
+      chartInstance = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              label: 'Meses Reales (Ene - May)',
+              data: [
+                { x: 40.00, y: 7.5, label: 'Enero' },
+                { x: 38.82, y: 4.2, label: 'Febrero (Colapso 4.2)' },
+                { x: 41.54, y: 6.8, label: 'Marzo' },
+                { x: 39.74, y: 9.4, label: 'Abril (Óptimo 9.4)' },
+                { x: 42.39, y: 8.1, label: 'Mayo' }
+              ],
+              backgroundColor: ['#64748B', '#F43F5E', '#64748B', '#10B981', '#F59E0B'],
+              pointRadius: 8
+            },
+            {
+              label: 'Tu Simulación Actual (Resaltado)',
+              data: [{ x: simState.cpa, y: simState.csat, label: 'Tu Simulación' }],
+              backgroundColor: colorSimulacion,
+              borderColor: '#FFFFFF',
+              borderWidth: 2.5,
+              pointRadius: 14,
+              pointStyle: 'triangle'
+            }
+          ]
+        },
+        options: {
+          ...commonOptions,
+          scales: {
+            x: { title: { display: true, text: 'CPA ($ USD)', color: textColor }, min: 30, max: 48, ticks: { color: textColor }, grid: { color: gridColor } },
+            y: { title: { display: true, text: 'CSAT (0-10)', color: textColor }, min: 2, max: 10.5, ticks: { color: textColor }, grid: { color: gridColor } }
+          }
+        }
+      });
+      break;
+
+    // 2. Ecuación CSAT (LÍNEA FLOTANDO POR ENCIMA DE LAS BARRAS)
+    case 2:
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [...datosReales.meses, 'Simulación'],
+          datasets: [
+            // Línea CSAT con order: 1 (se dibuja POR ENCIMA de las barras)
+            {
+              type: 'line',
+              label: 'CSAT Promedio (0-10)',
+              data: [...datosReales.csat, simState.csat],
+              borderColor: colorSimulacion,
+              backgroundColor: colorSimulacion,
+              borderWidth: 3.5,
+              pointRadius: [6, 6, 6, 6, 6, 9],
+              pointBackgroundColor: ['#10B981', '#F43F5E', '#10B981', '#10B981', '#F59E0B', colorSimulacion],
+              order: 1,
+              yAxisID: 'y1'
+            },
+            // Barras de volumen con order: 2 (se dibujan POR DEBAJO)
+            {
+              type: 'bar',
+              label: 'Volumen de Encuestas (n)',
+              data: [...datosReales.encuestas, 160],
+              backgroundColor: [barHistoricoColor, barHistoricoColor, barHistoricoColor, barHistoricoColor, barHistoricoColor, colorSimulacionTrans],
+              borderColor: [barHistoricoColor, barHistoricoColor, barHistoricoColor, barHistoricoColor, barHistoricoColor, colorSimulacion],
+              borderWidth: 1.5,
+              borderRadius: 4,
+              order: 2,
+              yAxisID: 'y'
+            }
+          ]
+        },
+        options: {
+          ...commonOptions,
+          scales: {
+            y: { position: 'left', min: 0, max: 200, ticks: { color: textColor }, grid: { color: gridColor } },
+            y1: { position: 'right', min: 0, max: 10.5, ticks: { color: colorSimulacion }, grid: { drawOnChartArea: false } }
+          }
+        }
+      });
+      break;
+
+    // 3. Ecuación Retención (>100%)
+    case 3:
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [...datosReales.meses, 'Simulación'],
+          datasets: [
+            { label: 'Clientes Inicio', data: [...datosReales.clientes_ini, 1700], backgroundColor: barHistoricoColor, borderRadius: 4 },
+            { label: 'Clientes Fin Retenidos', data: [...datosReales.clientes_fin, 1700 + Math.round(simState.clientes*0.9)], backgroundColor: [lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, colorSimulacion], borderRadius: 4 }
+          ]
+        },
+        options: commonOptions
+      });
+      break;
+
+    // 4. Rendimientos Decrecientes
+    case 4:
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [...datosReales.meses, 'Simulación'],
+          datasets: [
+            { label: 'Gasto Marketing ($ USD)', data: [...datosReales.pauta, simState.gasto], borderColor: lineHistoricoColor, borderWidth: 2, pointRadius: [4,4,4,4,4,8], pointBackgroundColor: lineHistoricoColor, yAxisID: 'y' },
+            { label: 'CPA Resultante ($ USD)', data: [...datosReales.cpa, simState.cpa], borderColor: colorSimulacion, borderWidth: 2.5, borderDash: [4, 4], pointRadius: [4,4,4,4,4,9], pointBackgroundColor: colorSimulacion, yAxisID: 'y1' }
+          ]
+        },
+        options: {
+          ...commonOptions,
+          scales: {
+            y: { position: 'left', ticks: { color: lineHistoricoColor, callback: v => '$' + v }, grid: { color: gridColor } },
+            y1: { position: 'right', min: 30, max: 48, ticks: { color: colorSimulacion, callback: v => '$' + v }, grid: { drawOnChartArea: false } }
+          }
+        }
+      });
+      break;
+
+    // 5. Embudo Visitas vs Conversión (LÍNEA FLOTANDO POR ENCIMA)
+    case 5:
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [...datosReales.meses, 'Simulación'],
+          datasets: [
+            // Línea con order: 1 (se dibuja POR ENCIMA)
+            {
+              type: 'line',
+              label: 'Tasa Conversión (CR %)',
+              data: [...datosReales.cr, simState.tasaConv],
+              borderColor: colorSimulacion,
+              borderWidth: 3.5,
+              pointRadius: [5, 5, 5, 5, 5, 9],
+              pointBackgroundColor: colorSimulacion,
+              order: 1,
+              yAxisID: 'y1'
+            },
+            // Barras con order: 2 (se dibujan POR DEBAJO)
+            {
+              type: 'bar',
+              label: 'Visitas Web (Tráfico)',
+              data: [...datosReales.visitas, simState.visitas],
+              backgroundColor: [barHistoricoColor, barHistoricoColor, barHistoricoColor, barHistoricoColor, barHistoricoColor, colorSimulacionTrans],
+              borderColor: [barHistoricoColor, barHistoricoColor, barHistoricoColor, barHistoricoColor, barHistoricoColor, colorSimulacion],
+              borderWidth: 1.5,
+              borderRadius: 4,
+              order: 2,
+              yAxisID: 'y'
+            }
+          ]
+        },
+        options: {
+          ...commonOptions,
+          scales: {
+            y: { position: 'left', min: 0, max: 2600, ticks: { color: textColor }, grid: { color: gridColor } },
+            y1: { position: 'right', min: 3, max: 7, ticks: { color: colorSimulacion, callback: v => v + '%' }, grid: { drawOnChartArea: false } }
+          }
+        }
+      });
+      break;
+
+    // 6. Margen Limpio por Rover
+    case 6:
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Precio Rover ($ USD)', 'CPA (Costo Pauta)', 'Margen Limpio a la Empresa'],
+          datasets: [{
+            data: [101.50, simState.cpa, simState.margen],
+            backgroundColor: [isMarte ? '#991B1B' : '#4B5563', '#F43F5E', colorSimulacion],
+            borderColor: [isMarte ? '#EF4444' : '#6B7280', '#FB7185', colorSimulacion],
+            borderWidth: 1.5,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          ...commonOptions, indexAxis: 'y',
+          scales: { x: { ticks: { color: textColor, callback: v => '$' + v }, grid: { color: gridColor } } }
+        }
+      });
+      break;
+
+    // 7. Ratio Maestro CSAT/CPA
+    case 7:
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [...datosReales.meses, 'Simulación'],
+          datasets: [{
+            label: 'Puntos de Satisfacción por $1 USD',
+            data: [...datosReales.ratio, parseFloat(simState.ratio)],
+            backgroundColor: [barHistoricoColor, '#F43F5E', barHistoricoColor, '#10B981', barHistoricoColor, colorSimulacion],
+            borderColor: [barHistoricoColor, '#FB7185', barHistoricoColor, '#34D399', barHistoricoColor, colorSimulacion],
+            borderWidth: 1.5,
+            borderRadius: 4
+          }]
+        },
+        options: {
+          ...commonOptions,
+          scales: { y: { min: 0, max: 0.35, ticks: { color: textColor }, grid: { color: gridColor } } }
+        }
+      });
+      break;
+
+    // 8. ROAS 2.56x
+    case 8:
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [...datosReales.meses, 'Simulación'],
+          datasets: [
+            { label: 'Ventas Totales ($ USD)', data: [...datosReales.ventas, simState.ventas], backgroundColor: [barHistoricoColor, barHistoricoColor, barHistoricoColor, barHistoricoColor, barHistoricoColor, colorSimulacion], borderRadius: 4 },
+            { label: 'Gasto Marketing ($ USD)', data: [...datosReales.pauta, simState.gasto], backgroundColor: isMarte ? '#3A1418' : '#1F2430', borderRadius: 4 }
+          ]
+        },
+        options: commonOptions
+      });
+      break;
+
+    // 9. Cartera Total (CON EL 6.° PUNTO DE PROYECCIÓN REACTIVO)
+    case 9:
+      const carteraProyectada = 1792 + simState.clientes;
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [...datosReales.meses, 'Simulación'],
+          datasets: [
+            {
+              label: 'Total Clientes Acumulados',
+              data: [...datosReales.total_clientes, carteraProyectada],
+              borderColor: colorSimulacion,
+              backgroundColor: colorSimulacion,
+              borderWidth: 3,
+              pointRadius: [4, 4, 4, 4, 4, 9],
+              pointBackgroundColor: [lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, colorSimulacion]
+            },
+            {
+              label: 'Clientes Retenidos Base',
+              data: [...datosReales.clientes_fin, 1700],
+              borderColor: isMarte ? '#7C2D12' : '#4B5563',
+              borderDash: [4, 4],
+              borderWidth: 2,
+              pointRadius: 3
+            }
+          ]
+        },
+        options: commonOptions
+      });
+      break;
+
+    // 10. Reasignación 15%
+    case 10:
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Estrategia Actual (Gasto Ciego)', 'Estrategia Recomendada SIM (15% CX)'],
+          datasets: [
+            { label: 'Inversión en Captación (Pauta)', data: [3900, simState.pautaNeta], backgroundColor: isMarte ? '#381216' : '#1E232F' },
+            { label: 'Inversión en Posventa y CX', data: [0, simState.gastoCX], backgroundColor: colorSimulacion }
+          ]
+        },
+        options: {
+          ...commonOptions,
+          scales: {
+            x: { stacked: true },
+            y: { stacked: true, ticks: { callback: v => '$' + v } }
+          }
+        }
+      });
+      break;
+  }
+}
+
+// ==========================================================================
+// CARGA RÁPIDA DE ESCENARIOS
+// ==========================================================================
+function cargarEscenario(tipo) {
+  if (tipo === 'febrero') {
+    rngGasto.value = 3300; rngSoporte.value = 0; rngVisitas.value = 1650;
+  } else if (tipo === 'abril') {
+    rngGasto.value = 3100; rngSoporte.value = 16; rngVisitas.value = 1480;
+  } else if (tipo === 'mayo') {
+    rngGasto.value = 3900; rngSoporte.value = 8; rngVisitas.value = 1580;
+  } else if (tipo === 'recomendado') {
+    rngGasto.value = 3300; rngSoporte.value = 15; rngVisitas.value = 1500;
+  } else if (tipo === 'agresivo') {
+    rngGasto.value = 5200; rngSoporte.value = 2; rngVisitas.value = 2200;
+  }
+  calcularParametros();
+}
+
+function toggleModalAyuda() {
+  const modal = document.getElementById('modal-ayuda');
+  modal.classList.toggle('hidden');
+}
+
+// EVENT LISTENERS
+rngGasto.addEventListener('input', calcularParametros);
+rngSoporte.addEventListener('input', calcularParametros);
+rngVisitas.addEventListener('input', calcularParametros);
+
+window.addEventListener('DOMContentLoaded', () => {
+  calcularParametros();
+  cambiarTab(1);
+});

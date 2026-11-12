@@ -1,0 +1,233 @@
+/* ==========================================================================
+   ESTILOS EJECUTIVOS SIM ROVER'S MARTE - DUAL THEME (MARTE DEFAULT + GERENCIAL GREYSCALE)
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ==========================================================================
+   1. MODO MARTE (POR DEFECTO AL ABRIR: ROJIZO VOLCÁNICO + NARANJA NEÓN)
+   ========================================================================== */
+body.theme-marte {
+  background-color: #110809;
+  color: #FED7AA;
+}
+body.theme-marte .header-bar {
+  background-color: #1C0A0D;
+  border-bottom-color: #431407;
+}
+body.theme-marte .card-box {
+  background-color: rgba(28, 12, 16, 0.95);
+  border-color: #571C1D;
+}
+body.theme-marte .logo-container {
+  background-color: rgba(255, 107, 0, 0.15);
+  border-color: rgba(255, 107, 0, 0.4);
+}
+body.theme-marte .logo-svg {
+  color: #FF6B00;
+}
+body.theme-marte .brand-title {
+  color: #FFEDD5;
+}
+body.theme-marte .mode-badge {
+  background-color: rgba(255, 107, 0, 0.2);
+  color: #FB923C;
+  border-color: rgba(255, 107, 0, 0.4);
+}
+body.theme-marte input[type="range"]::-webkit-slider-thumb {
+  background: #FF6B00;
+  box-shadow: 0 0 12px rgba(255, 107, 0, 0.85);
+}
+body.theme-marte .tab-btn.active {
+  background-color: #381216;
+  color: #FF6B00;
+  border-color: #FF6B00;
+}
+body.theme-marte .btn-recomendado {
+  background-color: rgba(255, 107, 0, 0.2);
+  border-color: #FF6B00;
+  color: #FFEDD5;
+}
+body.theme-marte .interpretacion-box {
+  background-color: rgba(43, 16, 20, 0.85);
+  border: 1px solid #7C2D12;
+}
+
+/* ==========================================================================
+   2. MODO GERENCIAL (ESCALA DE GRISES MONOCROMO + RESALTADO ELEGANTE)
+   ========================================================================== */
+body.theme-gerencial {
+  background-color: #07080A;
+  color: #E2E8F0;
+}
+body.theme-gerencial .header-bar {
+  background-color: #0E1015;
+  border-bottom-color: #262A33;
+}
+body.theme-gerencial .card-box {
+  background-color: rgba(18, 21, 28, 0.95);
+  border-color: #2A2F3D;
+}
+body.theme-gerencial .logo-container {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+body.theme-gerencial .logo-svg {
+  color: #F1F5F9;
+}
+body.theme-gerencial .brand-title {
+  color: #FFFFFF;
+}
+body.theme-gerencial .mode-badge {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #CBD5E1;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+body.theme-gerencial input[type="range"]::-webkit-slider-thumb {
+  background: #00F0FF;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.7);
+}
+body.theme-gerencial .tab-btn.active {
+  background-color: #1F2430;
+  color: #00F0FF;
+  border-color: #00F0FF;
+}
+body.theme-gerencial .btn-recomendado {
+  background-color: rgba(0, 240, 255, 0.15);
+  border-color: #00F0FF;
+  color: #E0F2FE;
+}
+body.theme-gerencial .interpretacion-box {
+  background-color: rgba(15, 18, 25, 0.9);
+  border: 1px solid #333A48;
+}
+
+/* ==========================================================================
+   TOOLTIPS FLOTANTES PARA KPIS Y CONTROLES
+   ========================================================================== */
+.kpi-card .kpi-tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 105%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 250px;
+  background-color: #0F172A;
+  color: #E2E8F0;
+  text-align: left;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 10.5px;
+  line-height: 1.4;
+  border: 1px solid #334155;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.85);
+  z-index: 100;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
+}
+.kpi-card:hover .kpi-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.control-group .control-tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #0F172A;
+  color: #E2E8F0;
+  text-align: left;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 10px;
+  line-height: 1.35;
+  border: 1px solid #334155;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.85);
+  z-index: 90;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
+}
+.control-group:hover .control-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Range input base */
+input[type="range"] {
+  height: 5px;
+  border-radius: 3px;
+  background: #262B36;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #07080A;
+  transition: transform 0.1s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+}
+
+.btn-esc {
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-esc:hover {
+  transform: translateY(-1px);
+}
+
+.tab-btn {
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: #333A48;
+  border-radius: 2px;
+}
+
+/* Badges */
+.badge-alerta {
+  background: rgba(225, 29, 72, 0.2);
+  color: #FB7185;
+  border-color: rgba(225, 29, 72, 0.4);
+}
+.badge-exito {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34D399;
+  border-color: rgba(16, 185, 129, 0.4);
+}
+.badge-advertencia {
+  background: rgba(217, 119, 6, 0.2);
+  color: #FBBF24;
+  border-color: rgba(217, 119, 6, 0.4);
+}

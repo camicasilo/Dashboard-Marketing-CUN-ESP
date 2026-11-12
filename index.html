@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ares Rover Dynamics - Tablero Directivo SIM</title>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<!-- ABRE SIEMPRE CON EL MODO MARTE POR DEFECTO -->
+<body id="app-body" class="theme-marte bg-[#110809] text-[#FED7AA] h-screen w-screen overflow-hidden flex flex-col font-sans select-none">
+
+  <!-- ========================================================================= -->
+  <!-- BARRA SUPERIOR: LOGO, SLOGAN, ESCENARIOS Y CONMUTADOR DE TEMA             -->
+  <!-- ========================================================================= -->
+  <header class="header-bar h-12 bg-[#1C0A0D] border-b border-[#431407] px-4 flex items-center justify-between shrink-0 gap-3">
+    
+    <!-- Marca y Slogan -->
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-lg bg-orange-500/15 border border-orange-500/40 flex items-center justify-center p-1 logo-container shrink-0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 logo-svg text-[#FF6B00]">
+          <circle cx="5" cy="18" r="2.5" fill="currentColor" fill-opacity="0.2"/>
+          <circle cx="12" cy="18" r="2.5" fill="currentColor" fill-opacity="0.2"/>
+          <circle cx="19" cy="18" r="2.5" fill="currentColor" fill-opacity="0.2"/>
+          <path d="M4 15.5l3-5h8l3 5"/>
+          <path d="M8 10.5V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3.5"/>
+          <path d="M12 5V2"/>
+          <circle cx="12" cy="2" r="1" fill="currentColor"/>
+          <line x1="7.5" y1="18" x2="9.5" y2="18"/>
+          <line x1="14.5" y1="18" x2="16.5" y2="18"/>
+        </svg>
+      </div>
+
+      <div class="flex flex-col">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-black tracking-wider text-[#FFEDD5] uppercase brand-title">ARES ROVER DYNAMICS™</span>
+          <span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-orange-500/20 text-orange-400 border border-orange-500/40 mode-badge">SIM v2.0</span>
+        </div>
+        <span class="text-[10px] text-orange-200/70 italic slogan-text">"Movilidad en suelo marciano: ingeniería rentable, clientes leales"</span>
+      </div>
+    </div>
+
+    <!-- Barra Rápida de Escenarios (1 Clic) -->
+    <div class="flex items-center gap-1.5 overflow-x-auto py-0.5">
+      <span class="text-[10px] uppercase font-bold text-slate-400 hidden xl:inline mr-1">Escenarios:</span>
+      <button onclick="cargarEscenario('febrero')" class="btn-esc text-[11px] px-2.5 py-1 rounded bg-slate-900/90 border border-rose-500/50 text-rose-300 hover:bg-rose-950/70 transition flex items-center gap-1">
+        <span>⚠️</span> Febrero (Colapso CSAT 4.2)
+      </button>
+      <button onclick="cargarEscenario('abril')" class="btn-esc text-[11px] px-2.5 py-1 rounded bg-slate-900/90 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-950/70 transition flex items-center gap-1">
+        <span>⭐</span> Abril (Óptimo CSAT 9.4)
+      </button>
+      <button onclick="cargarEscenario('mayo')" class="btn-esc text-[11px] px-2.5 py-1 rounded bg-slate-900/90 border border-amber-500/50 text-amber-300 hover:bg-amber-950/70 transition flex items-center gap-1">
+        <span>📈</span> Mayo (Saturado CPA $42)
+      </button>
+      <button onclick="cargarEscenario('recomendado')" class="btn-esc text-[11px] px-2.5 py-1 rounded bg-orange-950/60 border border-[#FF6B00] text-orange-100 font-bold hover:bg-orange-900 transition flex items-center gap-1 shadow-sm shadow-orange-500/30 btn-recomendado">
+        <span>🎯</span> Estrategia SIM (15% CX)
+      </button>
+      <button onclick="cargarEscenario('agresivo')" class="btn-esc text-[11px] px-2 py-1 rounded bg-slate-900/90 border border-purple-500/50 text-purple-300 hover:bg-purple-950/70 transition flex items-center gap-1 hidden md:flex">
+        <span>🚀</span> Expansión Ciega ($5K)
+      </button>
+    </div>
+
+    <!-- Conmutador de Temas: Abre en Modo Marte y permite cambiar a Modo Gerencial Monocromo -->
+    <div class="flex items-center gap-2 shrink-0">
+      <button id="btn-theme-toggle" onclick="toggleTheme()" class="text-[11px] px-2.5 py-1 rounded font-bold transition flex items-center gap-1.5 border border-[#571C1D] bg-[#2A0E13] hover:bg-[#3D141B] text-[#FFD8B0]">
+        <span id="theme-icon">👔</span>
+        <span id="theme-label">Modo Gerencial</span>
+      </button>
+
+      <button onclick="toggleModalAyuda()" class="text-[11px] px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 flex items-center gap-1">
+        <span>💡</span> Guía Gerencial
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- CONTENEDOR PRINCIPAL: 100% ANCHO, CERO SCROLL, PANTALLA COMPLETA         -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 p-2.5 gap-2.5 grid grid-cols-12 min-h-0 overflow-hidden w-full">
+
+    <!-- COLUMNA IZQUIERDA: CONTROLES + DIAGNÓSTICO + INTERPRETACIÓN DE GRÁFICA -->
+    <aside class="col-span-12 md:col-span-4 lg:col-span-3 flex flex-col gap-2 min-h-0 overflow-hidden">
+      
+      <!-- CARD 1: CONTROLES / PALANCAS (COMPACTO CON TOOLTIPS) -->
+      <section class="card-box bg-[#1C0C10]/95 border border-[#571C1D] rounded-lg p-2.5 flex flex-col gap-2 shrink-0 shadow-lg">
+        <div class="flex items-center justify-between border-b border-[#571C1D]/80 pb-1">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
+            <span>🎛️</span> Palancas de Simulación
+          </span>
+          <span class="text-[9px] text-slate-400">Pasa cursor para ayuda</span>
+        </div>
+
+        <!-- Slider 1: Presupuesto Pauta -->
+        <div class="control-group relative group">
+          <div class="flex justify-between text-[11px]">
+            <span class="text-slate-300 font-medium flex items-center gap-1">
+              Presupuesto Pauta (USD): <span class="text-slate-500 text-[10px]">ⓘ</span>
+            </span>
+            <span id="txt-gasto" class="font-bold text-[#FF6B00] text-xs">$3.100</span>
+          </div>
+          <input id="rng-gasto" type="range" min="1500" max="6000" step="100" value="3100" class="w-full accent-[#FF6B00] cursor-pointer mt-0.5">
+          <div class="flex justify-between text-[9px] text-slate-400 mt-0.5">
+            <span>$1.500 (Bajo)</span><span>$3.100 (Abril)</span><span>$6.000</span>
+          </div>
+          <div class="control-tooltip">
+            <strong class="text-cyan-300">¿Cómo funciona esta palanca?</strong><br>
+            Define la inversión en anuncios. Si inyectas más de $3.500 USD sin calificar prospectos, saturas el embudo (como en Mayo, donde el CPA subió a $42.39).
+          </div>
+        </div>
+
+        <!-- Slider 2: Reasignación a Soporte -->
+        <div class="control-group relative group">
+          <div class="flex justify-between text-[11px]">
+            <span class="text-slate-300 font-medium flex items-center gap-1">
+              % a Soporte y Posventa (CX): <span class="text-slate-500 text-[10px]">ⓘ</span>
+            </span>
+            <span id="txt-soporte" class="font-bold text-amber-400 text-xs">15 %</span>
+          </div>
+          <input id="rng-soporte" type="range" min="0" max="30" step="1" value="15" class="w-full accent-amber-500 cursor-pointer mt-0.5">
+          <div class="flex justify-between text-[9px] text-slate-400 mt-0.5">
+            <span class="text-rose-400">0% (Febrero)</span><span class="text-amber-300 font-bold">15% (Estrategia)</span><span>30%</span>
+          </div>
+          <div class="control-tooltip">
+            <strong class="text-cyan-300">La Palanca Decisiva de la Gerencia:</strong><br>
+            Si la dejas en 0%, la avalancha de clientes satura al equipo técnico y el CSAT colapsa a 4.2 (error de Febrero). Si reasignas el 15%, garantizas soporte y el CSAT salta a 9.4 (éxito de Abril).
+          </div>
+        </div>
+
+        <!-- Slider 3: Visitas Web -->
+        <div class="control-group relative group">
+          <div class="flex justify-between text-[11px]">
+            <span class="text-slate-300 font-medium flex items-center gap-1">
+              Tráfico Web (Sesiones): <span class="text-slate-500 text-[10px]">ⓘ</span>
+            </span>
+            <span id="txt-visitas" class="font-bold text-indigo-300 text-xs">1.480</span>
+          </div>
+          <input id="rng-visitas" type="range" min="900" max="2500" step="50" value="1480" class="w-full accent-indigo-500 cursor-pointer mt-0.5">
+          <div class="flex justify-between text-[9px] text-slate-400 mt-0.5">
+            <span>900</span><span>1.650 (Pico Feb)</span><span>2.500</span>
+          </div>
+          <div class="control-tooltip">
+            <strong class="text-cyan-300">Volumen de Prospectos Web:</strong><br>
+            A mayor volumen de tráfico frío no cualificado, menor es la tasa de conversión marginal.
+          </div>
+        </div>
+      </section>
+
+      <!-- CARD 2: DICTAMEN DIRECTIVO + INTERPRETACIÓN DE LA GRÁFICA (LLENA EL ESPACIO MARCADO EN ROJO) -->
+      <section class="card-box bg-[#1C0C10]/95 border border-[#571C1D] rounded-lg p-2.5 flex-1 flex flex-col min-h-0 overflow-hidden shadow-lg">
+        
+        <!-- Dictamen del Escenario -->
+        <div class="flex items-center justify-between border-b border-[#571C1D]/80 pb-1 shrink-0">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-200 flex items-center gap-1">
+            <span>📋</span> Dictamen Directivo
+          </span>
+          <span id="badge-estado" class="text-[9px] px-2 py-0.5 rounded font-bold border badge-exito">
+            EQUILIBRIO ÓPTIMO
+          </span>
+        </div>
+
+        <div id="box-diagnostico" class="mt-1.5 text-[10.5px] leading-relaxed space-y-1 overflow-y-auto pr-1 shrink-0 max-h-28">
+          <!-- Inyectado por JS -->
+        </div>
+
+        <!-- NUEVA SECCIÓN: INTERPRETACIÓN DINÁMICA DE LA GRÁFICA ACTIVA (ESPACIO MARCADO EN ROJO) -->
+        <div class="mt-2 pt-2 border-t border-[#571C1D]/80 flex-1 flex flex-col min-h-0 overflow-hidden">
+          <div class="flex items-center justify-between shrink-0 mb-1">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-[#FF9E4A] flex items-center gap-1">
+              <span>📊</span> Interpretación de la Gráfica
+            </span>
+            <span class="text-[9px] text-slate-400">En tiempo real</span>
+          </div>
+          <div id="box-interpretacion-grafica" class="interpretacion-box text-[10.5px] leading-relaxed text-slate-200 p-2 rounded overflow-y-auto flex-1">
+            <!-- Inyectado dinámicamente por JS al cambiar de tab o slider -->
+          </div>
+        </div>
+
+        <!-- Desglose Financiero Rápido -->
+        <div class="mt-1.5 pt-1.5 border-t border-[#571C1D]/80 grid grid-cols-2 gap-1 text-[9.5px] text-slate-400 shrink-0">
+          <div>Precio Rover: <strong class="text-slate-200">$101.5 USD</strong></div>
+          <div>Margen Neto: <strong id="lbl-mini-margen" class="text-emerald-400">$67.72 USD</strong></div>
+          <div>Inversión CX: <strong id="lbl-mini-cx" class="text-amber-400">$465 USD</strong></div>
+          <div>Pauta Neta: <strong id="lbl-mini-pauta" class="text-slate-200">$2.635 USD</strong></div>
+        </div>
+      </section>
+    </aside>
+
+    <!-- COLUMNA DERECHA: KPIS CON TOOLTIPS + 10 GRÁFICAS CON TABS -->
+    <section class="col-span-12 md:col-span-8 lg:col-span-9 flex flex-col gap-2 min-h-0 overflow-hidden">
+
+      <!-- ===================================================================== -->
+      <!-- 6 TARJETAS KPI CON TOOLTIPS FLOTANTES EXPLICATIVOS                    -->
+      <!-- ===================================================================== -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 shrink-0">
+        
+        <!-- KPI 1: Ventas -->
+        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-lg p-2 transition cursor-help shadow">
+          <span class="text-[10px] text-slate-400 uppercase font-bold flex items-center justify-between">
+            Ventas Totales <span class="text-[9px] text-slate-500">ⓘ</span>
+          </span>
+          <div id="kpi-ventas" class="text-base font-black text-white mt-0.5">$7.917</div>
+          <span id="kpi-roas" class="text-[9px] text-emerald-400 font-semibold">ROAS: 2.55x</span>
+          <div class="kpi-tooltip">
+            <strong class="text-cyan-300">Ventas Facturadas (USD):</strong><br>
+            Ingreso total por la venta de vehículos Rover.<br>
+            <strong class="text-slate-300">Adaptación del ACA:</strong> El precio unitario por Rover es de ~$101-$111 USD. En los datos del caso fluctuó entre $5.500 (Ene) y $10.200 (May), con un multiplicador ROAS constante de 2.56x.
+          </div>
+        </div>
+
+        <!-- KPI 2: Clientes -->
+        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-lg p-2 transition cursor-help shadow">
+          <span class="text-[10px] text-slate-400 uppercase font-bold flex items-center justify-between">
+            Clientes Adq. <span class="text-[9px] text-slate-500">ⓘ</span>
+          </span>
+          <div id="kpi-clientes" class="text-base font-black text-white mt-0.5">78</div>
+          <span id="kpi-tasa-conv" class="text-[9px] text-indigo-300 font-semibold">CR: 5.27%</span>
+          <div class="kpi-tooltip">
+            <strong class="text-cyan-300">Clientes Nuevos:</strong><br>
+            Unidades vendidas a nuevos usuarios en el mes.<br>
+            <strong class="text-slate-300">Ecuación Conversión (CR):</strong> (Clientes / Visitas) × 100. En el caso real varió entre 55 clientes (5.0% en Ene) y 92 clientes (5.82% en May).
+          </div>
+        </div>
+
+        <!-- KPI 3: CPA Unitario -->
+        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-lg p-2 transition cursor-help shadow">
+          <span class="text-[10px] text-slate-400 uppercase font-bold flex items-center justify-between">
+            CPA Unitario <span class="text-[9px] text-slate-500">ⓘ</span>
+          </span>
+          <div id="kpi-cpa" class="text-base font-black text-emerald-400 mt-0.5">$33.78</div>
+          <span id="kpi-cpa-status" class="text-[9px] text-slate-400">Meta: &lt; $41.00</span>
+          <div class="kpi-tooltip">
+            <strong class="text-cyan-300">Costo por Adquisición (CPA):</strong><br>
+            Pauta publicitaria neta dividida entre clientes adquiridos.<br>
+            <strong class="text-slate-300">Lección de Febrero:</strong> Un CPA bajo ($38.82) NO es eficiente si destruye la satisfacción; en Mayo subió a $42.39 por saturación publicitaria.
+          </div>
+        </div>
+
+        <!-- KPI 4: CSAT -->
+        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-lg p-2 transition cursor-help shadow">
+          <span class="text-[10px] text-slate-400 uppercase font-bold flex items-center justify-between">
+            CSAT (0-10) <span class="text-[9px] text-slate-500">ⓘ</span>
+          </span>
+          <div id="kpi-csat" class="text-base font-black text-emerald-400 mt-0.5">9.4 / 10</div>
+          <span id="kpi-csat-status" class="text-[9px] text-emerald-400">Excelente</span>
+          <div class="kpi-tooltip">
+            <strong class="text-cyan-300">Satisfacción del Cliente (CSAT):</strong><br>
+            Calificación de 0 a 10 obtenida en encuestas post-compra.<br>
+            <strong class="text-slate-300">Trampa de la Guía:</strong> La tabla ya traía el promedio listo. En Febrero colapsó a 4.2 por falta de soporte y en Abril subió a 9.4 al estabilizar la entrega técnica.
+          </div>
+        </div>
+
+        <!-- KPI 5: Margen Limpio -->
+        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-lg p-2 transition cursor-help shadow">
+          <span class="text-[10px] text-slate-400 uppercase font-bold flex items-center justify-between">
+            Margen Limpio <span class="text-[9px] text-slate-500">ⓘ</span>
+          </span>
+          <div id="kpi-margen" class="text-base font-black text-emerald-300 mt-0.5">$67.72</div>
+          <span class="text-[9px] text-slate-400">Por cada Rover</span>
+          <div class="kpi-tooltip">
+            <strong class="text-cyan-300">Margen Unitario de Contribución:</strong><br>
+            Precio de venta ($101.5) menos CPA pagado.<br>
+            <strong class="text-slate-300">Prueba de Viabilidad:</strong> Cada cliente deja ~$60-$68 USD libres tras pagar la publicidad. El modelo es viable y financieramente sólido.
+          </div>
+        </div>
+
+        <!-- KPI 6: Ratio Maestro -->
+        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-lg p-2 transition cursor-help shadow">
+          <span class="text-[10px] text-slate-400 uppercase font-bold flex items-center justify-between">
+            Ratio CSAT/CPA <span class="text-[9px] text-slate-500">ⓘ</span>
+          </span>
+          <div id="kpi-ratio" class="text-base font-black text-cyan-300 mt-0.5">0.2783</div>
+          <span class="text-[9px] text-slate-400">Puntos por $1 USD</span>
+          <div class="kpi-tooltip">
+            <strong class="text-cyan-300">Ratio Maestro de Eficiencia Directiva:</strong><br>
+            Puntos de satisfacción ganados por cada dólar de adquisición.<br>
+            <strong class="text-slate-300">Contraste:</strong> Febrero fue 0.1082 (pésimo rendimiento) y Abril fue 0.2365 (récord histórico de productividad).
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- PANEL DE LAS 10 GRÁFICAS CON TABS DINÁMICAS                           -->
+      <!-- ===================================================================== -->
+      <div class="card-box bg-[#1C0C10]/95 border border-[#571C1D] rounded-lg p-2.5 flex-1 flex flex-col min-h-0 overflow-hidden shadow-xl">
+        
+        <!-- BARRA DE PESTAÑAS (10 TABS DINÁMICAS) -->
+        <div class="flex flex-wrap items-center justify-between gap-1 border-b border-[#571C1D]/80 pb-1.5 shrink-0">
+          <div class="flex items-center gap-1 overflow-x-auto py-0.5">
+            <span class="text-[10px] uppercase font-bold text-slate-400 mr-1 hidden sm:inline">10 Gráficas:</span>
+            <button onclick="cambiarTab(1)" id="tab-1" class="tab-btn active text-[10px] px-2 py-1 rounded bg-[#381216] font-bold text-[#FF6B00] border border-[#FF6B00]">1. CPA vs CSAT</button>
+            <button onclick="cambiarTab(2)" id="tab-2" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800">2. Ecuación CSAT</button>
+            <button onclick="cambiarTab(3)" id="tab-3" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800">3. Retención &gt;100%</button>
+            <button onclick="cambiarTab(4)" id="tab-4" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800">4. Rendim. Decrec.</button>
+            <button onclick="cambiarTab(5)" id="tab-5" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800">5. Embudo Visitas</button>
+            <button onclick="cambiarTab(6)" id="tab-6" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800">6. Margen Limpio</button>
+            <button onclick="cambiarTab(7)" id="tab-7" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800">7. Ratio CSAT/CPA</button>
+            <button onclick="cambiarTab(8)" id="tab-8" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800">8. ROAS 2.56x</button>
+            <button onclick="cambiarTab(9)" id="tab-9" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800">9. Cartera Total</button>
+            <button onclick="cambiarTab(10)" id="tab-10" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800">10. Reasignación 15%</button>
+          </div>
+          <span id="tab-descripcion" class="text-[10px] text-[#FF9E4A] font-semibold truncate hidden md:inline">
+            Gráfica 1: Mapa del Dilema Estratégico (CPA vs. CSAT)
+          </span>
+        </div>
+
+        <!-- LIENZO DINÁMICO REACTIVO (CHART.JS) -->
+        <div class="flex-1 min-h-0 relative mt-1 w-full">
+          <canvas id="lienzo-grafico"></canvas>
+        </div>
+
+        <!-- PIE DE LECTURA DIRECTA -->
+        <div id="pie-explicativo-grafica" class="mt-1 pt-1 border-t border-[#571C1D]/80 text-[10px] text-slate-400 flex items-center justify-between shrink-0">
+          <span id="txt-explicacion-corta">📌 <strong>Lectura Ejecutiva:</strong> El elemento neón es tu simulación. Los elementos neutros son los datos históricos reales (Enero a Mayo).</span>
+          <span class="text-slate-500 hidden sm:inline">Ares Rover Dynamics | SIM Directivo</span>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL DE AYUDA Y GLOSARIO GERENCIAL EXACTO (TEXTO SOLICITADO)            -->
+  <!-- ========================================================================= -->
+  <div id="modal-ayuda" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="card-box bg-[#1A0A0D] border border-[#571C1D] rounded-xl max-w-2xl w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-[#571C1D] pb-2">
+        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+          <span>💡</span> Guía Gerencial para la Dirección General
+        </h3>
+        <button onclick="toggleModalAyuda()" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
+      </div>
+
+      <div class="space-y-4 text-xs text-slate-200 max-h-[72vh] overflow-y-auto pr-2 leading-relaxed">
+        
+        <!-- SECCIÓN 1 SOLICITADA -->
+        <div class="p-3.5 rounded bg-black/50 border border-[#571C1D] space-y-2.5">
+          <h4 class="text-sm font-bold text-[#FF9E4A] border-b border-[#571C1D] pb-1">
+            1. La Explicación Ejecutiva (Como si fueras el Gerente General)
+          </h4>
+          <p class="text-slate-300">
+            Imagina que eres el dueño de la empresa de vehículos Rover para Marte y no eres experto en marketing digital. Esto es lo que necesitas saber en 2 minutos:
+          </p>
+
+          <div class="space-y-1.5 pl-2 border-l-2 border-[#FF6B00]">
+            <h5 class="font-bold text-white text-xs">Los 4 Conceptos Básicos:</h5>
+            <ol class="list-decimal pl-4 space-y-1 text-slate-300">
+              <li><strong>Tasa de Conversión (CR):</strong> De cada 100 personas que visitaron la web en el mes, ¿cuántos compraron un Rover? (En el caso ronda entre 4,8 % y 5,8 %).</li>
+              <li><strong>Costo de Adquisición (CPA):</strong> ¿Cuántos dólares de publicidad pagamos para conseguir un cliente nuevo? (Oscila entre $38 y $42 USD).</li>
+              <li><strong>Margen Unitario Limpio:</strong> Cada cliente nos paga en promedio $101 USD por su vehículo. Si captarlo nos cuesta $39 USD, a la empresa le quedan <strong>$62 USD limpios</strong> en el bolsillo. <em>El negocio sí es rentable.</em></li>
+              <li><strong>Satisfacción (CSAT):</strong> La nota de 0 a 10 que nos ponen los clientes después de comprar.</li>
+            </ol>
+          </div>
+
+          <div class="space-y-1.5 pl-2 border-l-2 border-rose-500">
+            <h5 class="font-bold text-white text-xs">El Fenómeno Real (Lo que ocurrió en tu empresa):</h5>
+            <ul class="list-disc pl-4 space-y-1 text-slate-300">
+              <li><strong>El error de Febrero:</strong> En febrero quisiste crecer rápido y metiste mucha plata a publicidad ($3.300 USD). Llegaron 85 compradores y el costo por cliente fue baratísimo ($38,82 USD). Pero tu equipo de soporte y entrega no dio abasto: los clientes quedaron insatisfechos y la calificación colapsó a <strong>4,2 sobre 10</strong>. Conseguiste clientes baratos, pero los enfureciste; esos clientes no volverán a comprar repuestos ni contratarán misiones futuras.</li>
+              <li><strong>El éxito de Abril:</strong> En abril moderaste la pauta ($3.100 USD) y le diste respiro a la operación. Captaste 78 clientes a $39,74 USD y la satisfacción saltó a un récord histórico de <strong>9,4 sobre 10</strong>.</li>
+              <li><strong>La saturación de Mayo:</strong> En mayo volviste a gastar demasiado ($3.900 USD). Vendiste más, pero cada cliente nuevo te costó <strong>$42,39 USD</strong>. La publicidad en frío comenzó a rendir menos.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- SECCIÓN 2 SOLICITADA -->
+        <div class="p-3.5 rounded bg-black/50 border border-[#571C1D] space-y-2">
+          <h4 class="text-sm font-bold text-emerald-400 border-b border-[#571C1D] pb-1">
+            2. Qué hace el Tablero Interactivo que construimos dirigido a la Gerencia
+          </h4>
+          <p class="text-slate-300">
+            Este simulador paramétrico permite al equipo directivo manipular tres palancas clave (Presupuesto en Pauta, % Reasignado a Soporte y Tráfico Web) para proyectar en tiempo real:
+          </p>
+          <ul class="list-disc pl-4 space-y-1 text-slate-300">
+            <li>El impacto de la capacidad técnica sobre el <strong>Índice de Satisfacción (CSAT)</strong>.</li>
+            <li>El punto de equilibrio del <strong>CPA</strong> y el <strong>Margen Neto de Contribución</strong> por cada vehículo vendido.</li>
+            <li>La comparación interactiva a través de <strong>10 gráficas directivas</strong> que contrastan los datos históricos reales frente a cualquier decisión simulada.</li>
+            <li>La justificación matemática rigurosa para defender ante el docente y la junta directiva por qué se debe <strong>reasignar un 15 % de la pauta al soporte post-venta</strong>.</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="border-t border-[#571C1D] pt-3 flex justify-end">
+        <button onclick="toggleModalAyuda()" class="px-4 py-1.5 rounded bg-[#FF6B00] hover:bg-[#EA580C] font-bold text-white text-xs">Entendido, Volver al Tablero</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
