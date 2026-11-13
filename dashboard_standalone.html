@@ -485,6 +485,156 @@ input[type="range"]::-webkit-slider-thumb:hover {
   }
 }
 
+
+/* ==========================================================================
+   SISTEMA DE BOTONES CON ACENTO Y RESPLANDOR NEÓN (ESTILO TOUR GUIADO)
+   ========================================================================== */
+.btn-accent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-weight: 800;
+  border-radius: 0.5rem;
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  border-width: 1.5px;
+  border-style: solid;
+}
+.btn-accent:hover {
+  transform: translateY(-1.5px) scale(1.03);
+}
+.btn-accent:active {
+  transform: translateY(0.5px) scale(0.97);
+}
+
+/* 1. AZUL (Enero / Base) */
+.btn-accent-blue {
+  background: linear-gradient(135deg, #1E40AF 0%, #2563EB 50%, #38BDF8 100%) !important;
+  border-color: #93C5FD !important;
+  box-shadow: 0 0 14px rgba(37, 99, 235, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+  color: #FFFFFF !important;
+}
+.btn-accent-blue:hover {
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.95), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 2. ROJO (Febrero / Crisis / Pauta Ciega) */
+.btn-accent-red {
+  background: linear-gradient(135deg, #991B1B 0%, #DC2626 50%, #F87171 100%) !important;
+  border-color: #FCA5A5 !important;
+  box-shadow: 0 0 14px rgba(220, 38, 38, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+  color: #FFFFFF !important;
+}
+.btn-accent-red:hover {
+  box-shadow: 0 0 24px rgba(248, 113, 113, 0.95), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 3. VERDE (Abril / Óptimo / SIM Óptimo) */
+.btn-accent-green {
+  background: linear-gradient(135deg, #065F46 0%, #059669 50%, #34D399 100%) !important;
+  border-color: #A7F3D0 !important;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+  color: #FFFFFF !important;
+}
+.btn-accent-green:hover {
+  box-shadow: 0 0 24px rgba(52, 211, 153, 0.95), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 4. AMARILLO / ÁMBAR (Mayo / Saturación) */
+.btn-accent-yellow {
+  background: linear-gradient(135deg, #92400E 0%, #D97706 50%, #FBBF24 100%) !important;
+  border-color: #FDE68A !important;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+  color: #FFFFFF !important;
+}
+.btn-accent-yellow:hover {
+  box-shadow: 0 0 24px rgba(251, 191, 36, 0.95), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 5. MORADO / VIOLETA (Expansión / Fidelización) */
+.btn-accent-purple {
+  background: linear-gradient(135deg, #5B21B6 0%, #7C3AED 50%, #A78BFA 100%) !important;
+  border-color: #DDD6FE !important;
+  box-shadow: 0 0 14px rgba(124, 58, 237, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+  color: #FFFFFF !important;
+}
+.btn-accent-purple:hover {
+  box-shadow: 0 0 24px rgba(167, 139, 250, 0.95), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 6. COLOR MORA / FRAMBUESA (Memoria de Cálculo / Fórmulas) */
+.btn-accent-mora {
+  background: linear-gradient(135deg, #701A75 0%, #A21CAF 50%, #F472B6 100%) !important;
+  border-color: #FBCFE8 !important;
+  box-shadow: 0 0 14px rgba(162, 28, 175, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+  color: #FFFFFF !important;
+}
+.btn-accent-mora:hover {
+  box-shadow: 0 0 24px rgba(244, 114, 182, 0.95), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 7. CYAN NEÓN (Guía de Uso / Tour) */
+.btn-accent-cyan {
+  background: linear-gradient(135deg, #0E7490 0%, #06B6D4 50%, #38BDF8 100%) !important;
+  border-color: #BAE6FD !important;
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+  color: #FFFFFF !important;
+}
+.btn-accent-cyan:hover {
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.95), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 8. BLANCO Y NEGRO / PLATA (Selector Modo Claro / Oscuro) */
+body.theme-dark .btn-accent-bw {
+  background: linear-gradient(135deg, #1E293B 0%, #334155 50%, #64748B 100%) !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+  color: #FFFFFF !important;
+}
+body.theme-dark .btn-accent-bw:hover {
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.55), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+}
+body.theme-light .btn-accent-bw {
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #334155 100%) !important;
+  border-color: #0F172A !important;
+  box-shadow: 0 0 12px rgba(15, 23, 42, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  color: #FFFFFF !important;
+}
+body.theme-light .btn-accent-bw:hover {
+  box-shadow: 0 0 22px rgba(15, 23, 42, 0.5), 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* 9. NARANJA NEÓN (Estrategia SIM / Siguiente) */
+.btn-accent-orange {
+  background: linear-gradient(135deg, #C2410C 0%, #EA580C 50%, #FBA544 100%) !important;
+  border-color: #FED7AA !important;
+  box-shadow: 0 0 14px rgba(234, 88, 12, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+  color: #FFFFFF !important;
+}
+.btn-accent-orange:hover {
+  box-shadow: 0 0 24px rgba(249, 115, 22, 1), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* TABS ACTIVAS CON RESPLANDOR NEÓN */
+.tab-btn.active {
+  background: linear-gradient(135deg, #C2410C 0%, #EA580C 50%, #FB923C 100%) !important;
+  border-color: #FFEDD5 !important;
+  box-shadow: 0 0 14px rgba(234, 88, 12, 0.75), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+}
+body.theme-light .tab-btn.active {
+  background: linear-gradient(135deg, #EA580C 0%, #F97316 50%, #FB923C 100%) !important;
+  border-color: #F97316 !important;
+  box-shadow: 0 0 14px rgba(234, 88, 12, 0.55) !important;
+  color: #FFFFFF !important;
+}
+
 </style>
 </head>
 <!-- ABRE SIEMPRE CON EL MODO MARTE POR DEFECTO -->
@@ -523,13 +673,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
       <!-- Botones de Acción en Móvil -->
       <div class="flex items-center gap-1.5 shrink-0 md:hidden">
-        <button onclick="iniciarTour()" class="btn-glow-pulse text-xs px-2.5 py-1 rounded-lg font-bold bg-gradient-to-r from-orange-600 to-amber-500 text-white flex items-center gap-1 shadow-sm">
+        <button onclick="iniciarTour()" class="btn-accent btn-accent-cyan text-xs px-2.5 py-1 rounded-lg shadow-sm">
           <span>🧭</span> Tour
         </button>
-        <button onclick="toggleTheme()" class="btn-interactive text-xs px-2 py-1 rounded-lg font-bold border border-[#571C1D] bg-[#2A0E13] text-[#FFD8B0] flex items-center gap-1">
+        <button onclick="toggleTheme()" class="btn-accent btn-accent-bw text-xs px-2 py-1 rounded-lg">
           <span class="theme-icon-mob">☀️</span>
         </button>
-        <button onclick="toggleModalCalculo()" class="text-xs px-2 py-1 rounded-lg bg-indigo-950/80 border border-indigo-500/50 text-indigo-300 font-bold flex items-center gap-1">
+        <button onclick="toggleModalCalculo()" class="btn-accent btn-accent-mora text-xs px-2 py-1 rounded-lg">
           <span>📐</span>
         </button>
       </div>
@@ -538,22 +688,22 @@ input[type="range"]::-webkit-slider-thumb:hover {
     <!-- Fila 2 en móvil / centro en desktop: Escenarios con scroll táctil -->
     <div id="tour-escenarios" class="w-full md:w-auto flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none whitespace-nowrap">
       <span class="text-xs uppercase font-extrabold text-slate-400 hidden xl:inline mr-1">Escenarios:</span>
-      <button id="btn-hdr-enero" onclick="cargarEscenario('enero')" class="btn-esc btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-blue-500/50 text-blue-300 hover:bg-blue-950/70 transition flex items-center gap-1 shrink-0 font-medium">
+      <button id="btn-hdr-enero" onclick="cargarEscenario('enero')" class="btn-esc btn-accent btn-accent-blue text-xs px-2.5 py-1.5 rounded-lg shrink-0 font-bold">
         <span>🔵</span> Ene (Base)
       </button>
-      <button id="btn-hdr-febrero" onclick="cargarEscenario('febrero')" class="btn-esc btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-rose-500/50 text-rose-300 hover:bg-rose-950/70 transition flex items-center gap-1 shrink-0 font-medium">
+      <button id="btn-hdr-febrero" onclick="cargarEscenario('febrero')" class="btn-esc btn-accent btn-accent-red text-xs px-2.5 py-1.5 rounded-lg shrink-0 font-bold">
         <span>⚠️</span> Febrero (Crisis 4.2)
       </button>
-      <button id="btn-hdr-abril" onclick="cargarEscenario('abril')" class="btn-esc btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-950/70 transition flex items-center gap-1 shrink-0 font-medium">
+      <button id="btn-hdr-abril" onclick="cargarEscenario('abril')" class="btn-esc btn-accent btn-accent-green text-xs px-2.5 py-1.5 rounded-lg shrink-0 font-bold">
         <span>⭐</span> Abril (Óptimo 9.4)
       </button>
-      <button id="btn-hdr-mayo" onclick="cargarEscenario('mayo')" class="btn-esc btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-amber-500/50 text-amber-300 hover:bg-amber-950/70 transition flex items-center gap-1 shrink-0 font-medium">
+      <button id="btn-hdr-mayo" onclick="cargarEscenario('mayo')" class="btn-esc btn-accent btn-accent-yellow text-xs px-2.5 py-1.5 rounded-lg shrink-0 font-bold">
         <span>📈</span> Mayo (CPA $42)
       </button>
-      <button id="btn-hdr-recomendado" onclick="cargarEscenario('recomendado')" class="btn-esc btn-glow-pulse text-xs px-3 py-1.5 rounded-lg bg-gradient-to-r from-orange-600/90 to-amber-600/90 border border-[#FF6B00] text-white font-extrabold transition flex items-center gap-1 shadow-md shadow-orange-500/40 btn-recomendado shrink-0">
+      <button id="btn-hdr-recomendado" onclick="cargarEscenario('recomendado')" class="btn-esc btn-accent btn-accent-orange text-xs px-3 py-1.5 rounded-lg shrink-0 font-extrabold">
         <span>🎯</span> Estrategia SIM (15%)
       </button>
-      <button id="btn-hdr-agresivo" onclick="cargarEscenario('agresivo')" class="btn-esc btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-purple-500/50 text-purple-300 hover:bg-purple-950/70 transition items-center gap-1 shrink-0 hidden sm:flex font-medium">
+      <button id="btn-hdr-agresivo" onclick="cargarEscenario('agresivo')" class="btn-esc btn-accent btn-accent-purple text-xs px-2.5 py-1.5 rounded-lg shrink-0 font-bold hidden sm:inline-flex">
         <span>🚀</span> Expansión ($5K)
       </button>
     </div>
@@ -566,13 +716,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
         <span>Tour Guiado</span>
       </button>
 
-      <button onclick="toggleModalCalculo()" class="btn-glow-blue text-xs px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 border border-indigo-500/50 bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 shadow-sm shadow-indigo-500/20">
+      <button onclick="toggleModalCalculo()" class="btn-accent btn-accent-mora text-xs px-3 py-1.5 rounded-lg font-bold">
         <span>📐</span>
         <span>Memoria de Cálculo</span>
       </button>
 
       <!-- Conmutador Verdadero de Modo Claro / Modo Oscuro -->
-      <button id="btn-theme-toggle" onclick="toggleTheme()" class="btn-interactive text-xs px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 border border-[#571C1D] bg-[#2A0E13] hover:bg-[#3D141B] text-[#FFD8B0] shadow-sm" title="Alternar entre Modo Oscuro y Modo Claro">
+      <button id="btn-theme-toggle" onclick="toggleTheme()" class="btn-accent btn-accent-bw text-xs px-3 py-1.5 rounded-lg font-bold" title="Alternar entre Modo Oscuro y Modo Claro">
         <span id="theme-icon">☀️</span>
         <span id="theme-label">Modo Claro</span>
       </button>
@@ -586,10 +736,10 @@ input[type="range"]::-webkit-slider-thumb:hover {
   <!-- ========================================================================= -->
   <!-- CONTENEDOR PRINCIPAL: RESPONSIVE FLUIDO EN MÓVIL, CERO SCROLL EN DESKTOP  -->
   <!-- ========================================================================= -->
-  <main class="flex-1 p-2 md:p-2.5 gap-2.5 flex flex-col md:grid md:grid-cols-12 min-h-0 md:overflow-hidden w-full">
+  <main class="flex-1 p-2 md:p-3 gap-3 flex flex-col md:grid md:grid-cols-12 min-h-0 md:overflow-hidden w-full max-w-[1740px] mx-auto">
 
     <!-- COLUMNA IZQUIERDA: CONTROLES + DIAGNÓSTICO + INTERPRETACIÓN DE GRÁFICA -->
-    <aside class="w-full md:col-span-4 lg:col-span-3 flex flex-col gap-2 min-h-0 md:overflow-hidden">
+    <aside class="w-full md:col-span-5 lg:col-span-4 xl:col-span-4 flex flex-col gap-2.5 min-h-0 md:overflow-hidden">
       
       <!-- CARD 1: CONTROLES / PALANCAS (PASO 2 DEL TOUR) -->
       <section id="tour-palancas" class="card-box bg-[#1C0C10]/95 border border-[#571C1D] rounded-xl p-3 flex flex-col gap-2.5 shrink-0 shadow-lg">
@@ -668,7 +818,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
           </span>
         </div>
 
-        <div id="box-diagnostico" class="mt-1.5 text-xs leading-relaxed space-y-1 overflow-y-auto pr-1 shrink-0 max-h-16 md:max-h-20">
+        <div id="box-diagnostico" class="mt-1.5 text-xs md:text-[13px] leading-relaxed space-y-1.5 overflow-y-auto pr-1 shrink-0 max-h-28 md:max-h-32">
           <!-- Inyectado por JS -->
         </div>
 
@@ -682,15 +832,54 @@ input[type="range"]::-webkit-slider-thumb:hover {
               Escenario 2: SIM Óptimo
             </span>
           </div>
-          <div id="box-explicacion-escenarios" class="text-xs leading-relaxed p-2 rounded-lg bg-black/40 border border-[#571C1D]/60 space-y-1 max-h-24 md:max-h-24 overflow-y-auto">
+          <div id="box-explicacion-escenarios" class="text-xs md:text-[13px] leading-relaxed p-2.5 rounded-lg bg-black/40 border border-[#571C1D]/60 space-y-1.5 max-h-36 md:max-h-40 overflow-y-auto">
             <!-- Inyectado dinámicamente por JS -->
           </div>
-          <!-- Selector rápido de los 4 escenarios clave con microinteracción -->
-          <div class="grid grid-cols-4 gap-1.5 mt-1.5 text-xs">
-            <button onclick="cargarEscenarioCanónico(1)" id="btn-esc-canon-1" class="btn-interactive px-1.5 py-1 rounded-md border border-rose-800/60 bg-rose-950/40 text-rose-300 hover:bg-rose-900/60 font-semibold transition text-center truncate" title="Status Quo / Pauta Ciega (0% CX)">1. Pauta Ciega</button>
-            <button onclick="cargarEscenarioCanónico(2)" id="btn-esc-canon-2" class="btn-interactive px-1.5 py-1 rounded-md border border-emerald-800/60 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/60 font-bold transition text-center truncate" title="Estrategia SIM / Equilibrio Óptimo (15% CX)">2. SIM Óptimo</button>
-            <button onclick="cargarEscenarioCanónico(3)" id="btn-esc-canon-3" class="btn-interactive px-1.5 py-1 rounded-md border border-cyan-800/60 bg-cyan-950/40 text-cyan-300 hover:bg-cyan-900/60 font-semibold transition text-center truncate" title="Hiper-Fidelización / Blindaje (25% CX)">3. Fidelización</button>
-            <button onclick="cargarEscenarioCanónico(4)" id="btn-esc-canon-4" class="btn-interactive px-1.5 py-1 rounded-md border border-amber-800/60 bg-amber-950/40 text-amber-300 hover:bg-amber-900/60 font-semibold transition text-center truncate" title="Saturación de Audiencias ($4.500 USD | 0% CX)">4. Saturación</button>
+          <!-- Selector rápido de los 4 escenarios clave con acento neón y tooltips directivos -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2 text-xs">
+            <div class="has-tooltip w-full">
+              <button onclick="cargarEscenarioCanónico(1)" id="btn-esc-canon-1" class="btn-accent btn-accent-red w-full px-2 py-1.5 text-xs rounded-lg font-bold">
+                <span>⚠️</span> 1. Pauta Ciega
+              </button>
+              <div class="tooltip-content text-xs">
+                <strong class="text-rose-400">Escenario 1: Crisis de Febrero (Pauta Ciega)</strong><br>
+                <span class="text-slate-200">Gasto: $3.300 USD | Soporte CX: 0% | Visitas: 1.650</span><br>
+                <span class="text-slate-300">CPA bajo ($38.82) pero satisfacción colapsada a <strong>4.2 / 10</strong> por talleres mecánicos saturados.</span>
+              </div>
+            </div>
+
+            <div class="has-tooltip w-full">
+              <button onclick="cargarEscenarioCanónico(2)" id="btn-esc-canon-2" class="btn-accent btn-accent-green w-full px-2 py-1.5 text-xs rounded-lg font-bold">
+                <span>⭐</span> 2. SIM Óptimo
+              </button>
+              <div class="tooltip-content text-xs">
+                <strong class="text-emerald-400">Escenario 2: Punto de Oro (Abril)</strong><br>
+                <span class="text-slate-200">Gasto: $3.100 USD | Soporte CX: 16% | Visitas: 1.480</span><br>
+                <span class="text-slate-300">Récord histórico de satisfacción (<strong>9.4 / 10</strong>) con CPA controlado de $39.74 USD y rentabilidad blindada.</span>
+              </div>
+            </div>
+
+            <div class="has-tooltip w-full">
+              <button onclick="cargarEscenarioCanónico(3)" id="btn-esc-canon-3" class="btn-accent btn-accent-purple w-full px-2 py-1.5 text-xs rounded-lg font-bold">
+                <span>🛡️</span> 3. Fidelización
+              </button>
+              <div class="tooltip-content text-xs">
+                <strong class="text-purple-400">Escenario 3: Blindaje de Cartera Activa</strong><br>
+                <span class="text-slate-200">Gasto: $4.000 USD | Soporte CX: 25% | Visitas: 1.500</span><br>
+                <span class="text-slate-300">Prioriza la atención de los <strong>1.792 contratos corporativos acumulados</strong> en Marte garantizando recompras.</span>
+              </div>
+            </div>
+
+            <div class="has-tooltip w-full">
+              <button onclick="cargarEscenarioCanónico(4)" id="btn-esc-canon-4" class="btn-accent btn-accent-yellow w-full px-2 py-1.5 text-xs rounded-lg font-bold">
+                <span>📈</span> 4. Saturación
+              </button>
+              <div class="tooltip-content text-xs">
+                <strong class="text-amber-400">Escenario 4: Rendimientos Decrecientes (Mayo)</strong><br>
+                <span class="text-slate-200">Gasto: $4.500 USD | Soporte CX: 0% | Visitas: 1.900</span><br>
+                <span class="text-slate-300">Gasto masivo con tráfico frío que dispara el CPA a <strong>$42.39 USD</strong> destruyendo la eficiencia del embudo.</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -702,7 +891,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
             </span>
             <span class="text-[11px] text-slate-400">En tiempo real</span>
           </div>
-          <div id="box-interpretacion-grafica" class="interpretacion-box text-xs leading-relaxed text-slate-100 p-2 rounded-lg overflow-y-auto flex-1 min-h-[90px] md:min-h-0 max-h-36 md:max-h-none">
+          <div id="box-interpretacion-grafica" class="interpretacion-box text-xs md:text-[13px] leading-relaxed text-slate-100 p-2.5 rounded-lg overflow-y-auto flex-1 min-h-[110px] md:min-h-0">
             <!-- Inyectado dinámicamente por JS al cambiar de tab o slider -->
           </div>
         </div>
@@ -746,7 +935,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     </aside>
 
     <!-- COLUMNA DERECHA: KPIS CON TOOLTIPS + 10 GRÁFICAS CON TABS -->
-    <section class="w-full md:col-span-8 lg:col-span-9 flex flex-col gap-2 min-h-0 md:overflow-hidden">
+    <section class="w-full md:col-span-7 lg:col-span-8 xl:col-span-8 flex flex-col gap-2.5 min-h-0 md:overflow-hidden">
 
       <!-- ===================================================================== -->
       <!-- 6 TARJETAS KPI CON TOOLTIPS FLOTANTES EXPLICATIVOS (PASO 4 DEL TOUR) -->
@@ -1591,8 +1780,8 @@ function actualizarDiagnostico() {
     badgeClase = 'badge-alerta';
     html = `
       <p class="text-rose-400 font-bold">⚠️ Estás repitiendo la crisis de febrero de 2026.</p>
-      <p class="text-slate-300">Captaste <strong>${simState.clientes} clientes</strong> pero solo dejaste un <strong>${simState.soporte}% en soporte</strong>. El CPA parece barato ($${simState.cpa.toFixed(2)}), pero la satisfacción cayó a <strong>${simState.csat.toFixed(1)}/10</strong>. Los clientes no volverán a comprar repuestos ni misiones.</p>
-      <div class="p-1 rounded bg-rose-950/40 border border-rose-800/40 text-rose-300 text-[9.5px]">
+      <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">Captaste <strong>${simState.clientes} clientes</strong> pero solo dejaste un <strong>${simState.soporte}% en soporte</strong>. El CPA parece barato ($${simState.cpa.toFixed(2)}), pero la satisfacción cayó a <strong>${simState.csat.toFixed(1)}/10</strong>. Los clientes no volverán a comprar repuestos ni misiones.</p>
+      <div class="p-1 rounded bg-rose-950/40 border border-rose-800/40 text-rose-300 text-xs">
         <strong>Solución:</strong> Sube la palanca de soporte a mínimo 12-15%.
       </div>
     `;
@@ -1601,26 +1790,26 @@ function actualizarDiagnostico() {
     badgeClase = 'badge-advertencia';
     html = `
       <p class="text-amber-400 font-bold">⚠️ Saturación publicitaria en curso (Efecto Mayo).</p>
-      <p class="text-slate-300">El CPA subió a <strong>$${simState.cpa.toFixed(2)} USD</strong>. Estás pagando una prima muy alta por atraer tráfico frío a la misión.</p>
+      <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">El CPA subió a <strong>$${simState.cpa.toFixed(2)} USD</strong>. Estás pagando una prima muy alta por atraer tráfico frío a la misión.</p>
     `;
   } else if (simState.csat >= 8.8 && simState.cpa <= 41.0) {
     badge = 'EXCELENCIA ESTRATÉGICA (TIPO ABRIL)';
     badgeClase = 'badge-exito';
     html = `
       <p class="text-emerald-400 font-bold">⭐ Punto de Oro Gerencial.</p>
-      <p class="text-slate-300">Con <strong>${simState.soporte}% en soporte</strong> mantienes la satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong> y el margen limpio en <strong>$${simState.margen.toFixed(2)} USD</strong> por vehículo. Es la propuesta a defender en el ACA.</p>
+      <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">Con <strong>${simState.soporte}% en soporte</strong> mantienes la satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong> y el margen limpio en <strong>$${simState.margen.toFixed(2)} USD</strong> por vehículo. Es la propuesta a defender en el ACA.</p>
     `;
   } else {
     badge = 'ZONA ESTABLE DE CONTROL';
     badgeClase = 'badge-advertencia';
     html = `
       <p class="text-slate-200 font-bold">ℹ️ Operación en rango aceptable.</p>
-      <p class="text-slate-300">Margen de <strong>$${simState.margen.toFixed(2)} USD</strong> y satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong>. Se puede optimizar aumentando el cuidado de los clientes.</p>
+      <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">Margen de <strong>$${simState.margen.toFixed(2)} USD</strong> y satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong>. Se puede optimizar aumentando el cuidado de los clientes.</p>
     `;
   }
 
   badgeEstado.textContent = badge;
-  badgeEstado.className = `text-[9px] px-2 py-0.5 rounded font-bold border ${badgeClase}`;
+  badgeEstado.className = `text-xs px-2.5 py-1 rounded-md font-extrabold border ${badgeClase}`;
   boxDiagnostico.innerHTML = html;
 }
 
@@ -1646,9 +1835,9 @@ function actualizarExplicacionEscenarios() {
       <div class="space-y-1">
         <p class="font-bold text-amber-400 flex items-center justify-between">
           <span>🟡 Escenario 4: Saturación de Pauta ($4.500 USD | 0% CX | 1.900 Visitas)</span>
-          <span class="text-[8.5px] px-1 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-800">Saturación Crítica</span>
+          <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">Saturación Crítica</span>
         </p>
-        <p class="text-slate-300">
+        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
           <strong>Diagnóstico Directivo:</strong> Arquetipo de <strong>rendimientos decrecientes extremos y colapso dual</strong>. 
           Al forzar la inversión a $4.500 USD con 0% en soporte y 1.900 visitas, el tráfico frío se dispersa, el <strong>CPA sube a $${simState.cpa.toFixed(2)} USD</strong> y la avalancha de ${simState.clientes} clientes sin servicio técnico hunde el <strong>CSAT a un crítico ${simState.csat.toFixed(1)}/10 (Zona Roja)</strong>. 
           Prueba contundente de que inyectar más presupuesto a tráfico frío sin soporte acelera la quiebra del modelo.
@@ -1666,9 +1855,9 @@ function actualizarExplicacionEscenarios() {
       <div class="space-y-1">
         <p class="font-bold text-blue-400 flex items-center justify-between">
           <span>🔵 Enero (Línea Base Histórica)</span>
-          <span class="text-[8.5px] px-1 py-0.2 rounded bg-blue-950 text-blue-300 border border-blue-800">Calibración Inicial</span>
+          <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">Calibración Inicial</span>
         </p>
-        <p class="text-slate-300">
+        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
           <strong>Significado Real:</strong> Punto de partida empírico de Ares Rover Dynamics en Marte. Inversión inicial moderada de $2.200 USD con 8% en soporte ($176 USD) y 1.100 visitas, manteniendo una operación equilibrada: <strong>CSAT de 7.5/10</strong> y <strong>CPA de $40.00 USD</strong> antes de experimentar el estrés del escalamiento comercial.
         </p>
       </div>
@@ -1684,9 +1873,9 @@ function actualizarExplicacionEscenarios() {
       <div class="space-y-1">
         <p class="font-bold text-rose-400 flex items-center justify-between">
           <span>🔴 Febrero (Crisis Operativa por Pauta Ciega - 0% CX)</span>
-          <span class="text-[8.5px] px-1 py-0.2 rounded bg-rose-950 text-rose-300 border border-rose-800">Crisis Febrero</span>
+          <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800">Crisis Febrero</span>
         </p>
-        <p class="text-slate-300">
+        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
           <strong>Significado Real:</strong> El error directivo de canalizar el 100% del presupuesto ($3.300 USD) a captación publicitaria sin asignar $1 a posventa. Se captaron 85 clientes (1.650 visitas), pero el colapso del taller técnico hundió la satisfacción al nivel más bajo del semestre: <strong>CSAT de 4.2/10 (Zona Roja)</strong>. Evidencia empírica de que captar sin cuidar destruye el valor de vida del cliente.
         </p>
       </div>
@@ -1702,9 +1891,9 @@ function actualizarExplicacionEscenarios() {
       <div class="space-y-1">
         <p class="font-bold text-emerald-400 flex items-center justify-between">
           <span>⭐ Abril (Mes de Oro - Equilibrio Virtuoso)</span>
-          <span class="text-[8.5px] px-1 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Récord de Calidad</span>
+          <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Récord de Calidad</span>
         </p>
-        <p class="text-slate-300">
+        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
           <strong>Significado Real:</strong> El mes de mayor excelencia operativa y eficiencia histórica. Con $3.100 USD y un 16% reasignado a soporte posventa ($496 USD), los ingenieros garantizaron alistamiento óptimo de cada Rover, logrando el <strong>récord histórico de CSAT en 9.4/10</strong>, CPA de <strong>$39.74 USD</strong> y Ratio Maestro supremo de <strong>0.2365 pts/USD</strong>.
         </p>
       </div>
@@ -1720,9 +1909,9 @@ function actualizarExplicacionEscenarios() {
       <div class="space-y-1">
         <p class="font-bold text-amber-400 flex items-center justify-between">
           <span>📈 Mayo (Saturación y Rendimientos Decrecientes)</span>
-          <span class="text-[8.5px] px-1 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-800">Efecto Mayo</span>
+          <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">Efecto Mayo</span>
         </p>
-        <p class="text-slate-300">
+        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
           <strong>Significado Real:</strong> Demostración de saturación de audiencias marcianas. Al subir la pauta a $3.900 USD con solo 8% a soporte, el tráfico frío se dispersó y el <strong>CPA se disparó a $42.39 USD (Zona Roja > $42)</strong>. Aunque se captaron 92 clientes, cada adquisición marginal fue sustancialmente más costosa, comprobando la ley de rendimientos decrecientes.
         </p>
       </div>
@@ -1738,9 +1927,9 @@ function actualizarExplicacionEscenarios() {
       <div class="space-y-1">
         <p class="font-bold text-emerald-400 flex items-center justify-between">
           <span>🟢 Escenario 2: Estrategia SIM / Equilibrio Óptimo (15% CX = $600 USD)</span>
-          <span class="text-[8.5px] px-1 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Plan Junio Recomendado</span>
+          <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Plan Junio Recomendado</span>
         </p>
-        <p class="text-slate-300">
+        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
           <strong>Diagnóstico Directivo:</strong> La propuesta canónica del Sistema de Información de Marketing para el Plan Junio ($4.000 USD). Reasigna $600 USD (15%) a posventa y $3.400 USD a pauta neta, logrando <strong>CSAT blindado en Zona Verde (${simState.csat.toFixed(1)}/10 &gt; 9.0)</strong>, CPA optimizado de <strong>$${simState.cpa.toFixed(2)} USD</strong> y <strong>margen limpio de $${simState.margen.toFixed(2)} USD</strong> por unidad.
         </p>
       </div>
@@ -1756,9 +1945,9 @@ function actualizarExplicacionEscenarios() {
       <div class="space-y-1">
         <p class="font-bold text-cyan-300 flex items-center justify-between">
           <span>🔵 Escenario 3: Hiper-Fidelización / Blindaje Total (20-30% CX)</span>
-          <span class="text-[8.5px] px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">Lealtad VIP</span>
+          <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">Lealtad VIP</span>
         </p>
-        <p class="text-slate-300">
+        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
           <strong>Diagnóstico Directivo:</strong> Arquetipo de máxima lealtad y retención acumulada (&gt; 113%). Al destinar $${simState.gastoCX} USD (${simState.soporte}%) a posventa, el equipo técnico brinda atención personalizada y mantenimiento preventivo continuo, elevando el <strong>CSAT a ${simState.csat.toFixed(1)}/10</strong> y asegurando recompra garantizada de contratos en Marte.
         </p>
       </div>
@@ -1773,9 +1962,9 @@ function actualizarExplicacionEscenarios() {
       <div class="space-y-1">
         <p class="font-bold text-purple-300 flex items-center justify-between">
           <span>🚀 Expansión Agresiva de Mercado ($5.200 USD | 2% CX)</span>
-          <span class="text-[8.5px] px-1 py-0.2 rounded bg-purple-950 text-purple-300 border border-purple-800">Alto Riesgo</span>
+          <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">Alto Riesgo</span>
         </p>
-        <p class="text-slate-300">
+        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
           <strong>Diagnóstico Directivo:</strong> Gran volumen bruto de ventas (${simState.clientes} unidades), pero con sobrecosto publicitario por saturación y grave riesgo de deterioro de CSAT (${simState.csat.toFixed(1)}/10) por cuello de botella técnico.
         </p>
       </div>
@@ -1790,9 +1979,9 @@ function actualizarExplicacionEscenarios() {
       <div class="space-y-1">
         <p class="font-bold text-rose-400 flex items-center justify-between">
           <span>🔴 Escenario 1: Status Quo / Pauta Ciega (0% CX)</span>
-          <span class="text-[8.5px] px-1 py-0.2 rounded bg-rose-950 text-rose-300 border border-rose-800">Crisis Febrero</span>
+          <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800">Crisis Febrero</span>
         </p>
-        <p class="text-slate-300">
+        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
           <strong>Diagnóstico:</strong> El 100% del presupuesto ($${simState.gasto.toLocaleString()} USD) se consume en anuncios sin soporte postventa. 
           Desencadena saturación técnica y colapso del <strong>CSAT en Zona Roja (${simState.csat.toFixed(1)}/10)</strong>.
         </p>
@@ -1807,9 +1996,9 @@ function actualizarExplicacionEscenarios() {
       <div class="space-y-1">
         <p class="font-bold text-amber-400 flex items-center justify-between">
           <span>🟡 Escenario 4: Saturación de Audiencias (&gt; $3.900 USD)</span>
-          <span class="text-[8.5px] px-1 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-800">Efecto Mayo</span>
+          <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">Efecto Mayo</span>
         </p>
-        <p class="text-slate-300">
+        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
           <strong>Diagnóstico:</strong> Entrada en la ley de rendimientos decrecientes. Al forzar la inversión con tráfico frío, el <strong>CPA se eleva a $${simState.cpa.toFixed(2)} USD</strong>.
         </p>
       </div>
@@ -1823,9 +2012,9 @@ function actualizarExplicacionEscenarios() {
       <div class="space-y-1">
         <p class="font-bold text-emerald-400 flex items-center justify-between">
           <span>🟢 Escenario 2: Estrategia SIM / Equilibrio Óptimo (15% CX)</span>
-          <span class="text-[8.5px] px-1 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Punto de Oro</span>
+          <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Punto de Oro</span>
         </p>
-        <p class="text-slate-300">
+        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
           <strong>Diagnóstico:</strong> CSAT blindado en Zona Verde (${simState.csat.toFixed(1)}/10), CPA optimizado en $${simState.cpa.toFixed(2)} USD y margen limpio de $${simState.margen.toFixed(2)} USD.
         </p>
       </div>
@@ -1837,7 +2026,7 @@ function actualizarExplicacionEscenarios() {
     contenido = `
       <div class="space-y-1">
         <p class="font-bold text-slate-200">ℹ️ Configuración Paramétrica Intermedia</p>
-        <p class="text-slate-300">
+        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
           Inversión de $${simState.gasto.toLocaleString()} USD con $${simState.gastoCX} USD a CX (${simState.soporte}%) y $${simState.pautaNeta.toLocaleString()} USD a pauta. 
           CSAT: <strong>${simState.csat.toFixed(1)}/10</strong>, CPA: <strong>$${simState.cpa.toFixed(2)} USD</strong> y Margen: <strong>$${simState.margen.toFixed(2)} USD</strong>.
         </p>
@@ -1917,7 +2106,7 @@ function actualizarInterpretacionGrafica() {
           <div class="border-b border-slate-700/60 pb-1">
             <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 1: El Dilema Central (CPA vs CSAT)</strong>
           </div>
-          <div class="text-[10px] space-y-1 text-slate-300">
+          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Costo de Adquisición (CPA) en dólares ($30 a $48 USD). <em>Hacia la izquierda es más barato, hacia la derecha es más caro.</em></li>
@@ -1941,7 +2130,7 @@ function actualizarInterpretacionGrafica() {
           <div class="border-b border-slate-700/60 pb-1">
             <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 2: La Trampa de la Ecuación de Satisfacción</strong>
           </div>
-          <div class="text-[10px] space-y-1 text-slate-300">
+          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Los meses analizados (Enero a Mayo + Columna de Simulación).</li>
@@ -1966,7 +2155,7 @@ function actualizarInterpretacionGrafica() {
           <div class="border-b border-slate-700/60 pb-1">
             <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 3: La Trampa de la Ecuación de Retención (>100 %)</strong>
           </div>
-          <div class="text-[10px] space-y-1 text-slate-300">
+          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses de operación comercial.</li>
@@ -1990,7 +2179,7 @@ function actualizarInterpretacionGrafica() {
           <div class="border-b border-slate-700/60 pb-1">
             <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 4: Ley de Rendimientos Decrecientes en Pauta</strong>
           </div>
-          <div class="text-[10px] space-y-1 text-slate-300">
+          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Cronología de meses.</li>
@@ -2015,7 +2204,7 @@ function actualizarInterpretacionGrafica() {
           <div class="border-b border-slate-700/60 pb-1">
             <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 5: Dinámica del Embudo de Conversión (Visitas vs Compras)</strong>
           </div>
-          <div class="text-[10px] space-y-1 text-slate-300">
+          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses evaluados.</li>
@@ -2040,7 +2229,7 @@ function actualizarInterpretacionGrafica() {
           <div class="border-b border-slate-700/60 pb-1">
             <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 6: Economía Unitaria y Margen Limpio por Rover</strong>
           </div>
-          <div class="text-[10px] space-y-1 text-slate-300">
+          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje Y (Vertical):</strong> Las 3 variables clave: Precio de venta, Costo de adquisición (CPA) y Ganancia limpia.</li>
@@ -2064,7 +2253,7 @@ function actualizarInterpretacionGrafica() {
           <div class="border-b border-slate-700/60 pb-1">
             <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 7: El Ratio Maestro (CSAT / CPA)</strong>
           </div>
-          <div class="text-[10px] space-y-1 text-slate-300">
+          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses evaluados.</li>
@@ -2088,7 +2277,7 @@ function actualizarInterpretacionGrafica() {
           <div class="border-b border-slate-700/60 pb-1">
             <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 8: Correlación Causal de Crecimiento (Ventas vs Gasto y ROAS)</strong>
           </div>
-          <div class="text-[10px] space-y-1 text-slate-300">
+          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses de facturación.</li>
@@ -2112,7 +2301,7 @@ function actualizarInterpretacionGrafica() {
           <div class="border-b border-slate-700/60 pb-1">
             <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 9: Evolución de Cartera Total de la Misión</strong>
           </div>
-          <div class="text-[10px] space-y-1 text-slate-300">
+          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses de acumulación de clientes.</li>
@@ -2136,7 +2325,7 @@ function actualizarInterpretacionGrafica() {
           <div class="border-b border-slate-700/60 pb-1">
             <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 10: La Decisión Estratégica Directiva (Reasignación del 15 %)</strong>
           </div>
-          <div class="text-[10px] space-y-1 text-slate-300">
+          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Dos escenarios comparados: Estrategia Actual (Gasto ciego) vs Estrategia Optimizada SIM.</li>
@@ -2159,15 +2348,13 @@ function actualizarInterpretacionGrafica() {
 
 function cambiarTab(num) {
   tabActiva = num;
-  const isMarte = (currentTheme === 'marte');
-  const activeBg = isMarte ? 'bg-[#381216] text-[#FF6B00] border-[#FF6B00]' : 'bg-[#1F2430] text-[#00F0FF] border-[#00F0FF]';
 
   for (let i = 1; i <= 10; i++) {
     const btn = document.getElementById(`tab-${i}`);
     if (i === num) {
-      btn.className = `tab-btn active text-[10px] px-2 py-1 rounded font-bold border ${activeBg}`;
+      btn.className = "tab-btn active text-xs px-2.5 py-1.5 rounded-lg font-bold border shrink-0";
     } else {
-      btn.className = "tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800";
+      btn.className = "tab-btn text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium";
     }
   }
 
