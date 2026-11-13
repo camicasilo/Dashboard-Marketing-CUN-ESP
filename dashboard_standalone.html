@@ -14,7 +14,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
   <style>
 /* ==========================================================================
-   ESTILOS EJECUTIVOS SIM ROVER'S MARTE - DUAL THEME (MARTE DEFAULT + GERENCIAL GREYSCALE)
+   ESTILOS EJECUTIVOS SIM ROVER'S MARTE - DUAL THEME (MODO OSCURO & MODO CLARO)
    ========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 
@@ -29,105 +29,256 @@ body {
   overflow: hidden;
   height: 100vh;
   width: 100vw;
+  font-size: 13px; /* Tamaño de base aumentado para evitar textos ilegibles */
+  line-height: 1.45;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* ==========================================================================
-   1. MODO MARTE (POR DEFECTO AL ABRIR: ROJIZO VOLCÁNICO + NARANJA NEÓN)
+   1. MODO OSCURO (DARK MODE - TEMA MARTE ESPACIAL POR DEFECTO)
    ========================================================================== */
-body.theme-marte {
+body.theme-dark, body.theme-marte {
   background-color: #110809;
   color: #FED7AA;
 }
-body.theme-marte .header-bar {
+body.theme-dark .header-bar, body.theme-marte .header-bar {
   background-color: #1C0A0D;
   border-bottom-color: #431407;
 }
-body.theme-marte .card-box {
+body.theme-dark .card-box, body.theme-marte .card-box {
   background-color: rgba(28, 12, 16, 0.95);
   border-color: #571C1D;
 }
-body.theme-marte .logo-container {
+body.theme-dark .logo-container, body.theme-marte .logo-container {
   background-color: rgba(255, 107, 0, 0.15);
   border-color: rgba(255, 107, 0, 0.4);
 }
-body.theme-marte .logo-svg {
+body.theme-dark .logo-svg, body.theme-marte .logo-svg {
   color: #FF6B00;
 }
-body.theme-marte .brand-title {
+body.theme-dark .brand-title, body.theme-marte .brand-title {
   color: #FFEDD5;
 }
-body.theme-marte .mode-badge {
+body.theme-dark .mode-badge, body.theme-marte .mode-badge {
   background-color: rgba(255, 107, 0, 0.2);
   color: #FB923C;
   border-color: rgba(255, 107, 0, 0.4);
 }
+body.theme-dark input[type="range"]::-webkit-slider-thumb,
 body.theme-marte input[type="range"]::-webkit-slider-thumb {
   background: #FF6B00;
   box-shadow: 0 0 12px rgba(255, 107, 0, 0.85);
 }
-body.theme-marte .tab-btn.active {
+body.theme-dark .tab-btn.active, body.theme-marte .tab-btn.active {
   background-color: #381216;
   color: #FF6B00;
   border-color: #FF6B00;
 }
-body.theme-marte .btn-recomendado {
+body.theme-dark .btn-recomendado, body.theme-marte .btn-recomendado {
   background-color: rgba(255, 107, 0, 0.2);
   border-color: #FF6B00;
   color: #FFEDD5;
 }
-body.theme-marte .interpretacion-box {
+body.theme-dark .interpretacion-box, body.theme-marte .interpretacion-box {
   background-color: rgba(43, 16, 20, 0.85);
   border: 1px solid #7C2D12;
 }
 
 /* ==========================================================================
-   2. MODO GERENCIAL (ESCALA DE GRISES MONOCROMO + RESALTADO ELEGANTE)
+   2. MODO CLARO (LIGHT MODE - EJECUTIVO MODERNO ALTA VISIBILIDAD)
    ========================================================================== */
-body.theme-gerencial {
-  background-color: #07080A;
-  color: #E2E8F0;
+body.theme-light {
+  background-color: #F8FAFC;
+  color: #0F172A;
 }
-body.theme-gerencial .header-bar {
-  background-color: #0E1015;
-  border-bottom-color: #262A33;
+body.theme-light .header-bar {
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
-body.theme-gerencial .card-box {
-  background-color: rgba(18, 21, 28, 0.95);
-  border-color: #2A2F3D;
+body.theme-light .card-box {
+  background-color: #FFFFFF;
+  border-color: #E2E8F0;
+  box-shadow: 0 3px 10px -2px rgba(0, 0, 0, 0.06), 0 1px 4px -1px rgba(0, 0, 0, 0.04);
 }
-body.theme-gerencial .logo-container {
-  background-color: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+body.theme-light .logo-container {
+  background-color: rgba(234, 88, 12, 0.12);
+  border-color: rgba(234, 88, 12, 0.35);
 }
-body.theme-gerencial .logo-svg {
-  color: #F1F5F9;
+body.theme-light .logo-svg {
+  color: #EA580C;
 }
-body.theme-gerencial .brand-title {
+body.theme-light .brand-title {
+  color: #0F172A;
+}
+body.theme-light .slogan-text {
+  color: #475569;
+}
+body.theme-light .mode-badge {
+  background-color: rgba(234, 88, 12, 0.12);
+  color: #C2410C;
+  border-color: rgba(234, 88, 12, 0.3);
+}
+body.theme-light .text-slate-200,
+body.theme-light .text-slate-300,
+body.theme-light .text-white {
+  color: #0F172A !important;
+}
+body.theme-light .text-slate-400,
+body.theme-light .text-slate-500 {
+  color: #475569 !important;
+}
+body.theme-light .kpi-card {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+}
+body.theme-light .kpi-card:hover {
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 6px 16px -3px rgba(0, 0, 0, 0.08) !important;
+}
+body.theme-light input[type="range"] {
+  background-color: #E2E8F0;
+}
+body.theme-light input[type="range"]::-webkit-slider-thumb {
+  background: #EA580C;
+  box-shadow: 0 0 10px rgba(234, 88, 12, 0.6);
+}
+body.theme-light .tab-btn {
+  background-color: #F1F5F9;
+  color: #334155;
+  border-color: #CBD5E1;
+}
+body.theme-light .tab-btn.active {
+  background-color: #EA580C;
   color: #FFFFFF;
+  border-color: #EA580C;
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.35);
 }
-body.theme-gerencial .mode-badge {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #CBD5E1;
-  border-color: rgba(255, 255, 255, 0.2);
+body.theme-light .btn-esc {
+  background-color: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #1E293B;
 }
-body.theme-gerencial input[type="range"]::-webkit-slider-thumb {
-  background: #00F0FF;
-  box-shadow: 0 0 12px rgba(0, 240, 255, 0.7);
+body.theme-light .btn-esc:hover {
+  background-color: #F1F5F9;
 }
-body.theme-gerencial .tab-btn.active {
-  background-color: #1F2430;
-  color: #00F0FF;
-  border-color: #00F0FF;
+body.theme-light .btn-recomendado {
+  background-color: #FFF7ED;
+  border-color: #EA580C;
+  color: #C2410C;
 }
-body.theme-gerencial .btn-recomendado {
-  background-color: rgba(0, 240, 255, 0.15);
-  border-color: #00F0FF;
-  color: #E0F2FE;
+body.theme-light .interpretacion-box {
+  background-color: #FFF7ED;
+  border: 1px solid #FDBA74;
+  color: #7C2D12;
 }
-body.theme-gerencial .interpretacion-box {
-  background-color: rgba(15, 18, 25, 0.9);
-  border: 1px solid #333A48;
+body.theme-light #box-explicacion-escenarios {
+  background-color: #F8FAFC !important;
+  border-color: #E2E8F0 !important;
+  color: #1E293B !important;
+}
+body.theme-light #modal-calculo .card-box,
+body.theme-light #modal-ayuda .card-box {
+  background-color: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+body.theme-light #modal-calculo .bg-slate-900\/80,
+body.theme-light #modal-calculo .bg-slate-900\/70,
+body.theme-light #modal-calculo .bg-slate-900\/90 {
+  background-color: #F8FAFC !important;
+  border-color: #E2E8F0 !important;
+}
+body.theme-light #modal-calculo .bg-black\/50,
+body.theme-light #modal-calculo .bg-black\/40,
+body.theme-light #modal-calculo .bg-black\/30 {
+  background-color: #F1F5F9 !important;
+  border-color: #E2E8F0 !important;
+}
+
+/* ==========================================================================
+   3. ANIMACIONES DE BRILLO Y PULSO PARA BOTONES INTERACTIVOS
+   ========================================================================== */
+@keyframes glowPulsePrimary {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(255, 107, 0, 0.35), inset 0 0 3px rgba(255, 107, 0, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(255, 107, 0, 0.8), inset 0 0 6px rgba(255, 107, 0, 0.35);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes glowPulseBlue {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(99, 102, 241, 0.35);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(99, 102, 241, 0.75);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes shimmerEffect {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.btn-glow-pulse {
+  animation: glowPulsePrimary 2.2s infinite ease-in-out;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.btn-glow-pulse:hover {
+  transform: translateY(-1.5px) scale(1.03) !important;
+  box-shadow: 0 0 22px rgba(255, 107, 0, 0.95) !important;
+}
+
+.btn-glow-blue {
+  animation: glowPulseBlue 2.4s infinite ease-in-out;
+  transition: all 0.2s ease;
+}
+
+.btn-glow-blue:hover {
+  transform: translateY(-1.5px) scale(1.03);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.9);
+}
+
+.btn-interactive {
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn-interactive:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.15);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btn-interactive:active {
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   4. ESTILOS DEL TOUR GUIADO DE INICIO (ONBOARDING EJECUTIVO)
+   ========================================================================== */
+#tour-overlay {
+  transition: opacity 0.25s ease;
+}
+
+.tour-spotlight {
+  position: relative;
+  z-index: 60 !important;
+  box-shadow: 0 0 0 4px #FF6B00, 0 0 30px rgba(255, 107, 0, 0.85) !important;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+}
+
+body.theme-light .tour-spotlight {
+  box-shadow: 0 0 0 4px #EA580C, 0 0 30px rgba(234, 88, 12, 0.7) !important;
 }
 
 /* ==========================================================================
@@ -337,17 +488,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
 </style>
 </head>
 <!-- ABRE SIEMPRE CON EL MODO MARTE POR DEFECTO -->
-<body id="app-body" class="theme-marte bg-[#110809] text-[#FED7AA] min-h-screen md:h-screen w-full md:w-screen overflow-y-auto md:overflow-hidden flex flex-col font-sans select-none">
+<body id="app-body" class="theme-dark bg-[#110809] text-[#FED7AA] min-h-screen md:h-screen w-full md:w-screen overflow-y-auto md:overflow-hidden flex flex-col font-sans select-none">
 
   <!-- ========================================================================= -->
-  <!-- BARRA SUPERIOR: LOGO, SLOGAN, ESCENARIOS Y CONMUTADOR DE TEMA             -->
+  <!-- BARRA SUPERIOR: LOGO, SLOGAN, ESCENARIOS, TOUR Y CONMUTADOR DE TEMA       -->
   <!-- ========================================================================= -->
-  <header class="header-bar bg-[#1C0A0D] border-b border-[#431407] px-3 md:px-4 py-2 md:py-0 min-h-12 md:h-12 flex flex-col md:flex-row md:items-center justify-between shrink-0 gap-2 md:gap-3">
+  <header id="header-principal" class="header-bar bg-[#1C0A0D] border-b border-[#431407] px-3 md:px-4 py-2.5 md:py-0 min-h-14 md:h-14 flex flex-col md:flex-row md:items-center justify-between shrink-0 gap-2 md:gap-3 transition-colors">
     
     <!-- Fila 1 en móvil / izquierda en desktop: Marca + Slogan + Botones de Acción Móvil -->
     <div class="flex items-center justify-between w-full md:w-auto gap-2">
-      <div class="flex items-center gap-2">
-        <div class="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-orange-500/15 border border-orange-500/40 flex items-center justify-center p-1 logo-container shrink-0">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-orange-500/15 border border-orange-500/40 flex items-center justify-center p-1.5 logo-container shrink-0">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 md:w-6 md:h-6 logo-svg text-[#FF6B00]">
             <circle cx="5" cy="18" r="2.5" fill="currentColor" fill-opacity="0.2"/>
             <circle cx="12" cy="18" r="2.5" fill="currentColor" fill-opacity="0.2"/>
@@ -362,61 +513,72 @@ input[type="range"]::-webkit-slider-thumb:hover {
         </div>
 
         <div class="flex flex-col">
-          <div class="flex items-center gap-1.5">
-            <span class="text-[11px] md:text-xs font-black tracking-wider text-[#FFEDD5] uppercase brand-title">ARES ROVER DYNAMICS™</span>
-            <span class="px-1 py-0.2 rounded text-[8.5px] font-bold bg-orange-500/20 text-orange-400 border border-orange-500/40 mode-badge">SIM v3.0</span>
+          <div class="flex items-center gap-2">
+            <span class="text-xs md:text-sm font-black tracking-wider text-[#FFEDD5] uppercase brand-title">ARES ROVER DYNAMICS™</span>
+            <span class="px-1.5 py-0.5 rounded text-[11px] font-bold bg-orange-500/20 text-orange-400 border border-orange-500/40 mode-badge">SIM v3.2</span>
           </div>
-          <span class="text-[9px] md:text-[10px] text-orange-200/70 italic slogan-text hidden sm:block">"Movilidad en suelo marciano: ingeniería rentable, clientes leales"</span>
+          <span class="text-xs text-orange-200/80 italic slogan-text hidden sm:block">"Movilidad en suelo marciano: ingeniería rentable, clientes leales"</span>
         </div>
       </div>
 
       <!-- Botones de Acción en Móvil -->
       <div class="flex items-center gap-1.5 shrink-0 md:hidden">
-        <button onclick="toggleModalCalculo()" class="text-[10px] md:text-xs px-2 md:px-2.5 py-1 rounded bg-indigo-950/80 border border-indigo-500/50 text-indigo-300 hover:bg-indigo-900 font-bold transition flex items-center gap-1 shrink-0 shadow-sm shadow-indigo-500/20"><span>📐</span> Memoria de Cálculo</button>
-        <button onclick="toggleTheme()" class="text-[10px] px-2 py-1 rounded font-bold border border-[#571C1D] bg-[#2A0E13] text-[#FFD8B0] flex items-center gap-1">
-          <span class="theme-icon-mob">👔</span>
+        <button onclick="iniciarTour()" class="btn-glow-pulse text-xs px-2.5 py-1 rounded-lg font-bold bg-gradient-to-r from-orange-600 to-amber-500 text-white flex items-center gap-1 shadow-sm">
+          <span>🧭</span> Tour
         </button>
-        <button onclick="toggleModalAyuda()" class="text-[10px] px-2 py-1 rounded bg-slate-800 text-cyan-300 border border-cyan-500/30 flex items-center gap-1">
-          <span>💡</span> Guía
+        <button onclick="toggleTheme()" class="btn-interactive text-xs px-2 py-1 rounded-lg font-bold border border-[#571C1D] bg-[#2A0E13] text-[#FFD8B0] flex items-center gap-1">
+          <span class="theme-icon-mob">☀️</span>
+        </button>
+        <button onclick="toggleModalCalculo()" class="text-xs px-2 py-1 rounded-lg bg-indigo-950/80 border border-indigo-500/50 text-indigo-300 font-bold flex items-center gap-1">
+          <span>📐</span>
         </button>
       </div>
     </div>
 
     <!-- Fila 2 en móvil / centro en desktop: Escenarios con scroll táctil -->
-    <div class="w-full md:w-auto flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none whitespace-nowrap">
-      <span class="text-[9.5px] uppercase font-bold text-slate-400 hidden xl:inline mr-1">Escenarios:</span>
-      <button id="btn-hdr-enero" onclick="cargarEscenario('enero')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-blue-500/50 text-blue-300 hover:bg-blue-950/70 transition flex items-center gap-1 shrink-0"><span>🔵</span> Ene (Base)</button>
-      <button id="btn-hdr-febrero" onclick="cargarEscenario('febrero')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-rose-500/50 text-rose-300 hover:bg-rose-950/70 transition flex items-center gap-1 shrink-0">
-        <span>⚠️</span> Febrero (CSAT 4.2)
+    <div id="tour-escenarios" class="w-full md:w-auto flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none whitespace-nowrap">
+      <span class="text-xs uppercase font-extrabold text-slate-400 hidden xl:inline mr-1">Escenarios:</span>
+      <button id="btn-hdr-enero" onclick="cargarEscenario('enero')" class="btn-esc btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-blue-500/50 text-blue-300 hover:bg-blue-950/70 transition flex items-center gap-1 shrink-0 font-medium">
+        <span>🔵</span> Ene (Base)
       </button>
-      <button id="btn-hdr-abril" onclick="cargarEscenario('abril')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-950/70 transition flex items-center gap-1 shrink-0">
-        <span>⭐</span> Abril (CSAT 9.4)
+      <button id="btn-hdr-febrero" onclick="cargarEscenario('febrero')" class="btn-esc btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-rose-500/50 text-rose-300 hover:bg-rose-950/70 transition flex items-center gap-1 shrink-0 font-medium">
+        <span>⚠️</span> Febrero (Crisis 4.2)
       </button>
-      <button id="btn-hdr-mayo" onclick="cargarEscenario('mayo')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-amber-500/50 text-amber-300 hover:bg-amber-950/70 transition flex items-center gap-1 shrink-0">
+      <button id="btn-hdr-abril" onclick="cargarEscenario('abril')" class="btn-esc btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-950/70 transition flex items-center gap-1 shrink-0 font-medium">
+        <span>⭐</span> Abril (Óptimo 9.4)
+      </button>
+      <button id="btn-hdr-mayo" onclick="cargarEscenario('mayo')" class="btn-esc btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-amber-500/50 text-amber-300 hover:bg-amber-950/70 transition flex items-center gap-1 shrink-0 font-medium">
         <span>📈</span> Mayo (CPA $42)
       </button>
-      <button id="btn-hdr-recomendado" onclick="cargarEscenario('recomendado')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-orange-950/60 border border-[#FF6B00] text-orange-100 font-bold hover:bg-orange-900 transition flex items-center gap-1 shadow-sm shadow-orange-500/30 btn-recomendado shrink-0">
+      <button id="btn-hdr-recomendado" onclick="cargarEscenario('recomendado')" class="btn-esc btn-glow-pulse text-xs px-3 py-1.5 rounded-lg bg-gradient-to-r from-orange-600/90 to-amber-600/90 border border-[#FF6B00] text-white font-extrabold transition flex items-center gap-1 shadow-md shadow-orange-500/40 btn-recomendado shrink-0">
         <span>🎯</span> Estrategia SIM (15%)
       </button>
-      <button id="btn-hdr-agresivo" onclick="cargarEscenario('agresivo')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-purple-500/50 text-purple-300 hover:bg-purple-950/70 transition items-center gap-1 shrink-0 hidden sm:flex">
+      <button id="btn-hdr-agresivo" onclick="cargarEscenario('agresivo')" class="btn-esc btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-purple-500/50 text-purple-300 hover:bg-purple-950/70 transition items-center gap-1 shrink-0 hidden sm:flex font-medium">
         <span>🚀</span> Expansión ($5K)
       </button>
     </div>
 
     <!-- Botones de Acción en Desktop -->
-    <div class="hidden md:flex items-center gap-2 shrink-0">
-      <button onclick="toggleModalCalculo()" class="text-[11px] px-2.5 py-1 rounded font-bold transition flex items-center gap-1.5 border border-indigo-500/50 bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 shadow-sm shadow-indigo-500/20">
+    <div id="tour-herramientas" class="hidden md:flex items-center gap-2 shrink-0">
+      <!-- Botón Tour Guiado de Inicio (Con animación de resplandor para invitar al clic) -->
+      <button id="btn-tour-header" onclick="iniciarTour()" class="btn-glow-pulse text-xs px-3 py-1.5 rounded-lg font-black transition flex items-center gap-1.5 bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-500 hover:to-amber-400 text-white shadow-md shadow-orange-500/35 border border-orange-400/40" title="Ver Tour Interactivo y Guía para el Gerente">
+        <span>🧭</span>
+        <span>Tour Guiado</span>
+      </button>
+
+      <button onclick="toggleModalCalculo()" class="btn-glow-blue text-xs px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 border border-indigo-500/50 bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 shadow-sm shadow-indigo-500/20">
         <span>📐</span>
         <span>Memoria de Cálculo</span>
       </button>
 
-      <button id="btn-theme-toggle" onclick="toggleTheme()" class="text-[11px] px-2.5 py-1 rounded font-bold transition flex items-center gap-1.5 border border-[#571C1D] bg-[#2A0E13] hover:bg-[#3D141B] text-[#FFD8B0]">
-        <span id="theme-icon">👔</span>
-        <span id="theme-label">Modo Gerencial</span>
+      <!-- Conmutador Verdadero de Modo Claro / Modo Oscuro -->
+      <button id="btn-theme-toggle" onclick="toggleTheme()" class="btn-interactive text-xs px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 border border-[#571C1D] bg-[#2A0E13] hover:bg-[#3D141B] text-[#FFD8B0] shadow-sm" title="Alternar entre Modo Oscuro y Modo Claro">
+        <span id="theme-icon">☀️</span>
+        <span id="theme-label">Modo Claro</span>
       </button>
 
-      <button onclick="toggleModalAyuda()" class="text-[11px] px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 flex items-center gap-1">
-        <span>💡</span> Guía Gerencial
+      <button onclick="toggleModalAyuda()" class="btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 flex items-center gap-1 font-medium">
+        <span>💡</span> Guía
       </button>
     </div>
   </header>
@@ -429,28 +591,28 @@ input[type="range"]::-webkit-slider-thumb:hover {
     <!-- COLUMNA IZQUIERDA: CONTROLES + DIAGNÓSTICO + INTERPRETACIÓN DE GRÁFICA -->
     <aside class="w-full md:col-span-4 lg:col-span-3 flex flex-col gap-2 min-h-0 md:overflow-hidden">
       
-      <!-- CARD 1: CONTROLES / PALANCAS (COMPACTO CON TOOLTIPS) -->
-      <section class="card-box bg-[#1C0C10]/95 border border-[#571C1D] rounded-lg p-2.5 flex flex-col gap-2 shrink-0 shadow-lg">
-        <div class="flex items-center justify-between border-b border-[#571C1D]/80 pb-1">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
+      <!-- CARD 1: CONTROLES / PALANCAS (PASO 2 DEL TOUR) -->
+      <section id="tour-palancas" class="card-box bg-[#1C0C10]/95 border border-[#571C1D] rounded-xl p-3 flex flex-col gap-2.5 shrink-0 shadow-lg">
+        <div class="flex items-center justify-between border-b border-[#571C1D]/80 pb-1.5">
+          <span class="text-xs font-black uppercase tracking-wider text-slate-100 flex items-center gap-1.5">
             <span>🎛️</span> Palancas de Simulación
           </span>
-          <span class="text-[9px] text-slate-400">Pasa cursor para ayuda</span>
+          <span class="text-xs text-orange-400 font-semibold">Pasa cursor para ayuda</span>
         </div>
 
         <!-- Slider 1: Presupuesto Pauta -->
         <div class="control-group relative group">
-          <div class="flex justify-between text-[11px]">
-            <span class="text-slate-300 font-medium flex items-center gap-1">
-              Presupuesto Pauta (USD): <span class="text-slate-500 text-[10px]">ⓘ</span>
+          <div class="flex justify-between text-xs">
+            <span class="text-slate-200 font-bold flex items-center gap-1">
+              Presupuesto Pauta (USD): <span class="text-slate-400 text-xs">ⓘ</span>
             </span>
-            <span id="txt-gasto" class="font-bold text-[#FF6B00] text-xs">$3.100</span>
+            <span id="txt-gasto" class="font-black text-[#FF6B00] text-sm">$3.100</span>
           </div>
-          <input id="rng-gasto" type="range" min="1500" max="6000" step="100" value="3100" class="w-full accent-[#FF6B00] cursor-pointer mt-0.5">
-          <div class="flex justify-between text-[9px] text-slate-400 mt-0.5">
-            <span>$1.500 (Bajo)</span><span>$3.100 (Abril)</span><span>$6.000</span>
+          <input id="rng-gasto" type="range" min="1500" max="6000" step="100" value="3100" class="w-full accent-[#FF6B00] cursor-pointer mt-1">
+          <div class="flex justify-between text-[11px] text-slate-400 mt-0.5">
+            <span>$1.500 (Bajo)</span><span>$3.100 (Abril)</span><span>$6.000 (Tope)</span>
           </div>
-          <div class="control-tooltip">
+          <div class="control-tooltip text-xs">
             <strong class="text-cyan-300">¿Cómo funciona esta palanca?</strong><br>
             Define la inversión en anuncios. Si inyectas más de $3.500 USD sin calificar prospectos, saturas el embudo (como en Mayo, donde el CPA subió a $42.39).
           </div>
@@ -458,17 +620,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
         <!-- Slider 2: Reasignación a Soporte -->
         <div class="control-group relative group">
-          <div class="flex justify-between text-[11px]">
-            <span class="text-slate-300 font-medium flex items-center gap-1">
-              % a Soporte y Posventa (CX): <span class="text-slate-500 text-[10px]">ⓘ</span>
+          <div class="flex justify-between text-xs">
+            <span class="text-slate-200 font-bold flex items-center gap-1">
+              % a Soporte y Posventa (CX): <span class="text-slate-400 text-xs">ⓘ</span>
             </span>
-            <span id="txt-soporte" class="font-bold text-amber-400 text-xs">15 %</span>
+            <span id="txt-soporte" class="font-black text-amber-400 text-sm">15 %</span>
           </div>
-          <input id="rng-soporte" type="range" min="0" max="30" step="1" value="15" class="w-full accent-amber-500 cursor-pointer mt-0.5">
-          <div class="flex justify-between text-[9px] text-slate-400 mt-0.5">
-            <span class="text-rose-400">0% (Febrero)</span><span class="text-amber-300 font-bold">15% (Estrategia)</span><span>30%</span>
+          <input id="rng-soporte" type="range" min="0" max="30" step="1" value="15" class="w-full accent-amber-500 cursor-pointer mt-1">
+          <div class="flex justify-between text-[11px] text-slate-400 mt-0.5">
+            <span class="text-rose-400 font-semibold">0% (Febrero)</span><span class="text-amber-300 font-black">15% (Estrategia)</span><span>30%</span>
           </div>
-          <div class="control-tooltip">
+          <div class="control-tooltip text-xs">
             <strong class="text-cyan-300">La Palanca Decisiva de la Gerencia:</strong><br>
             Si la dejas en 0%, la avalancha de clientes satura al equipo técnico y el CSAT colapsa a 4.2 (error de Febrero). Si reasignas el 15%, garantizas soporte y el CSAT salta a 9.4 (éxito de Abril).
           </div>
@@ -476,17 +638,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
         <!-- Slider 3: Visitas Web -->
         <div class="control-group relative group">
-          <div class="flex justify-between text-[11px]">
-            <span class="text-slate-300 font-medium flex items-center gap-1">
-              Tráfico Web (Sesiones): <span class="text-slate-500 text-[10px]">ⓘ</span>
+          <div class="flex justify-between text-xs">
+            <span class="text-slate-200 font-bold flex items-center gap-1">
+              Tráfico Web (Sesiones): <span class="text-slate-400 text-xs">ⓘ</span>
             </span>
-            <span id="txt-visitas" class="font-bold text-indigo-300 text-xs">1.480</span>
+            <span id="txt-visitas" class="font-black text-indigo-300 text-sm">1.480</span>
           </div>
-          <input id="rng-visitas" type="range" min="900" max="2500" step="50" value="1480" class="w-full accent-indigo-500 cursor-pointer mt-0.5">
-          <div class="flex justify-between text-[9px] text-slate-400 mt-0.5">
+          <input id="rng-visitas" type="range" min="900" max="2500" step="50" value="1480" class="w-full accent-indigo-500 cursor-pointer mt-1">
+          <div class="flex justify-between text-[11px] text-slate-400 mt-0.5">
             <span>900</span><span>1.650 (Pico Feb)</span><span>2.500</span>
           </div>
-          <div class="control-tooltip">
+          <div class="control-tooltip text-xs">
             <strong class="text-cyan-300">Volumen de Prospectos Web:</strong><br>
             A mayor volumen de tráfico frío no cualificado, menor es la tasa de conversión marginal.
           </div>
@@ -494,73 +656,69 @@ input[type="range"]::-webkit-slider-thumb:hover {
       </section>
 
       <!-- CARD 2: DICTAMEN DIRECTIVO + EXPLICACIÓN DE ESCENARIOS + INTERPRETACIÓN DE LA GRÁFICA -->
-      <section class="card-box bg-[#1C0C10]/95 border border-[#571C1D] rounded-lg p-2.5 flex-1 flex flex-col min-h-0 md:overflow-hidden shadow-lg">
+      <section id="tour-escenarios-panel" class="card-box bg-[#1C0C10]/95 border border-[#571C1D] rounded-xl p-3 flex-1 flex flex-col min-h-0 md:overflow-hidden shadow-lg">
         
         <!-- Dictamen del Escenario -->
-        <div class="flex items-center justify-between border-b border-[#571C1D]/80 pb-1 shrink-0">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-200 flex items-center gap-1">
+        <div class="flex items-center justify-between border-b border-[#571C1D]/80 pb-1.5 shrink-0">
+          <span class="text-xs font-black uppercase tracking-wider text-slate-100 flex items-center gap-1">
             <span>📋</span> Dictamen Directivo
           </span>
-          <span id="badge-estado" class="text-[9px] px-2 py-0.5 rounded font-bold border badge-exito">
+          <span id="badge-estado" class="text-xs px-2.5 py-0.5 rounded-full font-bold border badge-exito">
             EQUILIBRIO ÓPTIMO
           </span>
         </div>
 
-        <div id="box-diagnostico" class="mt-1 text-[10px] leading-relaxed space-y-0.5 overflow-y-auto pr-1 shrink-0 max-h-16 md:max-h-20">
+        <div id="box-diagnostico" class="mt-1.5 text-xs leading-relaxed space-y-1 overflow-y-auto pr-1 shrink-0 max-h-16 md:max-h-20">
           <!-- Inyectado por JS -->
         </div>
 
-        <!-- NUEVO PANEL: EXPLICACIÓN DE ESCENARIOS (DINÁMICO E INTERACTIVO) -->
-        <div class="mt-1.5 pt-1.5 border-t border-[#571C1D]/80 shrink-0">
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-[#FF9E4A] flex items-center gap-1">
+        <!-- PANEL: EXPLICACIÓN DE ESCENARIOS (DINÁMICO E INTERACTIVO) -->
+        <div class="mt-2 pt-2 border-t border-[#571C1D]/80 shrink-0">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-xs font-black uppercase tracking-wider text-[#FF9E4A] flex items-center gap-1">
               <span>🧭</span> Explicación de Escenarios
             </span>
-            <span id="badge-escenario-activo" class="text-[8.5px] px-1.5 py-0.5 rounded font-bold border badge-exito">
+            <span id="badge-escenario-activo" class="text-[11px] px-2 py-0.5 rounded-full font-bold border badge-exito">
               Escenario 2: SIM Óptimo
             </span>
           </div>
-          <div id="box-explicacion-escenarios" class="text-[9.5px] leading-relaxed p-1.5 rounded bg-black/40 border border-[#571C1D]/60 space-y-1 max-h-24 md:max-h-24 overflow-y-auto">
+          <div id="box-explicacion-escenarios" class="text-xs leading-relaxed p-2 rounded-lg bg-black/40 border border-[#571C1D]/60 space-y-1 max-h-24 md:max-h-24 overflow-y-auto">
             <!-- Inyectado dinámicamente por JS -->
           </div>
-          <!-- Selector rápido de los 4 escenarios clave -->
-          <div class="grid grid-cols-4 gap-1 mt-1 text-[8px]">
-            <button onclick="cargarEscenarioCanónico(1)" id="btn-esc-canon-1" class="px-1 py-0.5 rounded border border-rose-800/60 bg-rose-950/40 text-rose-300 hover:bg-rose-900/60 font-medium transition text-center truncate" title="Status Quo / Pauta Ciega (0% CX)">1. Pauta Ciega</button>
-            <button onclick="cargarEscenarioCanónico(2)" id="btn-esc-canon-2" class="px-1 py-0.5 rounded border border-emerald-800/60 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/60 font-bold transition text-center truncate" title="Estrategia SIM / Equilibrio Óptimo (15% CX)">2. SIM Óptimo</button>
-            <button onclick="cargarEscenarioCanónico(3)" id="btn-esc-canon-3" class="px-1 py-0.5 rounded border border-cyan-800/60 bg-cyan-950/40 text-cyan-300 hover:bg-cyan-900/60 font-medium transition text-center truncate" title="Hiper-Fidelización / Blindaje (25% CX)">3. Fidelización</button>
-            <button onclick="cargarEscenarioCanónico(4)" id="btn-esc-canon-4" class="px-1 py-0.5 rounded border border-amber-800/60 bg-amber-950/40 text-amber-300 hover:bg-amber-900/60 font-medium transition text-center truncate" title="Saturación de Audiencias ($4.500 USD | 0% CX)">4. Saturación</button>
-          </div>
-          <div class="text-[8px] text-slate-400 italic px-1 pt-1 border-t border-slate-800/50 flex items-center justify-between">
-            <span>💡 <strong>Guía Directiva:</strong> Meses arriba = Calibración empírica</span>
-            <span>Botones abajo = Arquetipos de decisión</span>
+          <!-- Selector rápido de los 4 escenarios clave con microinteracción -->
+          <div class="grid grid-cols-4 gap-1.5 mt-1.5 text-xs">
+            <button onclick="cargarEscenarioCanónico(1)" id="btn-esc-canon-1" class="btn-interactive px-1.5 py-1 rounded-md border border-rose-800/60 bg-rose-950/40 text-rose-300 hover:bg-rose-900/60 font-semibold transition text-center truncate" title="Status Quo / Pauta Ciega (0% CX)">1. Pauta Ciega</button>
+            <button onclick="cargarEscenarioCanónico(2)" id="btn-esc-canon-2" class="btn-interactive px-1.5 py-1 rounded-md border border-emerald-800/60 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/60 font-bold transition text-center truncate" title="Estrategia SIM / Equilibrio Óptimo (15% CX)">2. SIM Óptimo</button>
+            <button onclick="cargarEscenarioCanónico(3)" id="btn-esc-canon-3" class="btn-interactive px-1.5 py-1 rounded-md border border-cyan-800/60 bg-cyan-950/40 text-cyan-300 hover:bg-cyan-900/60 font-semibold transition text-center truncate" title="Hiper-Fidelización / Blindaje (25% CX)">3. Fidelización</button>
+            <button onclick="cargarEscenarioCanónico(4)" id="btn-esc-canon-4" class="btn-interactive px-1.5 py-1 rounded-md border border-amber-800/60 bg-amber-950/40 text-amber-300 hover:bg-amber-900/60 font-semibold transition text-center truncate" title="Saturación de Audiencias ($4.500 USD | 0% CX)">4. Saturación</button>
           </div>
         </div>
 
         <!-- SECCIÓN: INTERPRETACIÓN DINÁMICA DE LA GRÁFICA ACTIVA -->
-        <div class="mt-1.5 pt-1.5 border-t border-[#571C1D]/80 flex-1 flex flex-col min-h-0 overflow-hidden">
+        <div class="mt-2 pt-2 border-t border-[#571C1D]/80 flex-1 flex flex-col min-h-0 overflow-hidden">
           <div class="flex items-center justify-between shrink-0 mb-1">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-[#FF9E4A] flex items-center gap-1">
+            <span class="text-xs font-black uppercase tracking-wider text-[#FF9E4A] flex items-center gap-1">
               <span>📊</span> Interpretación de la Gráfica
             </span>
-            <span class="text-[8.5px] text-slate-400">En tiempo real</span>
+            <span class="text-[11px] text-slate-400">En tiempo real</span>
           </div>
-          <div id="box-interpretacion-grafica" class="interpretacion-box text-[10px] leading-relaxed text-slate-200 p-1.5 rounded overflow-y-auto flex-1 min-h-[90px] md:min-h-0 max-h-36 md:max-h-none">
+          <div id="box-interpretacion-grafica" class="interpretacion-box text-xs leading-relaxed text-slate-100 p-2 rounded-lg overflow-y-auto flex-1 min-h-[90px] md:min-h-0 max-h-36 md:max-h-none">
             <!-- Inyectado dinámicamente por JS al cambiar de tab o slider -->
           </div>
         </div>
 
         <!-- Desglose Financiero Rápido con Tooltips Interactivos -->
-        <div class="mt-1.5 pt-1.5 border-t border-[#571C1D]/80 grid grid-cols-2 gap-1 text-[9.5px] text-slate-400 shrink-0">
+        <div class="mt-2 pt-1.5 border-t border-[#571C1D]/80 grid grid-cols-2 gap-1.5 text-xs text-slate-300 shrink-0">
           <div class="has-tooltip">
-            Precio Rover: <strong class="text-slate-200">$101.5 USD</strong> <span class="text-[9px] text-slate-500">ⓘ</span>
-            <div class="tooltip-content">
+            Precio Rover: <strong class="text-white">$101.5 USD</strong> <span class="text-xs text-slate-400">ⓘ</span>
+            <div class="tooltip-content text-xs">
               <strong class="text-cyan-300">Precio Unitario de Venta:</strong><br>
               Ticket promedio ponderado ($101.5 USD) de cada vehículo Rover comercializado en Marte. Rango en datos del caso: $100.00 (Ene) a $110.87 (May).
             </div>
           </div>
           <div class="has-tooltip">
-            Margen Neto: <strong id="lbl-mini-margen" class="text-emerald-400">$67.72 USD</strong> <span class="text-[9px] text-slate-500">ⓘ</span>
-            <div class="tooltip-content">
+            Margen Neto: <strong id="lbl-mini-margen" class="text-emerald-400">$67.72 USD</strong> <span class="text-xs text-slate-400">ⓘ</span>
+            <div class="tooltip-content text-xs">
               <strong class="text-cyan-300">Margen Unitario Limpio:</strong><br>
               <strong>Fórmula:</strong> Margen = Ticket ($101.50) - CPA.<br>
               <strong>Umbral Viabilidad:</strong> &gt; $60.00 USD (Margen &gt; 60%).<br>
@@ -568,16 +726,16 @@ input[type="range"]::-webkit-slider-thumb:hover {
             </div>
           </div>
           <div class="has-tooltip">
-            Inversión CX: <strong id="lbl-mini-cx" class="text-amber-400">$465 USD</strong> <span class="text-[9px] text-slate-500">ⓘ</span>
-            <div class="tooltip-content">
+            Inversión CX: <strong id="lbl-mini-cx" class="text-amber-400">$465 USD</strong> <span class="text-xs text-slate-400">ⓘ</span>
+            <div class="tooltip-content text-xs">
               <strong class="text-cyan-300">Inversión en Soporte y Posventa:</strong><br>
               <strong>Fórmula:</strong> Presupuesto Total × (% CX / 100).<br>
               <strong>Propuesta SIM:</strong> 15% ($465-$600 USD) para blindar el equipo técnico y mantener CSAT &gt; 9.0.
             </div>
           </div>
           <div class="has-tooltip">
-            Pauta Neta: <strong id="lbl-mini-pauta" class="text-slate-200">$2.635 USD</strong> <span class="text-[9px] text-slate-500">ⓘ</span>
-            <div class="tooltip-content">
+            Pauta Neta: <strong id="lbl-mini-pauta" class="text-white">$2.635 USD</strong> <span class="text-xs text-slate-400">ⓘ</span>
+            <div class="tooltip-content text-xs">
               <strong class="text-cyan-300">Presupuesto Publicitario Neto:</strong><br>
               <strong>Fórmula:</strong> Presupuesto Total - Inversión CX.<br>
               Dinero puro transferido a campañas de adquisición y conversión.
@@ -591,18 +749,18 @@ input[type="range"]::-webkit-slider-thumb:hover {
     <section class="w-full md:col-span-8 lg:col-span-9 flex flex-col gap-2 min-h-0 md:overflow-hidden">
 
       <!-- ===================================================================== -->
-      <!-- 6 TARJETAS KPI CON TOOLTIPS FLOTANTES EXPLICATIVOS                    -->
+      <!-- 6 TARJETAS KPI CON TOOLTIPS FLOTANTES EXPLICATIVOS (PASO 4 DEL TOUR) -->
       <!-- ===================================================================== -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 shrink-0">
+      <div id="tour-kpis" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 shrink-0">
         
         <!-- KPI 1: Ventas -->
-        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-lg p-2 transition cursor-help shadow">
-          <span class="text-[10px] text-slate-400 uppercase font-bold flex items-center justify-between">
-            Ventas Totales <span class="text-[9px] text-slate-500">ⓘ</span>
+        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-xl p-2.5 transition cursor-help shadow">
+          <span class="text-xs text-slate-400 uppercase font-black flex items-center justify-between">
+            Ventas Totales <span class="text-xs text-slate-500">ⓘ</span>
           </span>
-          <div id="kpi-ventas" class="text-base font-black text-white mt-0.5">$7.917</div>
-          <span id="kpi-roas" class="text-[9px] text-emerald-400 font-semibold">ROAS: 2.55x</span>
-          <div class="kpi-tooltip">
+          <div id="kpi-ventas" class="text-lg md:text-xl font-black text-white mt-0.5">$7.917</div>
+          <span id="kpi-roas" class="text-xs text-emerald-400 font-bold">ROAS: 2.55x</span>
+          <div class="kpi-tooltip text-xs">
             <strong class="text-cyan-300">Ventas Facturadas (USD):</strong><br>
             Ingreso bruto por comercialización de la flota Rover.<br>
             <strong class="text-slate-300">📐 Fórmula Matemática:</strong> Ventas = Clientes Adquiridos × Ticket Promedio ($101.50 USD).<br>
@@ -612,13 +770,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
         </div>
 
         <!-- KPI 2: Clientes -->
-        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-lg p-2 transition cursor-help shadow">
-          <span class="text-[10px] text-slate-400 uppercase font-bold flex items-center justify-between">
-            Clientes Adq. <span class="text-[9px] text-slate-500">ⓘ</span>
+        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-xl p-2.5 transition cursor-help shadow">
+          <span class="text-xs text-slate-400 uppercase font-black flex items-center justify-between">
+            Clientes Adq. <span class="text-xs text-slate-500">ⓘ</span>
           </span>
-          <div id="kpi-clientes" class="text-base font-black text-white mt-0.5">78</div>
-          <span id="kpi-tasa-conv" class="text-[9px] text-indigo-300 font-semibold">CR: 5.27%</span>
-          <div class="kpi-tooltip">
+          <div id="kpi-clientes" class="text-lg md:text-xl font-black text-white mt-0.5">78</div>
+          <span id="kpi-tasa-conv" class="text-xs text-indigo-300 font-bold">CR: 5.27%</span>
+          <div class="kpi-tooltip text-xs">
             <strong class="text-cyan-300">Clientes Nuevos Adquiridos:</strong><br>
             Unidades vendidas a nuevos operadores en el período.<br>
             <strong class="text-slate-300">📐 Fórmula Matemática:</strong> CR = (Clientes / Visitas) × 100.<br>
@@ -628,13 +786,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
         </div>
 
         <!-- KPI 3: CPA Unitario -->
-        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-lg p-2 transition cursor-help shadow">
-          <span class="text-[10px] text-slate-400 uppercase font-bold flex items-center justify-between">
-            CPA Unitario <span class="text-[9px] text-slate-500">ⓘ</span>
+        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-xl p-2.5 transition cursor-help shadow">
+          <span class="text-xs text-slate-400 uppercase font-black flex items-center justify-between">
+            CPA Unitario <span class="text-xs text-slate-500">ⓘ</span>
           </span>
-          <div id="kpi-cpa" class="text-base font-black text-emerald-400 mt-0.5">$33.78</div>
-          <span id="kpi-cpa-status" class="text-[9px] text-slate-400">Meta: &lt; $41.00</span>
-          <div class="kpi-tooltip">
+          <div id="kpi-cpa" class="text-lg md:text-xl font-black text-emerald-400 mt-0.5">$33.78</div>
+          <span id="kpi-cpa-status" class="text-xs text-slate-400 font-semibold">Meta: &lt; $41.00</span>
+          <div class="kpi-tooltip text-xs">
             <strong class="text-cyan-300">Costo por Adquisición (CPA):</strong><br>
             Inversión publicitaria neta dividida entre clientes adquiridos.<br>
             <strong class="text-slate-300">📐 Fórmula Matemática:</strong> CPA = Pauta Neta ($) / Clientes Adquiridos.<br>
@@ -644,13 +802,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
         </div>
 
         <!-- KPI 4: CSAT -->
-        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-lg p-2 transition cursor-help shadow">
-          <span class="text-[10px] text-slate-400 uppercase font-bold flex items-center justify-between">
-            CSAT (0-10) <span class="text-[9px] text-slate-500">ⓘ</span>
+        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-xl p-2.5 transition cursor-help shadow">
+          <span class="text-xs text-slate-400 uppercase font-black flex items-center justify-between">
+            CSAT (0-10) <span class="text-xs text-slate-500">ⓘ</span>
           </span>
-          <div id="kpi-csat" class="text-base font-black text-emerald-400 mt-0.5">9.4 / 10</div>
-          <span id="kpi-csat-status" class="text-[9px] text-emerald-400">Excelente</span>
-          <div class="kpi-tooltip">
+          <div id="kpi-csat" class="text-lg md:text-xl font-black text-emerald-400 mt-0.5">9.4 / 10</div>
+          <span id="kpi-csat-status" class="text-xs text-emerald-400 font-bold">Excelente</span>
+          <div class="kpi-tooltip text-xs">
             <strong class="text-cyan-300">Satisfacción del Cliente (CSAT):</strong><br>
             Calificación de experiencia y soporte técnico post-compra.<br>
             <strong class="text-slate-300">📐 Fórmula Matemática:</strong> CSAT = Promedio Ponderado ∑ calificaciones / N.<br>
@@ -660,13 +818,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
         </div>
 
         <!-- KPI 5: Margen Limpio -->
-        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-lg p-2 transition cursor-help shadow">
-          <span class="text-[10px] text-slate-400 uppercase font-bold flex items-center justify-between">
-            Margen Limpio <span class="text-[9px] text-slate-500">ⓘ</span>
+        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-xl p-2.5 transition cursor-help shadow">
+          <span class="text-xs text-slate-400 uppercase font-black flex items-center justify-between">
+            Margen Limpio <span class="text-xs text-slate-500">ⓘ</span>
           </span>
-          <div id="kpi-margen" class="text-base font-black text-emerald-300 mt-0.5">$67.72</div>
-          <span class="text-[9px] text-slate-400">Por cada Rover</span>
-          <div class="kpi-tooltip">
+          <div id="kpi-margen" class="text-lg md:text-xl font-black text-emerald-300 mt-0.5">$67.72</div>
+          <span class="text-xs text-slate-400 font-semibold">Por cada Rover</span>
+          <div class="kpi-tooltip text-xs">
             <strong class="text-cyan-300">Margen Unitario de Contribución:</strong><br>
             Ganancia neta disponible tras amortizar la pauta publicitaria.<br>
             <strong class="text-slate-300">📐 Fórmula Matemática:</strong> Margen = Ticket Promedio ($101.50) - CPA.<br>
@@ -676,13 +834,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
         </div>
 
         <!-- KPI 6: Ratio Maestro -->
-        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-lg p-2 transition cursor-help shadow">
-          <span class="text-[10px] text-slate-400 uppercase font-bold flex items-center justify-between">
-            Ratio CSAT/CPA <span class="text-[9px] text-slate-500">ⓘ</span>
+        <div class="kpi-card group relative card-box bg-[#1C0C10]/80 border border-[#571C1D] hover:border-slate-500 rounded-xl p-2.5 transition cursor-help shadow">
+          <span class="text-xs text-slate-400 uppercase font-black flex items-center justify-between">
+            Ratio CSAT/CPA <span class="text-xs text-slate-500">ⓘ</span>
           </span>
-          <div id="kpi-ratio" class="text-base font-black text-cyan-300 mt-0.5">0.2783</div>
-          <span class="text-[9px] text-slate-400">Puntos por $1 USD</span>
-          <div class="kpi-tooltip">
+          <div id="kpi-ratio" class="text-lg md:text-xl font-black text-cyan-300 mt-0.5">0.2783</div>
+          <span class="text-xs text-slate-400 font-semibold">Puntos por $1 USD</span>
+          <div class="kpi-tooltip text-xs">
             <strong class="text-cyan-300">Ratio Maestro de Eficiencia Directiva:</strong><br>
             Puntos de satisfacción entregados por cada dólar invertido en adquisición.<br>
             <strong class="text-slate-300">📐 Fórmula Matemática:</strong> Ratio = CSAT / CPA.<br>
@@ -694,39 +852,39 @@ input[type="range"]::-webkit-slider-thumb:hover {
       </div>
 
       <!-- ===================================================================== -->
-      <!-- PANEL DE LAS 10 GRÁFICAS CON TABS DINÁMICAS                           -->
+      <!-- PANEL DE LAS 10 GRÁFICAS CON TABS DINÁMICAS (PASO 5 DEL TOUR)         -->
       <!-- ===================================================================== -->
-      <div class="card-box bg-[#1C0C10]/95 border border-[#571C1D] rounded-lg p-2.5 flex-1 flex flex-col min-h-0 md:overflow-hidden shadow-xl">
+      <div id="tour-graficas" class="card-box bg-[#1C0C10]/95 border border-[#571C1D] rounded-xl p-3 flex-1 flex flex-col min-h-0 md:overflow-hidden shadow-xl">
         
         <!-- BARRA DE PESTAÑAS (10 TABS DINÁMICAS) CON SCROLL TÁCTIL HORIZONTAL -->
-        <div class="flex items-center justify-between gap-1 border-b border-[#571C1D]/80 pb-1.5 shrink-0">
-          <div class="flex items-center gap-1 overflow-x-auto py-0.5 scrollbar-none whitespace-nowrap max-w-full">
-            <span class="text-[10px] uppercase font-bold text-slate-400 mr-1 hidden sm:inline">10 Gráficas:</span>
-            <button onclick="cambiarTab(1)" id="tab-1" class="tab-btn active text-[10px] px-2 py-1 rounded bg-[#381216] font-bold text-[#FF6B00] border border-[#FF6B00] shrink-0">1. CPA vs CSAT</button>
-            <button onclick="cambiarTab(2)" id="tab-2" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800 shrink-0">2. Ecuación CSAT</button>
-            <button onclick="cambiarTab(3)" id="tab-3" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800 shrink-0">3. Retención &gt;100%</button>
-            <button onclick="cambiarTab(4)" id="tab-4" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800 shrink-0">4. Rendim. Decrec.</button>
-            <button onclick="cambiarTab(5)" id="tab-5" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800 shrink-0">5. Embudo Visitas</button>
-            <button onclick="cambiarTab(6)" id="tab-6" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800 shrink-0">6. Margen Limpio</button>
-            <button onclick="cambiarTab(7)" id="tab-7" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800 shrink-0">7. Ratio CSAT/CPA</button>
-            <button onclick="cambiarTab(8)" id="tab-8" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800 shrink-0">8. ROAS 2.56x</button>
-            <button onclick="cambiarTab(9)" id="tab-9" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800 shrink-0">9. Cartera Total</button>
-            <button onclick="cambiarTab(10)" id="tab-10" class="tab-btn text-[10px] px-2 py-1 rounded bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800 shrink-0">10. Reasignación 15%</button>
+        <div class="flex items-center justify-between gap-1.5 border-b border-[#571C1D]/80 pb-2 shrink-0">
+          <div class="flex items-center gap-1.5 overflow-x-auto py-0.5 scrollbar-none whitespace-nowrap max-w-full">
+            <span class="text-xs uppercase font-extrabold text-slate-400 mr-1 hidden sm:inline">10 Gráficas:</span>
+            <button onclick="cambiarTab(1)" id="tab-1" class="tab-btn btn-interactive active text-xs px-2.5 py-1.5 rounded-lg bg-[#381216] font-bold text-[#FF6B00] border border-[#FF6B00] shrink-0">1. CPA vs CSAT</button>
+            <button onclick="cambiarTab(2)" id="tab-2" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">2. Ecuación CSAT</button>
+            <button onclick="cambiarTab(3)" id="tab-3" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">3. Retención &gt;100%</button>
+            <button onclick="cambiarTab(4)" id="tab-4" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">4. Rendim. Decrec.</button>
+            <button onclick="cambiarTab(5)" id="tab-5" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">5. Embudo Visitas</button>
+            <button onclick="cambiarTab(6)" id="tab-6" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">6. Margen Limpio</button>
+            <button onclick="cambiarTab(7)" id="tab-7" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">7. Ratio CSAT/CPA</button>
+            <button onclick="cambiarTab(8)" id="tab-8" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">8. ROAS 2.56x</button>
+            <button onclick="cambiarTab(9)" id="tab-9" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">9. Cartera Total</button>
+            <button onclick="cambiarTab(10)" id="tab-10" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">10. Reasignación 15%</button>
           </div>
-          <span id="tab-descripcion" class="text-[10px] text-[#FF9E4A] font-semibold truncate hidden lg:inline">
+          <span id="tab-descripcion" class="text-xs text-[#FF9E4A] font-bold truncate hidden lg:inline">
             Gráfica 1: Mapa del Dilema Estratégico (CPA vs. CSAT)
           </span>
         </div>
 
         <!-- LIENZO DINÁMICO REACTIVO (CHART.JS) CON ALTURA MÍNIMA GARANTIZADA EN MÓVIL -->
-        <div class="flex-1 h-64 sm:h-72 md:h-auto min-h-[260px] md:min-h-0 relative mt-1 w-full">
+        <div class="flex-1 h-64 sm:h-72 md:h-auto min-h-[270px] md:min-h-0 relative mt-1 w-full">
           <canvas id="lienzo-grafico"></canvas>
         </div>
 
         <!-- PIE DE LECTURA DIRECTA -->
-        <div id="pie-explicativo-grafica" class="mt-1 pt-1 border-t border-[#571C1D]/80 text-[9.5px] md:text-[10px] text-slate-400 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 shrink-0">
+        <div id="pie-explicativo-grafica" class="mt-1.5 pt-1.5 border-t border-[#571C1D]/80 text-xs text-slate-400 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 shrink-0">
           <span id="txt-explicacion-corta">📌 <strong>Lectura Ejecutiva:</strong> El elemento neón es tu simulación. Los elementos neutros son los datos históricos reales (Enero a Mayo).</span>
-          <span class="text-slate-500 hidden sm:inline">Ares Rover Dynamics | SIM Directivo</span>
+          <span class="text-slate-400 hidden sm:inline font-semibold">Ares Rover Dynamics | SIM Directivo</span>
         </div>
 
       </div>
@@ -1173,6 +1331,56 @@ input[type="range"]::-webkit-slider-thumb:hover {
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- MODAL / OVERLAY DEL TOUR GUIADO DE INICIO (ONBOARDING EJECUTIVO)           -->
+  <!-- ========================================================================= -->
+  <div id="tour-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
+    <div id="tour-card" class="card-box bg-[#1A0A0D] border-2 border-orange-500/80 rounded-2xl max-w-xl w-full p-5 md:p-6 shadow-2xl shadow-orange-500/30 flex flex-col gap-4 text-slate-100 transition-all duration-300 transform scale-100">
+      
+      <!-- Cabecera del Tour: Paso y Progreso -->
+      <div class="flex items-center justify-between border-b border-orange-500/30 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">🧭</span>
+          <div>
+            <span class="text-[11px] font-black uppercase tracking-wider text-orange-400">Guía de Inicio y Bienvenida Gerencial</span>
+            <h3 id="tour-step-title" class="text-sm md:text-base font-bold text-white">1. Bienvenida al SIM de Ares Rover Dynamics</h3>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="tour-step-indicator" class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 font-bold border border-orange-500/40">Paso 1 de 6</span>
+          <button onclick="finalizarTour()" class="text-slate-400 hover:text-white text-lg font-bold px-2 py-0.5 rounded hover:bg-white/10 transition" title="Cerrar Guía">✕</button>
+        </div>
+      </div>
+
+      <!-- Barra de Progreso Visual -->
+      <div class="w-full bg-slate-800/80 rounded-full h-1.5 overflow-hidden">
+        <div id="tour-progress-bar" class="bg-gradient-to-r from-orange-500 to-amber-400 h-1.5 rounded-full transition-all duration-300" style="width: 16.66%;"></div>
+      </div>
+
+      <!-- Contenido del Paso del Tour (Contextualización para el Gerente) -->
+      <div id="tour-step-content" class="text-xs md:text-sm text-slate-200 leading-relaxed space-y-2.5 py-1">
+        <!-- Inyectado dinámicamente por JavaScript -->
+      </div>
+
+      <!-- Botones de Navegación del Tour -->
+      <div class="flex items-center justify-between border-t border-orange-500/30 pt-3 mt-1">
+        <button id="btn-tour-prev" onclick="anteriorPasoTour()" class="btn-interactive text-xs px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold transition flex items-center gap-1 disabled:opacity-30 disabled:pointer-events-none">
+          <span>←</span> Anterior
+        </button>
+
+        <div class="flex items-center gap-2">
+          <button onclick="finalizarTour()" class="btn-interactive text-xs px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/5 transition">
+            Saltar Guía
+          </button>
+          <button id="btn-tour-next" onclick="siguientePasoTour()" class="btn-glow-pulse text-xs px-4 py-1.5 rounded-lg bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-500 hover:to-amber-400 text-white font-extrabold transition flex items-center gap-1.5 shadow-md shadow-orange-500/40">
+            <span id="btn-tour-next-text">Siguiente</span> <span>→</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <script>
 // ==========================================================================
 // DATOS HISTÓRICOS REALES CANÓNICOS (ENERO - MAYO 2026)
@@ -1214,8 +1422,8 @@ let simState = {
 };
 
 let tabActiva = 1;
-// ABRE SIEMPRE CON EL MODO MARTE POR DEFECTO
-let currentTheme = 'marte';
+// Tema persistido o por defecto oscuro
+let currentTheme = localStorage.getItem('sim_theme') || 'dark';
 let chartInstance = null;
 let presetOrigen = 'recomendado';
 
@@ -1261,25 +1469,42 @@ const themeIcon = document.getElementById('theme-icon');
 const themeLabel = document.getElementById('theme-label');
 
 // ==========================================================================
-// FUNCIÓN PARA CAMBIAR ENTRE MODO MARTE Y MODO GERENCIAL MONOCROMO
+// FUNCIÓN PARA ALTERNAR ENTRE MODO CLARO Y MODO OSCURO (CON PERSISTENCIA)
 // ==========================================================================
-function toggleTheme() {
-  if (currentTheme === 'marte') {
-    currentTheme = 'gerencial';
-    appBody.classList.remove('theme-marte');
-    appBody.classList.add('theme-gerencial');
-    themeIcon.textContent = '🪐';
-    themeLabel.textContent = 'Modo Marte';
-    btnThemeToggle.className = 'text-[11px] px-2.5 py-1 rounded font-bold transition flex items-center gap-1.5 border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200';
+function aplicarTema(tema) {
+  currentTheme = tema;
+  localStorage.setItem('sim_theme', tema);
+
+  const mobIcon = document.querySelector('.theme-icon-mob');
+
+  if (tema === 'light') {
+    appBody.classList.remove('theme-dark', 'theme-marte');
+    appBody.classList.add('theme-light');
+    if (themeIcon) themeIcon.textContent = '🌙';
+    if (themeLabel) themeLabel.textContent = 'Modo Oscuro';
+    if (mobIcon) mobIcon.textContent = '🌙';
+    if (btnThemeToggle) {
+      btnThemeToggle.className = 'btn-interactive text-xs px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 shadow-sm';
+    }
   } else {
-    currentTheme = 'marte';
-    appBody.classList.remove('theme-gerencial');
-    appBody.classList.add('theme-marte');
-    themeIcon.textContent = '👔';
-    themeLabel.textContent = 'Modo Gerencial';
-    btnThemeToggle.className = 'text-[11px] px-2.5 py-1 rounded font-bold transition flex items-center gap-1.5 border border-[#571C1D] bg-[#2A0E13] hover:bg-[#3D141B] text-[#FFD8B0]';
+    appBody.classList.remove('theme-light');
+    appBody.classList.add('theme-dark', 'theme-marte');
+    if (themeIcon) themeIcon.textContent = '☀️';
+    if (themeLabel) themeLabel.textContent = 'Modo Claro';
+    if (mobIcon) mobIcon.textContent = '☀️';
+    if (btnThemeToggle) {
+      btnThemeToggle.className = 'btn-interactive text-xs px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 border border-[#571C1D] bg-[#2A0E13] hover:bg-[#3D141B] text-[#FFD8B0] shadow-sm';
+    }
   }
-  actualizarUI();
+
+  if (chartInstance) {
+    renderizarGraficaActiva();
+  }
+}
+
+function toggleTheme() {
+  const nuevoTema = (currentTheme === 'light') ? 'dark' : 'light';
+  aplicarTema(nuevoTema);
 }
 
 // ==========================================================================
@@ -2117,12 +2342,13 @@ const thresholdPlugin = {
 
       const thresholdId = `H_${yScale.id}_${val}_${label}`;
       const isHovered = hoveredThreshold && hoveredThreshold.id === thresholdId;
+      const isLight = (currentTheme === 'light');
 
-      // 1. Línea punteada (con iluminación reactiva al hover)
+      // 1. Línea punteada horizontal limpia
       ctx.beginPath();
       ctx.setLineDash(dash);
       ctx.strokeStyle = color;
-      ctx.lineWidth = isHovered ? 2.8 : 1.6;
+      ctx.lineWidth = isHovered ? 2.6 : 1.6;
       if (isHovered) {
         ctx.shadowColor = color;
         ctx.shadowBlur = 10;
@@ -2134,46 +2360,49 @@ const thresholdPlugin = {
       ctx.lineTo(right, yPx);
       ctx.stroke();
 
-      // Reset sombra de línea
       ctx.setLineDash([]);
       ctx.shadowBlur = 0;
 
       // 2. Pastilla / Badge de Alto Contraste con Separación Vertical Limpia
-      ctx.font = 'bold 9.5px "Plus Jakarta Sans", sans-serif';
+      ctx.font = 'bold 11px "Plus Jakarta Sans", sans-serif';
       const tw = ctx.measureText(label).width;
-      const padX = 8;
-      const badgeH = 19;
+      const padX = 10;
+      const badgeH = 22;
       const badgeW = tw + padX * 2;
 
-      // Posición vertical: Separada de la línea por 7px de aire (no pegada ni cruzada)
-      const placeBelow = (yPx < top + 32);
-      const badgeY = placeBelow ? (yPx + 7) : (yPx - badgeH - 7);
-      const textY = badgeY + 13;
+      // Posición vertical: Separada de la línea por 8px de aire (JAMÁS pegada ni cortando el texto)
+      const placeBelow = (yPx < top + 36);
+      const badgeY = placeBelow ? (yPx + 8) : (yPx - badgeH - 8);
+      const textY = badgeY + 15;
 
-      // Posición horizontal
-      const badgeX = (align === 'right') ? (right - badgeW - 8) : (left + 8);
+      // Posición horizontal con margen de respiro
+      const badgeX = (align === 'right') ? (right - badgeW - 10) : (left + 10);
       const textX = badgeX + padX;
 
-      // Dibujar caja del badge con bordes redondeados y fondo oscuro opaco
-      drawRoundedRect(ctx, badgeX, badgeY, badgeW, badgeH, 5);
-      ctx.fillStyle = isHovered ? 'rgba(32, 20, 28, 0.98)' : 'rgba(14, 10, 16, 0.94)';
+      // Dibujar caja del badge con bordes redondeados y fondo 100% opaco
+      drawRoundedRect(ctx, badgeX, badgeY, badgeW, badgeH, 6);
+      if (isLight) {
+        ctx.fillStyle = isHovered ? '#FFFFFF' : '#F8FAFC';
+      } else {
+        ctx.fillStyle = isHovered ? 'rgba(38, 16, 24, 0.98)' : 'rgba(18, 8, 13, 0.95)';
+      }
       ctx.fill();
 
       // Borde del badge con color del semáforo
       ctx.strokeStyle = color;
-      ctx.lineWidth = isHovered ? 1.8 : 1.0;
+      ctx.lineWidth = isHovered ? 2.0 : 1.2;
       if (isHovered) {
         ctx.shadowColor = color;
         ctx.shadowBlur = 12;
       } else {
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+        ctx.shadowColor = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 0, 0, 0.85)';
         ctx.shadowBlur = 4;
       }
       ctx.stroke();
-      ctx.shadowBlur = 0; // reset sombra
+      ctx.shadowBlur = 0;
 
       // Texto nítido de alto contraste
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = isLight ? '#0F172A' : '#FFFFFF';
       ctx.fillText(label, textX, textY);
 
       // Registrar para interactividad
@@ -2206,12 +2435,13 @@ const thresholdPlugin = {
 
       const thresholdId = `V_${xScale.id}_${val}_${label}`;
       const isHovered = hoveredThreshold && hoveredThreshold.id === thresholdId;
+      const isLight = (currentTheme === 'light');
 
       // 1. Línea punteada vertical
       ctx.beginPath();
       ctx.setLineDash(dash);
       ctx.strokeStyle = color;
-      ctx.lineWidth = isHovered ? 2.8 : 1.6;
+      ctx.lineWidth = isHovered ? 2.6 : 1.6;
       if (isHovered) {
         ctx.shadowColor = color;
         ctx.shadowBlur = 10;
@@ -2227,38 +2457,42 @@ const thresholdPlugin = {
       ctx.shadowBlur = 0;
 
       // 2. Pastilla de Alto Contraste Separada Horizontalmente
-      ctx.font = 'bold 9.5px "Plus Jakarta Sans", sans-serif';
+      ctx.font = 'bold 11px "Plus Jakarta Sans", sans-serif';
       const tw = ctx.measureText(label).width;
-      const padX = 8;
-      const badgeH = 19;
+      const padX = 10;
+      const badgeH = 22;
       const badgeW = tw + padX * 2;
 
       // Posición vertical
       const badgeY = (align === 'top') ? (top + 10) : (bottom - badgeH - 10);
-      const textY = badgeY + 13;
+      const textY = badgeY + 15;
 
-      // Posición horizontal separada 7px de la línea vertical
-      const placeLeft = (xPx > right - badgeW - 20);
-      const badgeX = placeLeft ? (xPx - badgeW - 7) : (xPx + 7);
+      // Posición horizontal separada 8px de la línea vertical
+      const placeLeft = (xPx > right - badgeW - 25);
+      const badgeX = placeLeft ? (xPx - badgeW - 8) : (xPx + 8);
       const textX = badgeX + padX;
 
-      drawRoundedRect(ctx, badgeX, badgeY, badgeW, badgeH, 5);
-      ctx.fillStyle = isHovered ? 'rgba(32, 20, 28, 0.98)' : 'rgba(14, 10, 16, 0.94)';
+      drawRoundedRect(ctx, badgeX, badgeY, badgeW, badgeH, 6);
+      if (isLight) {
+        ctx.fillStyle = isHovered ? '#FFFFFF' : '#F8FAFC';
+      } else {
+        ctx.fillStyle = isHovered ? 'rgba(38, 16, 24, 0.98)' : 'rgba(18, 8, 13, 0.95)';
+      }
       ctx.fill();
 
       ctx.strokeStyle = color;
-      ctx.lineWidth = isHovered ? 1.8 : 1.0;
+      ctx.lineWidth = isHovered ? 2.0 : 1.2;
       if (isHovered) {
         ctx.shadowColor = color;
         ctx.shadowBlur = 12;
       } else {
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+        ctx.shadowColor = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 0, 0, 0.85)';
         ctx.shadowBlur = 4;
       }
       ctx.stroke();
       ctx.shadowBlur = 0;
 
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = isLight ? '#0F172A' : '#FFFFFF';
       ctx.fillText(label, textX, textY);
 
       chartThresholds.push({
@@ -2406,58 +2640,68 @@ const thresholdPlugin = {
     // 3. Renderizado de Tooltip Flotante Ejecutivo al hacer Hover
     if (hoveredThreshold) {
       const ht = hoveredThreshold;
-      const tipW = 270;
-      const pad = 10;
-      ctx.font = 'normal 10px "Plus Jakarta Sans", sans-serif';
+      const isLightTip = (currentTheme === 'light');
+      const tipW = 290;
+      const pad = 12;
+      ctx.font = 'normal 11px "Plus Jakarta Sans", sans-serif';
       const descLines = wrapCanvasLines(ctx, ht.desc, tipW - pad * 2);
-      const tipH = 48 + (descLines.length * 13);
+      const tipH = 54 + (descLines.length * 15);
 
-      let tipX = ht.mouseX ? (ht.mouseX + 14) : (ht.bbox.x);
-      let tipY = ht.mouseY ? (ht.mouseY - tipH - 10) : (ht.bbox.y - tipH - 8);
+      let tipX = ht.mouseX ? (ht.mouseX + 16) : (ht.bbox.x);
+      let tipY = ht.mouseY ? (ht.mouseY - tipH - 12) : (ht.bbox.y - tipH - 10);
 
       // Limitar a los bordes visibles del canvas
       if (tipX + tipW > right) tipX = right - tipW - 8;
       if (tipX < left + 8) tipX = left + 8;
-      if (tipY < top + 8) tipY = (ht.mouseY ? ht.mouseY + 18 : ht.bbox.y + ht.bbox.h + 8);
+      if (tipY < top + 8) tipY = (ht.mouseY ? ht.mouseY + 20 : ht.bbox.y + ht.bbox.h + 10);
       if (tipY + tipH > bottom) tipY = bottom - tipH - 8;
 
-      // Caja del Tooltip Flotante con efecto Glassmorphism
+      // Caja del Tooltip Flotante adaptado al tema (Modo Claro vs Modo Oscuro)
       drawRoundedRect(ctx, tipX, tipY, tipW, tipH, 8);
-      ctx.fillStyle = 'rgba(12, 10, 16, 0.97)';
-      ctx.fill();
-
-      ctx.strokeStyle = ht.color;
-      ctx.lineWidth = 1.6;
-      ctx.shadowColor = ht.color;
-      ctx.shadowBlur = 14;
-      ctx.stroke();
+      if (isLightTip) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.98)';
+        ctx.fill();
+        ctx.strokeStyle = ht.color;
+        ctx.lineWidth = 1.8;
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.14)';
+        ctx.shadowBlur = 14;
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = 'rgba(14, 10, 16, 0.98)';
+        ctx.fill();
+        ctx.strokeStyle = ht.color;
+        ctx.lineWidth = 1.8;
+        ctx.shadowColor = ht.color;
+        ctx.shadowBlur = 14;
+        ctx.stroke();
+      }
       ctx.shadowBlur = 0;
 
       // Encabezado del Tooltip
-      ctx.font = 'bold 10px "Plus Jakarta Sans", sans-serif';
+      ctx.font = 'bold 11.5px "Plus Jakarta Sans", sans-serif';
       ctx.fillStyle = ht.color;
       ctx.fillText(ht.label, tipX + pad, tipY + 18);
 
       // Subtítulo de Zona
-      ctx.font = 'bold 8.5px "Plus Jakarta Sans", sans-serif';
-      ctx.fillStyle = '#94A3B8';
-      ctx.fillText(ht.zone.toUpperCase(), tipX + pad, tipY + 31);
+      ctx.font = 'bold 10px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = isLightTip ? '#475569' : '#94A3B8';
+      ctx.fillText(ht.zone.toUpperCase(), tipX + pad, tipY + 32);
 
       // Línea divisoria fina
       ctx.beginPath();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.strokeStyle = isLightTip ? '#E2E8F0' : 'rgba(255, 255, 255, 0.14)';
       ctx.lineWidth = 1;
-      ctx.moveTo(tipX + pad, tipY + 36);
-      ctx.lineTo(tipX + tipW - pad, tipY + 36);
+      ctx.moveTo(tipX + pad, tipY + 39);
+      ctx.lineTo(tipX + tipW - pad, tipY + 39);
       ctx.stroke();
 
-      // Descripción en texto blanco limpio
-      ctx.font = 'normal 9.5px "Plus Jakarta Sans", sans-serif';
-      ctx.fillStyle = '#E2E8F0';
-      let lineY = tipY + 49;
+      // Descripción legible
+      ctx.font = 'normal 11px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = isLightTip ? '#1E293B' : '#E2E8F0';
+      let lineY = tipY + 53;
       for (const line of descLines) {
         ctx.fillText(line, tipX + pad, lineY);
-        lineY += 13;
+        lineY += 15;
       }
     }
 
@@ -2471,29 +2715,32 @@ function renderizarGraficaActiva() {
   initThresholdCanvasListener(canvas);
   if (chartInstance) chartInstance.destroy();
 
-  const isMarte = (currentTheme === 'marte');
-  // COLOR NEÓN INSIGNIA PARA LA SIMULACIÓN
-  const colorSimulacion = isMarte ? '#FF6B00' : '#00F0FF';
-  const colorSimulacionTrans = isMarte ? 'rgba(255, 107, 0, 0.25)' : 'rgba(0, 240, 255, 0.25)';
+  const isLight = (currentTheme === 'light');
+
+  // Colores dinámicos adaptados a modo claro / modo oscuro
+  const colorSimulacion = isLight ? '#EA580C' : '#FF6B00';
+  const colorSimulacionTrans = isLight ? 'rgba(234, 88, 12, 0.25)' : 'rgba(255, 107, 0, 0.25)';
 
   // Paleta base para datos históricos
-  const barHistoricoColor = isMarte ? '#451D24' : '#333A48';
-  const lineHistoricoColor = isMarte ? '#EA580C' : '#94A3B8';
-  const gridColor = isMarte ? '#3A1418' : '#1E232F';
-  const textColor = isMarte ? '#FDBA74' : '#94A3B8';
+  const barHistoricoColor = isLight ? '#94A3B8' : '#451D24';
+  const lineHistoricoColor = isLight ? '#2563EB' : '#EA580C';
+  const gridColor = isLight ? '#E2E8F0' : '#3A1418';
+  const textColor = isLight ? '#334155' : '#FDBA74';
 
   const commonOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { labels: { color: textColor, font: { size: 10 } } },
+      legend: { labels: { color: textColor, font: { size: 11.5, weight: 'bold' } } },
       tooltip: {
-        backgroundColor: '#0F172A',
-        titleColor: '#F8FAFC',
-        bodyColor: '#E2E8F0',
-        borderColor: '#334155',
+        backgroundColor: isLight ? '#FFFFFF' : '#0F172A',
+        titleColor: isLight ? '#0F172A' : '#F8FAFC',
+        bodyColor: isLight ? '#334155' : '#E2E8F0',
+        borderColor: isLight ? '#CBD5E1' : '#334155',
         borderWidth: 1,
-        padding: 8,
+        padding: 10,
+        titleFont: { size: 12, weight: 'bold' },
+        bodyFont: { size: 11.5 },
         callbacks: {
           footer: function(tooltipItems) {
             return obtenerDiagnosticoTooltip(tabActiva, tooltipItems);
@@ -2502,8 +2749,8 @@ function renderizarGraficaActiva() {
       }
     },
     scales: {
-      x: { ticks: { color: textColor, font: { size: 9 } }, grid: { color: gridColor } },
-      y: { ticks: { color: textColor, font: { size: 9 } }, grid: { color: gridColor } }
+      x: { ticks: { color: textColor, font: { size: 11, weight: '600' } }, grid: { color: gridColor } },
+      y: { ticks: { color: textColor, font: { size: 11, weight: '600' } }, grid: { color: gridColor } }
     }
   };
 
@@ -2922,14 +3169,169 @@ rngSoporte.addEventListener('input', onSliderInput);
 rngVisitas.addEventListener('input', onSliderInput);
 
 window.addEventListener('DOMContentLoaded', () => {
+  const temaGuardado = localStorage.getItem('sim_theme') || 'dark';
+  aplicarTema(temaGuardado);
   calcularParametros();
   cambiarTab(1);
   renderKatexMath();
+
+  // Iniciar automáticamente el tour en la primera visita
+  if (localStorage.getItem('sim_tour_completed') !== 'true') {
+    setTimeout(iniciarTour, 650);
+  }
 });
 
 window.addEventListener('load', () => {
   renderKatexMath();
 });
+
+
+// ==========================================================================
+// GUÍA DE USO DE INICIO E INDUCCIÓN GERENCIAL (TOUR GUIADO INTERACTIVO)
+// ==========================================================================
+const tourPasos = [
+  {
+    titulo: "1. Misión Ejecutiva: Flota Corporativa en Marte",
+    targetId: null,
+    contenido: `
+      <p class="font-bold text-orange-400">Bienvenido al Simulador de Información de Marketing (SIM), Señor Gerente General.</p>
+      <p>Usted lidera la dirección de <strong>Ares Rover Dynamics</strong>. A mayo de 2026, la empresa cuenta con una <strong>base acumulada de 1.792 contratos corporativos de rovers</strong> operando en Marte (1.700 contratos vigentes de meses anteriores + 92 nuevos clientes adquiridos).</p>
+      <p>El desafío directivo no es captar rovers a ciegas, sino <strong>equilibrar la pauta publicitaria con la capacidad operativa de los talleres mecánicos posventa</strong> para evitar cancelaciones masivas y maximizar el margen neto.</p>
+    `
+  },
+  {
+    titulo: "2. Palancas Estratégicas de Decisión (Controles)",
+    targetId: "tour-palancas",
+    contenido: `
+      <p>En este cuadrante usted comanda las <strong>3 variables maestras</strong> de la estrategia empresarial:</p>
+      <ul class="list-disc list-inside space-y-1 text-slate-300">
+        <li><strong>Presupuesto de Marketing ($ USD):</strong> Inversión total mensual asignada.</li>
+        <li><strong>Soporte Posventa / CX (%):</strong> Porcentaje del presupuesto reservado para ingenieros y repuestos en talleres marcianos.</li>
+        <li><strong>Visitas Estimadas:</strong> Volumen de tráfico proyectado en el portal corporativo.</li>
+      </ul>
+      <p class="text-orange-300 text-xs mt-1">💡 Al mover cualquier control, el modelo paramétrico recalcula en tiempo real todas las ecuaciones de conversión, costos y rentabilidad.</p>
+    `
+  },
+  {
+    titulo: "3. Laboratorio de Escenarios Históricos",
+    targetId: "tour-escenarios-panel",
+    contenido: `
+      <p>Evalúe su propuesta frente a los hitos reales auditados durante el primer semestre de 2026:</p>
+      <div class="grid grid-cols-2 gap-2 text-xs my-2">
+        <div class="p-2 rounded bg-slate-800/80 border border-slate-700">
+          <span class="text-rose-400 font-bold">⚠️ Febrero 2026:</span>
+          <p class="text-[11px] text-slate-300">Cero soporte posventa. Captación récord pero satisfacción destruida (CSAT 4.2) por talleres colapsados.</p>
+        </div>
+        <div class="p-2 rounded bg-slate-800/80 border border-slate-700">
+          <span class="text-emerald-400 font-bold">⭐ Abril 2026:</span>
+          <p class="text-[11px] text-slate-300">16% a soporte. Récord histórico de satisfacción (CSAT 9.4) con CPA eficiente de $39.74 USD.</p>
+        </div>
+      </div>
+      <p class="text-xs">Haga clic en cualquiera de los 4 botones para cargar instantáneamente esos parámetros.</p>
+    `
+  },
+  {
+    titulo: "4. Tablero de Control Directivo (KPIs)",
+    targetId: "tour-kpis",
+    contenido: `
+      <p>Monitoreo continuo de los 6 indicadores vitales para la Junta Directiva:</p>
+      <ul class="list-disc list-inside space-y-1 text-slate-300">
+        <li><strong>Ventas Totales & ROAS:</strong> Facturación estimada y retorno bruto de inversión.</li>
+        <li><strong>Nuevos Clientes & Tasa CR:</strong> Eficiencia de transformación en embudo.</li>
+        <li><strong>CPA (Costo por Adquisición):</strong> Semáforo de eficiencia en captación.</li>
+        <li><strong>CSAT (Satisfacción del Cliente):</strong> Alerta temprana para blindar la retención de la flota corporativa.</li>
+      </ul>
+    `
+  },
+  {
+    titulo: "5. Analítica Visual de 10 Gráficas con Umbrales",
+    targetId: "tour-graficas",
+    contenido: `
+      <p>Navegue a través de las <strong>10 perspectivas analíticas</strong> del SIM para fundamentar sus decisiones.</p>
+      <p><strong>Novedad Interactiva:</strong> Cada gráfica incorpora líneas de umbral gerencial (Meta CSAT, Alerta Crítica, Break-Even, etc.).</p>
+      <p class="text-emerald-400 font-bold text-xs mt-1">👉 Pase el cursor sobre cualquiera de las pastillas de umbral para abrir la justificación estratégica detallada.</p>
+    `
+  },
+  {
+    titulo: "6. Auditoría de Fórmulas y Modo Visual",
+    targetId: "btn-theme-toggle",
+    contenido: `
+      <p>Para su comodidad ejecutiva, puede alternar en cualquier momento entre el <strong>Modo Oscuro (espacial Marte)</strong> y el <strong>Modo Claro (informe corporativo blanco)</strong> con el botón superior.</p>
+      <p>Además, el botón <strong>«Fórmulas Matemáticas»</strong> le despliega la memoria de cálculo completa auditada en LaTeX con sus 5 fuentes bibliográficas del ACA.</p>
+      <p class="text-orange-400 font-bold mt-2">¡Listo para comenzar! Explore el simulador y tome el control de Ares Rover Dynamics.</p>
+    `
+  }
+];
+
+let tourPasoActual = 0;
+
+function iniciarTour() {
+  tourPasoActual = 0;
+  const overlay = document.getElementById('tour-overlay');
+  if (overlay) {
+    overlay.classList.remove('hidden');
+    mostrarPasoTour(0);
+  }
+}
+
+function mostrarPasoTour(index) {
+  if (index < 0 || index >= tourPasos.length) return;
+  tourPasoActual = index;
+  const paso = tourPasos[index];
+
+  const titleEl = document.getElementById('tour-step-title');
+  const indEl = document.getElementById('tour-step-indicator');
+  const contentEl = document.getElementById('tour-step-content');
+  const barEl = document.getElementById('tour-progress-bar');
+
+  if (titleEl) titleEl.textContent = paso.titulo;
+  if (indEl) indEl.textContent = `Paso ${index + 1} de ${tourPasos.length}`;
+  if (contentEl) contentEl.innerHTML = paso.contenido;
+  
+  const pct = ((index + 1) / tourPasos.length) * 100;
+  if (barEl) barEl.style.width = `${pct}%`;
+
+  const btnPrev = document.getElementById('btn-tour-prev');
+  if (btnPrev) btnPrev.disabled = (index === 0);
+
+  const btnNextText = document.getElementById('btn-tour-next-text');
+  if (btnNextText) {
+    btnNextText.textContent = (index === tourPasos.length - 1) ? 'Finalizar Guía' : 'Siguiente';
+  }
+
+  // Limpiar spotlights previos
+  document.querySelectorAll('.tour-spotlight').forEach(el => el.classList.remove('tour-spotlight'));
+
+  // Aplicar spotlight al elemento objetivo si existe
+  if (paso.targetId) {
+    const targetEl = document.getElementById(paso.targetId);
+    if (targetEl) {
+      targetEl.classList.add('tour-spotlight');
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+}
+
+function siguientePasoTour() {
+  if (tourPasoActual < tourPasos.length - 1) {
+    mostrarPasoTour(tourPasoActual + 1);
+  } else {
+    finalizarTour();
+  }
+}
+
+function anteriorPasoTour() {
+  if (tourPasoActual > 0) {
+    mostrarPasoTour(tourPasoActual - 1);
+  }
+}
+
+function finalizarTour() {
+  const overlay = document.getElementById('tour-overlay');
+  if (overlay) overlay.classList.add('hidden');
+  document.querySelectorAll('.tour-spotlight').forEach(el => el.classList.remove('tour-spotlight'));
+  localStorage.setItem('sim_tour_completed', 'true');
+}
 
 </script>
 </body>

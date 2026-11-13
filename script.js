@@ -38,8 +38,8 @@ let simState = {
 };
 
 let tabActiva = 1;
-// ABRE SIEMPRE CON EL MODO MARTE POR DEFECTO
-let currentTheme = 'marte';
+// Tema persistido o por defecto oscuro
+let currentTheme = localStorage.getItem('sim_theme') || 'dark';
 let chartInstance = null;
 let presetOrigen = 'recomendado';
 
@@ -85,25 +85,42 @@ const themeIcon = document.getElementById('theme-icon');
 const themeLabel = document.getElementById('theme-label');
 
 // ==========================================================================
-// FUNCIÓN PARA CAMBIAR ENTRE MODO MARTE Y MODO GERENCIAL MONOCROMO
+// FUNCIÓN PARA ALTERNAR ENTRE MODO CLARO Y MODO OSCURO (CON PERSISTENCIA)
 // ==========================================================================
-function toggleTheme() {
-  if (currentTheme === 'marte') {
-    currentTheme = 'gerencial';
-    appBody.classList.remove('theme-marte');
-    appBody.classList.add('theme-gerencial');
-    themeIcon.textContent = '🪐';
-    themeLabel.textContent = 'Modo Marte';
-    btnThemeToggle.className = 'text-[11px] px-2.5 py-1 rounded font-bold transition flex items-center gap-1.5 border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200';
+function aplicarTema(tema) {
+  currentTheme = tema;
+  localStorage.setItem('sim_theme', tema);
+
+  const mobIcon = document.querySelector('.theme-icon-mob');
+
+  if (tema === 'light') {
+    appBody.classList.remove('theme-dark', 'theme-marte');
+    appBody.classList.add('theme-light');
+    if (themeIcon) themeIcon.textContent = '🌙';
+    if (themeLabel) themeLabel.textContent = 'Modo Oscuro';
+    if (mobIcon) mobIcon.textContent = '🌙';
+    if (btnThemeToggle) {
+      btnThemeToggle.className = 'btn-interactive text-xs px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 shadow-sm';
+    }
   } else {
-    currentTheme = 'marte';
-    appBody.classList.remove('theme-gerencial');
-    appBody.classList.add('theme-marte');
-    themeIcon.textContent = '👔';
-    themeLabel.textContent = 'Modo Gerencial';
-    btnThemeToggle.className = 'text-[11px] px-2.5 py-1 rounded font-bold transition flex items-center gap-1.5 border border-[#571C1D] bg-[#2A0E13] hover:bg-[#3D141B] text-[#FFD8B0]';
+    appBody.classList.remove('theme-light');
+    appBody.classList.add('theme-dark', 'theme-marte');
+    if (themeIcon) themeIcon.textContent = '☀️';
+    if (themeLabel) themeLabel.textContent = 'Modo Claro';
+    if (mobIcon) mobIcon.textContent = '☀️';
+    if (btnThemeToggle) {
+      btnThemeToggle.className = 'btn-interactive text-xs px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 border border-[#571C1D] bg-[#2A0E13] hover:bg-[#3D141B] text-[#FFD8B0] shadow-sm';
+    }
   }
-  actualizarUI();
+
+  if (chartInstance) {
+    renderizarGraficaActiva();
+  }
+}
+
+function toggleTheme() {
+  const nuevoTema = (currentTheme === 'light') ? 'dark' : 'light';
+  aplicarTema(nuevoTema);
 }
 
 // ==========================================================================
@@ -941,12 +958,13 @@ const thresholdPlugin = {
 
       const thresholdId = `H_${yScale.id}_${val}_${label}`;
       const isHovered = hoveredThreshold && hoveredThreshold.id === thresholdId;
+      const isLight = (currentTheme === 'light');
 
-      // 1. Línea punteada (con iluminación reactiva al hover)
+      // 1. Línea punteada horizontal limpia
       ctx.beginPath();
       ctx.setLineDash(dash);
       ctx.strokeStyle = color;
-      ctx.lineWidth = isHovered ? 2.8 : 1.6;
+      ctx.lineWidth = isHovered ? 2.6 : 1.6;
       if (isHovered) {
         ctx.shadowColor = color;
         ctx.shadowBlur = 10;
@@ -958,46 +976,49 @@ const thresholdPlugin = {
       ctx.lineTo(right, yPx);
       ctx.stroke();
 
-      // Reset sombra de línea
       ctx.setLineDash([]);
       ctx.shadowBlur = 0;
 
       // 2. Pastilla / Badge de Alto Contraste con Separación Vertical Limpia
-      ctx.font = 'bold 9.5px "Plus Jakarta Sans", sans-serif';
+      ctx.font = 'bold 11px "Plus Jakarta Sans", sans-serif';
       const tw = ctx.measureText(label).width;
-      const padX = 8;
-      const badgeH = 19;
+      const padX = 10;
+      const badgeH = 22;
       const badgeW = tw + padX * 2;
 
-      // Posición vertical: Separada de la línea por 7px de aire (no pegada ni cruzada)
-      const placeBelow = (yPx < top + 32);
-      const badgeY = placeBelow ? (yPx + 7) : (yPx - badgeH - 7);
-      const textY = badgeY + 13;
+      // Posición vertical: Separada de la línea por 8px de aire (JAMÁS pegada ni cortando el texto)
+      const placeBelow = (yPx < top + 36);
+      const badgeY = placeBelow ? (yPx + 8) : (yPx - badgeH - 8);
+      const textY = badgeY + 15;
 
-      // Posición horizontal
-      const badgeX = (align === 'right') ? (right - badgeW - 8) : (left + 8);
+      // Posición horizontal con margen de respiro
+      const badgeX = (align === 'right') ? (right - badgeW - 10) : (left + 10);
       const textX = badgeX + padX;
 
-      // Dibujar caja del badge con bordes redondeados y fondo oscuro opaco
-      drawRoundedRect(ctx, badgeX, badgeY, badgeW, badgeH, 5);
-      ctx.fillStyle = isHovered ? 'rgba(32, 20, 28, 0.98)' : 'rgba(14, 10, 16, 0.94)';
+      // Dibujar caja del badge con bordes redondeados y fondo 100% opaco
+      drawRoundedRect(ctx, badgeX, badgeY, badgeW, badgeH, 6);
+      if (isLight) {
+        ctx.fillStyle = isHovered ? '#FFFFFF' : '#F8FAFC';
+      } else {
+        ctx.fillStyle = isHovered ? 'rgba(38, 16, 24, 0.98)' : 'rgba(18, 8, 13, 0.95)';
+      }
       ctx.fill();
 
       // Borde del badge con color del semáforo
       ctx.strokeStyle = color;
-      ctx.lineWidth = isHovered ? 1.8 : 1.0;
+      ctx.lineWidth = isHovered ? 2.0 : 1.2;
       if (isHovered) {
         ctx.shadowColor = color;
         ctx.shadowBlur = 12;
       } else {
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+        ctx.shadowColor = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 0, 0, 0.85)';
         ctx.shadowBlur = 4;
       }
       ctx.stroke();
-      ctx.shadowBlur = 0; // reset sombra
+      ctx.shadowBlur = 0;
 
       // Texto nítido de alto contraste
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = isLight ? '#0F172A' : '#FFFFFF';
       ctx.fillText(label, textX, textY);
 
       // Registrar para interactividad
@@ -1030,12 +1051,13 @@ const thresholdPlugin = {
 
       const thresholdId = `V_${xScale.id}_${val}_${label}`;
       const isHovered = hoveredThreshold && hoveredThreshold.id === thresholdId;
+      const isLight = (currentTheme === 'light');
 
       // 1. Línea punteada vertical
       ctx.beginPath();
       ctx.setLineDash(dash);
       ctx.strokeStyle = color;
-      ctx.lineWidth = isHovered ? 2.8 : 1.6;
+      ctx.lineWidth = isHovered ? 2.6 : 1.6;
       if (isHovered) {
         ctx.shadowColor = color;
         ctx.shadowBlur = 10;
@@ -1051,38 +1073,42 @@ const thresholdPlugin = {
       ctx.shadowBlur = 0;
 
       // 2. Pastilla de Alto Contraste Separada Horizontalmente
-      ctx.font = 'bold 9.5px "Plus Jakarta Sans", sans-serif';
+      ctx.font = 'bold 11px "Plus Jakarta Sans", sans-serif';
       const tw = ctx.measureText(label).width;
-      const padX = 8;
-      const badgeH = 19;
+      const padX = 10;
+      const badgeH = 22;
       const badgeW = tw + padX * 2;
 
       // Posición vertical
       const badgeY = (align === 'top') ? (top + 10) : (bottom - badgeH - 10);
-      const textY = badgeY + 13;
+      const textY = badgeY + 15;
 
-      // Posición horizontal separada 7px de la línea vertical
-      const placeLeft = (xPx > right - badgeW - 20);
-      const badgeX = placeLeft ? (xPx - badgeW - 7) : (xPx + 7);
+      // Posición horizontal separada 8px de la línea vertical
+      const placeLeft = (xPx > right - badgeW - 25);
+      const badgeX = placeLeft ? (xPx - badgeW - 8) : (xPx + 8);
       const textX = badgeX + padX;
 
-      drawRoundedRect(ctx, badgeX, badgeY, badgeW, badgeH, 5);
-      ctx.fillStyle = isHovered ? 'rgba(32, 20, 28, 0.98)' : 'rgba(14, 10, 16, 0.94)';
+      drawRoundedRect(ctx, badgeX, badgeY, badgeW, badgeH, 6);
+      if (isLight) {
+        ctx.fillStyle = isHovered ? '#FFFFFF' : '#F8FAFC';
+      } else {
+        ctx.fillStyle = isHovered ? 'rgba(38, 16, 24, 0.98)' : 'rgba(18, 8, 13, 0.95)';
+      }
       ctx.fill();
 
       ctx.strokeStyle = color;
-      ctx.lineWidth = isHovered ? 1.8 : 1.0;
+      ctx.lineWidth = isHovered ? 2.0 : 1.2;
       if (isHovered) {
         ctx.shadowColor = color;
         ctx.shadowBlur = 12;
       } else {
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+        ctx.shadowColor = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 0, 0, 0.85)';
         ctx.shadowBlur = 4;
       }
       ctx.stroke();
       ctx.shadowBlur = 0;
 
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = isLight ? '#0F172A' : '#FFFFFF';
       ctx.fillText(label, textX, textY);
 
       chartThresholds.push({
@@ -1230,58 +1256,68 @@ const thresholdPlugin = {
     // 3. Renderizado de Tooltip Flotante Ejecutivo al hacer Hover
     if (hoveredThreshold) {
       const ht = hoveredThreshold;
-      const tipW = 270;
-      const pad = 10;
-      ctx.font = 'normal 10px "Plus Jakarta Sans", sans-serif';
+      const isLightTip = (currentTheme === 'light');
+      const tipW = 290;
+      const pad = 12;
+      ctx.font = 'normal 11px "Plus Jakarta Sans", sans-serif';
       const descLines = wrapCanvasLines(ctx, ht.desc, tipW - pad * 2);
-      const tipH = 48 + (descLines.length * 13);
+      const tipH = 54 + (descLines.length * 15);
 
-      let tipX = ht.mouseX ? (ht.mouseX + 14) : (ht.bbox.x);
-      let tipY = ht.mouseY ? (ht.mouseY - tipH - 10) : (ht.bbox.y - tipH - 8);
+      let tipX = ht.mouseX ? (ht.mouseX + 16) : (ht.bbox.x);
+      let tipY = ht.mouseY ? (ht.mouseY - tipH - 12) : (ht.bbox.y - tipH - 10);
 
       // Limitar a los bordes visibles del canvas
       if (tipX + tipW > right) tipX = right - tipW - 8;
       if (tipX < left + 8) tipX = left + 8;
-      if (tipY < top + 8) tipY = (ht.mouseY ? ht.mouseY + 18 : ht.bbox.y + ht.bbox.h + 8);
+      if (tipY < top + 8) tipY = (ht.mouseY ? ht.mouseY + 20 : ht.bbox.y + ht.bbox.h + 10);
       if (tipY + tipH > bottom) tipY = bottom - tipH - 8;
 
-      // Caja del Tooltip Flotante con efecto Glassmorphism
+      // Caja del Tooltip Flotante adaptado al tema (Modo Claro vs Modo Oscuro)
       drawRoundedRect(ctx, tipX, tipY, tipW, tipH, 8);
-      ctx.fillStyle = 'rgba(12, 10, 16, 0.97)';
-      ctx.fill();
-
-      ctx.strokeStyle = ht.color;
-      ctx.lineWidth = 1.6;
-      ctx.shadowColor = ht.color;
-      ctx.shadowBlur = 14;
-      ctx.stroke();
+      if (isLightTip) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.98)';
+        ctx.fill();
+        ctx.strokeStyle = ht.color;
+        ctx.lineWidth = 1.8;
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.14)';
+        ctx.shadowBlur = 14;
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = 'rgba(14, 10, 16, 0.98)';
+        ctx.fill();
+        ctx.strokeStyle = ht.color;
+        ctx.lineWidth = 1.8;
+        ctx.shadowColor = ht.color;
+        ctx.shadowBlur = 14;
+        ctx.stroke();
+      }
       ctx.shadowBlur = 0;
 
       // Encabezado del Tooltip
-      ctx.font = 'bold 10px "Plus Jakarta Sans", sans-serif';
+      ctx.font = 'bold 11.5px "Plus Jakarta Sans", sans-serif';
       ctx.fillStyle = ht.color;
       ctx.fillText(ht.label, tipX + pad, tipY + 18);
 
       // Subtítulo de Zona
-      ctx.font = 'bold 8.5px "Plus Jakarta Sans", sans-serif';
-      ctx.fillStyle = '#94A3B8';
-      ctx.fillText(ht.zone.toUpperCase(), tipX + pad, tipY + 31);
+      ctx.font = 'bold 10px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = isLightTip ? '#475569' : '#94A3B8';
+      ctx.fillText(ht.zone.toUpperCase(), tipX + pad, tipY + 32);
 
       // Línea divisoria fina
       ctx.beginPath();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.strokeStyle = isLightTip ? '#E2E8F0' : 'rgba(255, 255, 255, 0.14)';
       ctx.lineWidth = 1;
-      ctx.moveTo(tipX + pad, tipY + 36);
-      ctx.lineTo(tipX + tipW - pad, tipY + 36);
+      ctx.moveTo(tipX + pad, tipY + 39);
+      ctx.lineTo(tipX + tipW - pad, tipY + 39);
       ctx.stroke();
 
-      // Descripción en texto blanco limpio
-      ctx.font = 'normal 9.5px "Plus Jakarta Sans", sans-serif';
-      ctx.fillStyle = '#E2E8F0';
-      let lineY = tipY + 49;
+      // Descripción legible
+      ctx.font = 'normal 11px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = isLightTip ? '#1E293B' : '#E2E8F0';
+      let lineY = tipY + 53;
       for (const line of descLines) {
         ctx.fillText(line, tipX + pad, lineY);
-        lineY += 13;
+        lineY += 15;
       }
     }
 
@@ -1295,29 +1331,32 @@ function renderizarGraficaActiva() {
   initThresholdCanvasListener(canvas);
   if (chartInstance) chartInstance.destroy();
 
-  const isMarte = (currentTheme === 'marte');
-  // COLOR NEÓN INSIGNIA PARA LA SIMULACIÓN
-  const colorSimulacion = isMarte ? '#FF6B00' : '#00F0FF';
-  const colorSimulacionTrans = isMarte ? 'rgba(255, 107, 0, 0.25)' : 'rgba(0, 240, 255, 0.25)';
+  const isLight = (currentTheme === 'light');
+
+  // Colores dinámicos adaptados a modo claro / modo oscuro
+  const colorSimulacion = isLight ? '#EA580C' : '#FF6B00';
+  const colorSimulacionTrans = isLight ? 'rgba(234, 88, 12, 0.25)' : 'rgba(255, 107, 0, 0.25)';
 
   // Paleta base para datos históricos
-  const barHistoricoColor = isMarte ? '#451D24' : '#333A48';
-  const lineHistoricoColor = isMarte ? '#EA580C' : '#94A3B8';
-  const gridColor = isMarte ? '#3A1418' : '#1E232F';
-  const textColor = isMarte ? '#FDBA74' : '#94A3B8';
+  const barHistoricoColor = isLight ? '#94A3B8' : '#451D24';
+  const lineHistoricoColor = isLight ? '#2563EB' : '#EA580C';
+  const gridColor = isLight ? '#E2E8F0' : '#3A1418';
+  const textColor = isLight ? '#334155' : '#FDBA74';
 
   const commonOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { labels: { color: textColor, font: { size: 10 } } },
+      legend: { labels: { color: textColor, font: { size: 11.5, weight: 'bold' } } },
       tooltip: {
-        backgroundColor: '#0F172A',
-        titleColor: '#F8FAFC',
-        bodyColor: '#E2E8F0',
-        borderColor: '#334155',
+        backgroundColor: isLight ? '#FFFFFF' : '#0F172A',
+        titleColor: isLight ? '#0F172A' : '#F8FAFC',
+        bodyColor: isLight ? '#334155' : '#E2E8F0',
+        borderColor: isLight ? '#CBD5E1' : '#334155',
         borderWidth: 1,
-        padding: 8,
+        padding: 10,
+        titleFont: { size: 12, weight: 'bold' },
+        bodyFont: { size: 11.5 },
         callbacks: {
           footer: function(tooltipItems) {
             return obtenerDiagnosticoTooltip(tabActiva, tooltipItems);
@@ -1326,8 +1365,8 @@ function renderizarGraficaActiva() {
       }
     },
     scales: {
-      x: { ticks: { color: textColor, font: { size: 9 } }, grid: { color: gridColor } },
-      y: { ticks: { color: textColor, font: { size: 9 } }, grid: { color: gridColor } }
+      x: { ticks: { color: textColor, font: { size: 11, weight: '600' } }, grid: { color: gridColor } },
+      y: { ticks: { color: textColor, font: { size: 11, weight: '600' } }, grid: { color: gridColor } }
     }
   };
 
@@ -1746,11 +1785,166 @@ rngSoporte.addEventListener('input', onSliderInput);
 rngVisitas.addEventListener('input', onSliderInput);
 
 window.addEventListener('DOMContentLoaded', () => {
+  const temaGuardado = localStorage.getItem('sim_theme') || 'dark';
+  aplicarTema(temaGuardado);
   calcularParametros();
   cambiarTab(1);
   renderKatexMath();
+
+  // Iniciar automáticamente el tour en la primera visita
+  if (localStorage.getItem('sim_tour_completed') !== 'true') {
+    setTimeout(iniciarTour, 650);
+  }
 });
 
 window.addEventListener('load', () => {
   renderKatexMath();
 });
+
+
+// ==========================================================================
+// GUÍA DE USO DE INICIO E INDUCCIÓN GERENCIAL (TOUR GUIADO INTERACTIVO)
+// ==========================================================================
+const tourPasos = [
+  {
+    titulo: "1. Misión Ejecutiva: Flota Corporativa en Marte",
+    targetId: null,
+    contenido: `
+      <p class="font-bold text-orange-400">Bienvenido al Simulador de Información de Marketing (SIM), Señor Gerente General.</p>
+      <p>Usted lidera la dirección de <strong>Ares Rover Dynamics</strong>. A mayo de 2026, la empresa cuenta con una <strong>base acumulada de 1.792 contratos corporativos de rovers</strong> operando en Marte (1.700 contratos vigentes de meses anteriores + 92 nuevos clientes adquiridos).</p>
+      <p>El desafío directivo no es captar rovers a ciegas, sino <strong>equilibrar la pauta publicitaria con la capacidad operativa de los talleres mecánicos posventa</strong> para evitar cancelaciones masivas y maximizar el margen neto.</p>
+    `
+  },
+  {
+    titulo: "2. Palancas Estratégicas de Decisión (Controles)",
+    targetId: "tour-palancas",
+    contenido: `
+      <p>En este cuadrante usted comanda las <strong>3 variables maestras</strong> de la estrategia empresarial:</p>
+      <ul class="list-disc list-inside space-y-1 text-slate-300">
+        <li><strong>Presupuesto de Marketing ($ USD):</strong> Inversión total mensual asignada.</li>
+        <li><strong>Soporte Posventa / CX (%):</strong> Porcentaje del presupuesto reservado para ingenieros y repuestos en talleres marcianos.</li>
+        <li><strong>Visitas Estimadas:</strong> Volumen de tráfico proyectado en el portal corporativo.</li>
+      </ul>
+      <p class="text-orange-300 text-xs mt-1">💡 Al mover cualquier control, el modelo paramétrico recalcula en tiempo real todas las ecuaciones de conversión, costos y rentabilidad.</p>
+    `
+  },
+  {
+    titulo: "3. Laboratorio de Escenarios Históricos",
+    targetId: "tour-escenarios-panel",
+    contenido: `
+      <p>Evalúe su propuesta frente a los hitos reales auditados durante el primer semestre de 2026:</p>
+      <div class="grid grid-cols-2 gap-2 text-xs my-2">
+        <div class="p-2 rounded bg-slate-800/80 border border-slate-700">
+          <span class="text-rose-400 font-bold">⚠️ Febrero 2026:</span>
+          <p class="text-[11px] text-slate-300">Cero soporte posventa. Captación récord pero satisfacción destruida (CSAT 4.2) por talleres colapsados.</p>
+        </div>
+        <div class="p-2 rounded bg-slate-800/80 border border-slate-700">
+          <span class="text-emerald-400 font-bold">⭐ Abril 2026:</span>
+          <p class="text-[11px] text-slate-300">16% a soporte. Récord histórico de satisfacción (CSAT 9.4) con CPA eficiente de $39.74 USD.</p>
+        </div>
+      </div>
+      <p class="text-xs">Haga clic en cualquiera de los 4 botones para cargar instantáneamente esos parámetros.</p>
+    `
+  },
+  {
+    titulo: "4. Tablero de Control Directivo (KPIs)",
+    targetId: "tour-kpis",
+    contenido: `
+      <p>Monitoreo continuo de los 6 indicadores vitales para la Junta Directiva:</p>
+      <ul class="list-disc list-inside space-y-1 text-slate-300">
+        <li><strong>Ventas Totales & ROAS:</strong> Facturación estimada y retorno bruto de inversión.</li>
+        <li><strong>Nuevos Clientes & Tasa CR:</strong> Eficiencia de transformación en embudo.</li>
+        <li><strong>CPA (Costo por Adquisición):</strong> Semáforo de eficiencia en captación.</li>
+        <li><strong>CSAT (Satisfacción del Cliente):</strong> Alerta temprana para blindar la retención de la flota corporativa.</li>
+      </ul>
+    `
+  },
+  {
+    titulo: "5. Analítica Visual de 10 Gráficas con Umbrales",
+    targetId: "tour-graficas",
+    contenido: `
+      <p>Navegue a través de las <strong>10 perspectivas analíticas</strong> del SIM para fundamentar sus decisiones.</p>
+      <p><strong>Novedad Interactiva:</strong> Cada gráfica incorpora líneas de umbral gerencial (Meta CSAT, Alerta Crítica, Break-Even, etc.).</p>
+      <p class="text-emerald-400 font-bold text-xs mt-1">👉 Pase el cursor sobre cualquiera de las pastillas de umbral para abrir la justificación estratégica detallada.</p>
+    `
+  },
+  {
+    titulo: "6. Auditoría de Fórmulas y Modo Visual",
+    targetId: "btn-theme-toggle",
+    contenido: `
+      <p>Para su comodidad ejecutiva, puede alternar en cualquier momento entre el <strong>Modo Oscuro (espacial Marte)</strong> y el <strong>Modo Claro (informe corporativo blanco)</strong> con el botón superior.</p>
+      <p>Además, el botón <strong>«Fórmulas Matemáticas»</strong> le despliega la memoria de cálculo completa auditada en LaTeX con sus 5 fuentes bibliográficas del ACA.</p>
+      <p class="text-orange-400 font-bold mt-2">¡Listo para comenzar! Explore el simulador y tome el control de Ares Rover Dynamics.</p>
+    `
+  }
+];
+
+let tourPasoActual = 0;
+
+function iniciarTour() {
+  tourPasoActual = 0;
+  const overlay = document.getElementById('tour-overlay');
+  if (overlay) {
+    overlay.classList.remove('hidden');
+    mostrarPasoTour(0);
+  }
+}
+
+function mostrarPasoTour(index) {
+  if (index < 0 || index >= tourPasos.length) return;
+  tourPasoActual = index;
+  const paso = tourPasos[index];
+
+  const titleEl = document.getElementById('tour-step-title');
+  const indEl = document.getElementById('tour-step-indicator');
+  const contentEl = document.getElementById('tour-step-content');
+  const barEl = document.getElementById('tour-progress-bar');
+
+  if (titleEl) titleEl.textContent = paso.titulo;
+  if (indEl) indEl.textContent = `Paso ${index + 1} de ${tourPasos.length}`;
+  if (contentEl) contentEl.innerHTML = paso.contenido;
+  
+  const pct = ((index + 1) / tourPasos.length) * 100;
+  if (barEl) barEl.style.width = `${pct}%`;
+
+  const btnPrev = document.getElementById('btn-tour-prev');
+  if (btnPrev) btnPrev.disabled = (index === 0);
+
+  const btnNextText = document.getElementById('btn-tour-next-text');
+  if (btnNextText) {
+    btnNextText.textContent = (index === tourPasos.length - 1) ? 'Finalizar Guía' : 'Siguiente';
+  }
+
+  // Limpiar spotlights previos
+  document.querySelectorAll('.tour-spotlight').forEach(el => el.classList.remove('tour-spotlight'));
+
+  // Aplicar spotlight al elemento objetivo si existe
+  if (paso.targetId) {
+    const targetEl = document.getElementById(paso.targetId);
+    if (targetEl) {
+      targetEl.classList.add('tour-spotlight');
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+}
+
+function siguientePasoTour() {
+  if (tourPasoActual < tourPasos.length - 1) {
+    mostrarPasoTour(tourPasoActual + 1);
+  } else {
+    finalizarTour();
+  }
+}
+
+function anteriorPasoTour() {
+  if (tourPasoActual > 0) {
+    mostrarPasoTour(tourPasoActual - 1);
+  }
+}
+
+function finalizarTour() {
+  const overlay = document.getElementById('tour-overlay');
+  if (overlay) overlay.classList.add('hidden');
+  document.querySelectorAll('.tour-spotlight').forEach(el => el.classList.remove('tour-spotlight'));
+  localStorage.setItem('sim_tour_completed', 'true');
+}
