@@ -801,18 +801,27 @@ function renderizarGraficaActiva() {
 // CARGA RÁPIDA DE ESCENARIOS
 // ==========================================================================
 function cargarEscenario(tipo) {
-  if (tipo === 'febrero') {
+  if (tipo === 'enero') {
+    rngGasto.value = 2200; rngSoporte.value = 8; rngVisitas.value = 1100;
+  } else if (tipo === 'febrero') {
     rngGasto.value = 3300; rngSoporte.value = 0; rngVisitas.value = 1650;
+  } else if (tipo === 'marzo') {
+    rngGasto.value = 2700; rngSoporte.value = 6; rngVisitas.value = 1350;
   } else if (tipo === 'abril') {
     rngGasto.value = 3100; rngSoporte.value = 16; rngVisitas.value = 1480;
   } else if (tipo === 'mayo') {
     rngGasto.value = 3900; rngSoporte.value = 8; rngVisitas.value = 1580;
   } else if (tipo === 'recomendado') {
-    rngGasto.value = 3300; rngSoporte.value = 15; rngVisitas.value = 1500;
+    rngGasto.value = 4000; rngSoporte.value = 15; rngVisitas.value = 1700;
   } else if (tipo === 'agresivo') {
     rngGasto.value = 5200; rngSoporte.value = 2; rngVisitas.value = 2200;
   }
   calcularParametros();
+}
+
+function toggleModalCalculo() {
+  const modal = document.getElementById('modal-calculo');
+  if (modal) modal.classList.toggle('hidden');
 }
 
 function toggleModalAyuda() {

@@ -38,7 +38,7 @@
         <div class="flex flex-col">
           <div class="flex items-center gap-1.5">
             <span class="text-[11px] md:text-xs font-black tracking-wider text-[#FFEDD5] uppercase brand-title">ARES ROVER DYNAMICS™</span>
-            <span class="px-1 py-0.2 rounded text-[8.5px] font-bold bg-orange-500/20 text-orange-400 border border-orange-500/40 mode-badge">SIM v2.0</span>
+            <span class="px-1 py-0.2 rounded text-[8.5px] font-bold bg-orange-500/20 text-orange-400 border border-orange-500/40 mode-badge">SIM v3.0</span>
           </div>
           <span class="text-[9px] md:text-[10px] text-orange-200/70 italic slogan-text hidden sm:block">"Movilidad en suelo marciano: ingeniería rentable, clientes leales"</span>
         </div>
@@ -49,7 +49,8 @@
         <button onclick="toggleTheme()" class="text-[10px] px-2 py-1 rounded font-bold border border-[#571C1D] bg-[#2A0E13] text-[#FFD8B0] flex items-center gap-1">
           <span class="theme-icon-mob">👔</span>
         </button>
-        <button onclick="toggleModalAyuda()" class="text-[10px] px-2 py-1 rounded bg-slate-800 text-cyan-300 border border-cyan-500/30 flex items-center gap-1">
+        <button onclick="toggleModalCalculo()" class="text-[10px] md:text-xs px-2 md:px-2.5 py-1 rounded bg-indigo-950/80 border border-indigo-500/50 text-indigo-300 hover:bg-indigo-900 font-bold transition flex items-center gap-1 shrink-0 shadow-sm shadow-indigo-500/20"><span>📐</span> Fórmulas & Umbrales</button>
+      <button onclick="toggleModalAyuda()" class="text-[10px] px-2 py-1 rounded bg-slate-800 text-cyan-300 border border-cyan-500/30 flex items-center gap-1">
           <span>💡</span> Guía
         </button>
       </div>
@@ -58,6 +59,7 @@
     <!-- Fila 2 en móvil / centro en desktop: Escenarios con scroll táctil -->
     <div class="w-full md:w-auto flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none whitespace-nowrap">
       <span class="text-[9.5px] uppercase font-bold text-slate-400 hidden xl:inline mr-1">Escenarios:</span>
+      <button onclick="cargarEscenario('enero')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-blue-500/50 text-blue-300 hover:bg-blue-950/70 transition flex items-center gap-1 shrink-0"><span>🔵</span> Ene (Base)</button>
       <button onclick="cargarEscenario('febrero')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-rose-500/50 text-rose-300 hover:bg-rose-950/70 transition flex items-center gap-1 shrink-0">
         <span>⚠️</span> Febrero (CSAT 4.2)
       </button>
