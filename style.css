@@ -189,6 +189,40 @@ input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.25);
 }
 
+/* ==========================================================================
+   TOOLTIPS EN DESGLOSE FINANCIERO RÁPIDO Y ELEMENTOS INTERACTIVOS
+   ========================================================================== */
+.has-tooltip {
+  position: relative;
+  cursor: help;
+}
+.has-tooltip .tooltip-content {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  background-color: #0F172A;
+  color: #E2E8F0;
+  text-align: left;
+  border-radius: 6px;
+  padding: 7px 9px;
+  font-size: 9.5px;
+  line-height: 1.35;
+  border: 1px solid #334155;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.9);
+  z-index: 120;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
+  font-weight: normal;
+}
+.has-tooltip:hover .tooltip-content {
+  visibility: visible;
+  opacity: 1;
+}
+
 .btn-esc {
   cursor: pointer;
   white-space: nowrap;
