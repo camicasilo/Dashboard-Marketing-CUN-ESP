@@ -1789,10 +1789,9 @@ window.addEventListener('DOMContentLoaded', () => {
   cambiarTab(1);
   renderKatexMath();
 
-  // Iniciar automáticamente el tour en la primera visita
-  if (localStorage.getItem('sim_tour_completed') !== 'true') {
-    setTimeout(iniciarTour, 650);
-  }
+  // El tour SIEMPRE se inicia de primeras automáticamente al cargar el dashboard
+  localStorage.removeItem('sim_tour_completed');
+  setTimeout(iniciarTour, 500);
 });
 
 window.addEventListener('load', () => {
@@ -1944,5 +1943,4 @@ function finalizarTour() {
   const overlay = document.getElementById('tour-overlay');
   if (overlay) overlay.classList.add('hidden');
   document.querySelectorAll('.tour-spotlight').forEach(el => el.classList.remove('tour-spotlight'));
-  localStorage.setItem('sim_tour_completed', 'true');
 }
