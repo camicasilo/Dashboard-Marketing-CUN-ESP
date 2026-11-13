@@ -41,6 +41,7 @@ let tabActiva = 1;
 // ABRE SIEMPRE CON EL MODO MARTE POR DEFECTO
 let currentTheme = 'marte';
 let chartInstance = null;
+let presetOrigen = 'recomendado';
 
 // Elementos DOM
 const appBody = document.getElementById('app-body');
@@ -228,47 +229,126 @@ function actualizarDiagnostico() {
 function actualizarExplicacionEscenarios() {
   if (!boxExplicacionEscenarios || !badgeEscenarioActivo) return;
 
-  let escenarioId = 0;
+  let activeCanonId = 0;
+  let activeHeaderId = null;
   let badgeTexto = '';
   let badgeClase = '';
   let contenido = '';
 
-  // Detección de arquetipo basada en variables simuladas
-  if (simState.soporte === 0 || (simState.soporte < 5 && simState.gasto >= 3000)) {
-    escenarioId = 1;
-    badgeTexto = 'Escenario 1: Pauta Ciega';
+  // 1. PRIORIDAD MÁXIMA: SATURACIÓN DE PAUTA (Botón 4: $4.500 USD, 0% CX, 1.900 Visitas)
+  if (presetOrigen === 'saturacion' || (simState.gasto === 4500 && simState.soporte === 0 && simState.visitas === 1900) || (simState.gasto >= 4500 && simState.soporte === 0)) {
+    activeCanonId = 4;
+    activeHeaderId = null;
+    badgeTexto = 'SATURACIÓN DE PAUTA';
+    badgeClase = 'badge-alerta';
+    contenido = `
+      <div class="space-y-1">
+        <p class="font-bold text-amber-400 flex items-center justify-between">
+          <span>🟡 Escenario 4: Saturación de Pauta ($4.500 USD | 0% CX | 1.900 Visitas)</span>
+          <span class="text-[8.5px] px-1 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-800">Saturación Crítica</span>
+        </p>
+        <p class="text-slate-300">
+          <strong>Diagnóstico Directivo:</strong> Arquetipo de <strong>rendimientos decrecientes extremos y colapso dual</strong>. 
+          Al forzar la inversión a $4.500 USD con 0% en soporte y 1.900 visitas, el tráfico frío se dispersa, el <strong>CPA sube a $${simState.cpa.toFixed(2)} USD</strong> y la avalancha de ${simState.clientes} clientes sin servicio técnico hunde el <strong>CSAT a un crítico ${simState.csat.toFixed(1)}/10 (Zona Roja)</strong>. 
+          Prueba contundente de que inyectar más presupuesto a tráfico frío sin soporte acelera la quiebra del modelo.
+        </p>
+      </div>
+    `;
+  }
+  // 2. Mes de Enero: Línea Base Histórica
+  else if (presetOrigen === 'enero' || (simState.gasto === 2200 && simState.soporte === 8 && simState.visitas === 1100)) {
+    activeHeaderId = 'enero';
+    activeCanonId = 0;
+    badgeTexto = 'Enero (Línea Base Histórica)';
+    badgeClase = 'badge-neutro';
+    contenido = `
+      <div class="space-y-1">
+        <p class="font-bold text-blue-400 flex items-center justify-between">
+          <span>🔵 Enero (Línea Base Histórica)</span>
+          <span class="text-[8.5px] px-1 py-0.2 rounded bg-blue-950 text-blue-300 border border-blue-800">Calibración Inicial</span>
+        </p>
+        <p class="text-slate-300">
+          <strong>Significado Real:</strong> Punto de partida empírico de Ares Rover Dynamics en Marte. Inversión inicial moderada de $2.200 USD con 8% en soporte ($176 USD) y 1.100 visitas, manteniendo una operación equilibrada: <strong>CSAT de 7.5/10</strong> y <strong>CPA de $40.00 USD</strong> antes de experimentar el estrés del escalamiento comercial.
+        </p>
+      </div>
+    `;
+  }
+  // 3. Mes de Febrero / Arquetipo 1: Crisis Pauta Ciega
+  else if (presetOrigen === 'febrero' || presetOrigen === 'canon1' || (simState.gasto === 3300 && simState.soporte === 0 && simState.visitas === 1650)) {
+    activeCanonId = 1;
+    activeHeaderId = 'febrero';
+    badgeTexto = 'Febrero (Crisis Operativa por Pauta Ciega)';
     badgeClase = 'badge-alerta';
     contenido = `
       <div class="space-y-1">
         <p class="font-bold text-rose-400 flex items-center justify-between">
-          <span>🔴 Escenario 1: Status Quo / Pauta Ciega (0% Soporte CX)</span>
+          <span>🔴 Febrero (Crisis Operativa por Pauta Ciega - 0% CX)</span>
           <span class="text-[8.5px] px-1 py-0.2 rounded bg-rose-950 text-rose-300 border border-rose-800">Crisis Febrero</span>
         </p>
         <p class="text-slate-300">
-          <strong>Diagnóstico:</strong> El 100% del presupuesto ($${simState.gasto.toLocaleString()} USD) se consume en anuncios sin asignar ni $1 al soporte postventa. 
-          Desencadena <strong>saturación operativa</strong> y el <strong>colapso del CSAT en Zona Roja (${simState.csat.toFixed(1)}/10)</strong>. 
-          Aunque el CPA parece falsamente eficiente ($${simState.cpa.toFixed(2)} USD), se destruye el valor de vida del cliente (LTV) por abandono técnico.
+          <strong>Significado Real:</strong> El error directivo de canalizar el 100% del presupuesto ($3.300 USD) a captación publicitaria sin asignar $1 a posventa. Se captaron 85 clientes (1.650 visitas), pero el colapso del taller técnico hundió la satisfacción al nivel más bajo del semestre: <strong>CSAT de 4.2/10 (Zona Roja)</strong>. Evidencia empírica de que captar sin cuidar destruye el valor de vida del cliente.
         </p>
       </div>
     `;
-  } else if (simState.gasto >= 3900 && simState.soporte < 12) {
-    escenarioId = 4;
-    badgeTexto = 'Escenario 4: Saturación';
+  }
+  // 4. Mes de Abril: Mes de Oro - Equilibrio Virtuoso
+  else if (presetOrigen === 'abril' || (simState.gasto === 3100 && simState.soporte === 16 && simState.visitas === 1480)) {
+    activeHeaderId = 'abril';
+    activeCanonId = 0;
+    badgeTexto = 'Abril (Mes de Oro - Equilibrio Virtuoso)';
+    badgeClase = 'badge-exito';
+    contenido = `
+      <div class="space-y-1">
+        <p class="font-bold text-emerald-400 flex items-center justify-between">
+          <span>⭐ Abril (Mes de Oro - Equilibrio Virtuoso)</span>
+          <span class="text-[8.5px] px-1 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Récord de Calidad</span>
+        </p>
+        <p class="text-slate-300">
+          <strong>Significado Real:</strong> El mes de mayor excelencia operativa y eficiencia histórica. Con $3.100 USD y un 16% reasignado a soporte posventa ($496 USD), los ingenieros garantizaron alistamiento óptimo de cada Rover, logrando el <strong>récord histórico de CSAT en 9.4/10</strong>, CPA de <strong>$39.74 USD</strong> y Ratio Maestro supremo de <strong>0.2365 pts/USD</strong>.
+        </p>
+      </div>
+    `;
+  }
+  // 5. Mes de Mayo: Saturación y Rendimientos Decrecientes
+  else if (presetOrigen === 'mayo' || (simState.gasto === 3900 && simState.soporte === 8 && simState.visitas === 1580)) {
+    activeHeaderId = 'mayo';
+    activeCanonId = 4;
+    badgeTexto = 'Mayo (Saturación y Rendimientos Decrecientes)';
     badgeClase = 'badge-advertencia';
     contenido = `
       <div class="space-y-1">
         <p class="font-bold text-amber-400 flex items-center justify-between">
-          <span>🟡 Escenario 4: Saturación de Audiencias (&gt; $3.900 USD Pauta)</span>
+          <span>📈 Mayo (Saturación y Rendimientos Decrecientes)</span>
           <span class="text-[8.5px] px-1 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-800">Efecto Mayo</span>
         </p>
         <p class="text-slate-300">
-          <strong>Diagnóstico:</strong> Entrada en la <strong>ley de rendimientos decrecientes</strong>. 
-          Al forzar la inversión publicitaria con tráfico frío no cualificado, el <strong>CPA se dispara a $${simState.cpa.toFixed(2)} USD (&gt; $42 USD)</strong>, reduciendo la rentabilidad marginal del embudo a pesar de captar ${simState.clientes} unidades.
+          <strong>Significado Real:</strong> Demostración de saturación de audiencias marcianas. Al subir la pauta a $3.900 USD con solo 8% a soporte, el tráfico frío se dispersó y el <strong>CPA se disparó a $42.39 USD (Zona Roja > $42)</strong>. Aunque se captaron 92 clientes, cada adquisición marginal fue sustancialmente más costosa, comprobando la ley de rendimientos decrecientes.
         </p>
       </div>
     `;
-  } else if (simState.soporte >= 20) {
-    escenarioId = 3;
+  }
+  // 6. Estrategia SIM Recomendada (Plan Junio $4.000 USD / 15% CX)
+  else if (presetOrigen === 'recomendado' || presetOrigen === 'canon2' || (simState.gasto === 4000 && simState.soporte === 15 && simState.visitas === 1700)) {
+    activeCanonId = 2;
+    activeHeaderId = 'recomendado';
+    badgeTexto = 'Escenario 2: SIM Óptimo';
+    badgeClase = 'badge-exito';
+    contenido = `
+      <div class="space-y-1">
+        <p class="font-bold text-emerald-400 flex items-center justify-between">
+          <span>🟢 Escenario 2: Estrategia SIM / Equilibrio Óptimo (15% CX = $600 USD)</span>
+          <span class="text-[8.5px] px-1 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Plan Junio Recomendado</span>
+        </p>
+        <p class="text-slate-300">
+          <strong>Diagnóstico Directivo:</strong> La propuesta canónica del Sistema de Información de Marketing para el Plan Junio ($4.000 USD). Reasigna $600 USD (15%) a posventa y $3.400 USD a pauta neta, logrando <strong>CSAT blindado en Zona Verde (${simState.csat.toFixed(1)}/10 &gt; 9.0)</strong>, CPA optimizado de <strong>$${simState.cpa.toFixed(2)} USD</strong> y <strong>margen limpio de $${simState.margen.toFixed(2)} USD</strong> por unidad.
+        </p>
+      </div>
+    `;
+  }
+  // 7. Escenario 3: Hiper-Fidelización (20% - 30% CX)
+  else if (presetOrigen === 'canon3' || simState.soporte >= 20) {
+    activeCanonId = 3;
+    activeHeaderId = null;
     badgeTexto = 'Escenario 3: Fidelización Total';
     badgeClase = 'badge-exito';
     contenido = `
@@ -278,36 +358,87 @@ function actualizarExplicacionEscenarios() {
           <span class="text-[8.5px] px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">Lealtad VIP</span>
         </p>
         <p class="text-slate-300">
-          <strong>Diagnóstico:</strong> Máxima lealtad y retención (&gt; 113%). 
-          Al reasignar $${simState.gastoCX} USD (${simState.soporte}%) a soporte posventa, el equipo técnico blinda cada Rover en Marte, logrando un <strong>CSAT pico de ${simState.csat.toFixed(1)}/10</strong> y asegurando recompra de contratos y repuestos sin quejas.
+          <strong>Diagnóstico Directivo:</strong> Arquetipo de máxima lealtad y retención acumulada (&gt; 113%). Al destinar $${simState.gastoCX} USD (${simState.soporte}%) a posventa, el equipo técnico brinda atención personalizada y mantenimiento preventivo continuo, elevando el <strong>CSAT a ${simState.csat.toFixed(1)}/10</strong> y asegurando recompra garantizada de contratos en Marte.
         </p>
       </div>
     `;
-  } else if (simState.soporte >= 12 && simState.soporte <= 18) {
-    escenarioId = 2;
+  }
+  // 8. Expansión Agresiva ($5K)
+  else if (presetOrigen === 'agresivo' || (simState.gasto >= 5000 && simState.soporte <= 5)) {
+    activeHeaderId = 'agresivo';
+    badgeTexto = 'Expansión Agresiva ($5K)';
+    badgeClase = 'badge-advertencia';
+    contenido = `
+      <div class="space-y-1">
+        <p class="font-bold text-purple-300 flex items-center justify-between">
+          <span>🚀 Expansión Agresiva de Mercado ($5.200 USD | 2% CX)</span>
+          <span class="text-[8.5px] px-1 py-0.2 rounded bg-purple-950 text-purple-300 border border-purple-800">Alto Riesgo</span>
+        </p>
+        <p class="text-slate-300">
+          <strong>Diagnóstico Directivo:</strong> Gran volumen bruto de ventas (${simState.clientes} unidades), pero con sobrecosto publicitario por saturación y grave riesgo de deterioro de CSAT (${simState.csat.toFixed(1)}/10) por cuello de botella técnico.
+        </p>
+      </div>
+    `;
+  }
+  // 9. Detección genérica por sliders (Modo Manual)
+  else if (simState.soporte === 0 || (simState.soporte < 5 && simState.gasto >= 3000)) {
+    activeCanonId = 1;
+    badgeTexto = 'Escenario 1: Pauta Ciega';
+    badgeClase = 'badge-alerta';
+    contenido = `
+      <div class="space-y-1">
+        <p class="font-bold text-rose-400 flex items-center justify-between">
+          <span>🔴 Escenario 1: Status Quo / Pauta Ciega (0% CX)</span>
+          <span class="text-[8.5px] px-1 py-0.2 rounded bg-rose-950 text-rose-300 border border-rose-800">Crisis Febrero</span>
+        </p>
+        <p class="text-slate-300">
+          <strong>Diagnóstico:</strong> El 100% del presupuesto ($${simState.gasto.toLocaleString()} USD) se consume en anuncios sin soporte postventa. 
+          Desencadena saturación técnica y colapso del <strong>CSAT en Zona Roja (${simState.csat.toFixed(1)}/10)</strong>.
+        </p>
+      </div>
+    `;
+  }
+  else if (simState.gasto >= 3900 && simState.soporte < 12) {
+    activeCanonId = 4;
+    badgeTexto = 'Escenario 4: Saturación';
+    badgeClase = 'badge-advertencia';
+    contenido = `
+      <div class="space-y-1">
+        <p class="font-bold text-amber-400 flex items-center justify-between">
+          <span>🟡 Escenario 4: Saturación de Audiencias (&gt; $3.900 USD)</span>
+          <span class="text-[8.5px] px-1 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-800">Efecto Mayo</span>
+        </p>
+        <p class="text-slate-300">
+          <strong>Diagnóstico:</strong> Entrada en la ley de rendimientos decrecientes. Al forzar la inversión con tráfico frío, el <strong>CPA se eleva a $${simState.cpa.toFixed(2)} USD</strong>.
+        </p>
+      </div>
+    `;
+  }
+  else if (simState.soporte >= 12 && simState.soporte <= 18) {
+    activeCanonId = 2;
     badgeTexto = 'Escenario 2: SIM Óptimo';
     badgeClase = 'badge-exito';
     contenido = `
       <div class="space-y-1">
         <p class="font-bold text-emerald-400 flex items-center justify-between">
-          <span>🟢 Escenario 2: Estrategia SIM / Equilibrio Óptimo (15% CX = $600 USD)</span>
+          <span>🟢 Escenario 2: Estrategia SIM / Equilibrio Óptimo (15% CX)</span>
           <span class="text-[8.5px] px-1 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Punto de Oro</span>
         </p>
         <p class="text-slate-300">
-          <strong>Diagnóstico:</strong> La recomendación central del Sistema de Información de Marketing. 
-          <strong>CSAT blindado en Zona Verde (${simState.csat.toFixed(1)}/10 &gt; 9.0)</strong>, CPA optimizado en <strong>$${simState.cpa.toFixed(2)} USD</strong> y <strong>margen limpio unitario de $${simState.margen.toFixed(2)} USD (&gt; $65 USD)</strong>. Balance perfecto entre captación y capacidad técnica.
+          <strong>Diagnóstico:</strong> CSAT blindado en Zona Verde (${simState.csat.toFixed(1)}/10), CPA optimizado en $${simState.cpa.toFixed(2)} USD y margen limpio de $${simState.margen.toFixed(2)} USD.
         </p>
       </div>
     `;
-  } else {
+  }
+  else {
     badgeTexto = `Transición (${simState.soporte}% CX)`;
     badgeClase = 'badge-advertencia';
     contenido = `
       <div class="space-y-1">
         <p class="font-bold text-slate-200">ℹ️ Configuración Paramétrica Intermedia</p>
         <p class="text-slate-300">
-          Inversión total de $${simState.gasto.toLocaleString()} USD con $${simState.gastoCX} USD en CX (${simState.soporte}%) y $${simState.pautaNeta.toLocaleString()} USD a pauta. 
-          CSAT resultante: <strong>${simState.csat.toFixed(1)}/10</strong>, CPA: <strong>$${simState.cpa.toFixed(2)} USD</strong> y margen limpio: <strong>$${simState.margen.toFixed(2)} USD</strong>.
+          Inversión de $${simState.gasto.toLocaleString()} USD con $${simState.gastoCX} USD a CX (${simState.soporte}%) y $${simState.pautaNeta.toLocaleString()} USD a pauta. 
+          CSAT: <strong>${simState.csat.toFixed(1)}/10</strong>, CPA: <strong>$${simState.cpa.toFixed(2)} USD</strong> y Margen: <strong>$${simState.margen.toFixed(2)} USD</strong>.
         </p>
       </div>
     `;
@@ -317,40 +448,60 @@ function actualizarExplicacionEscenarios() {
   badgeEscenarioActivo.className = `text-[8.5px] px-1.5 py-0.5 rounded font-bold border ${badgeClase}`;
   boxExplicacionEscenarios.innerHTML = contenido;
 
-  // Actualizar botones de escenarios canónicos
-  const botones = [
+  // Actualizar botones de escenarios canónicos (4 arquetipos)
+  const botonesCanon = [
     { btn: btnEscCanon1, id: 1, activeClass: 'border-rose-500 bg-rose-900/80 text-white font-bold shadow-sm shadow-rose-500/30' },
     { btn: btnEscCanon2, id: 2, activeClass: 'border-emerald-500 bg-emerald-900/80 text-white font-bold shadow-sm shadow-emerald-500/30' },
     { btn: btnEscCanon3, id: 3, activeClass: 'border-cyan-500 bg-cyan-900/80 text-white font-bold shadow-sm shadow-cyan-500/30' },
     { btn: btnEscCanon4, id: 4, activeClass: 'border-amber-500 bg-amber-900/80 text-white font-bold shadow-sm shadow-amber-500/30' }
   ];
 
-  botones.forEach(item => {
+  botonesCanon.forEach(item => {
     if (!item.btn) return;
-    if (item.id === escenarioId) {
+    if (item.id === activeCanonId) {
       item.btn.className = `px-1 py-0.5 rounded transition text-center truncate ${item.activeClass}`;
     } else {
       item.btn.className = 'px-1 py-0.5 rounded border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-white hover:bg-slate-800 transition text-center truncate';
+    }
+  });
+
+  // Sincronización visual con los botones de la barra superior
+  const headerBtns = [
+    { btn: document.getElementById('btn-hdr-enero'), id: 'enero' },
+    { btn: document.getElementById('btn-hdr-febrero'), id: 'febrero' },
+    { btn: document.getElementById('btn-hdr-abril'), id: 'abril' },
+    { btn: document.getElementById('btn-hdr-mayo'), id: 'mayo' },
+    { btn: document.getElementById('btn-hdr-recomendado'), id: 'recomendado' },
+    { btn: document.getElementById('btn-hdr-agresivo'), id: 'agresivo' }
+  ];
+
+  headerBtns.forEach(item => {
+    if (!item.btn) return;
+    if (item.id === activeHeaderId) {
+      item.btn.classList.add('ring-2', 'ring-white/80', 'font-bold', 'scale-[1.03]', 'shadow-md');
+    } else {
+      item.btn.classList.remove('ring-2', 'ring-white/80', 'scale-[1.03]', 'shadow-md');
     }
   });
 }
 
 function cargarEscenarioCanónico(id) {
   if (id === 1) {
+    presetOrigen = 'febrero';
     rngGasto.value = 3300; rngSoporte.value = 0; rngVisitas.value = 1650;
   } else if (id === 2) {
+    presetOrigen = 'recomendado';
     rngGasto.value = 4000; rngSoporte.value = 15; rngVisitas.value = 1700;
   } else if (id === 3) {
+    presetOrigen = 'canon3';
     rngGasto.value = 3500; rngSoporte.value = 25; rngVisitas.value = 1500;
   } else if (id === 4) {
-    rngGasto.value = 4500; rngSoporte.value = 4; rngVisitas.value = 2100;
+    presetOrigen = 'saturacion';
+    rngGasto.value = 4500; rngSoporte.value = 0; rngVisitas.value = 1900;
   }
   calcularParametros();
 }
 
-// ==========================================================================
-// MOTOR PEDAGÓGICO COMPLETO: INTERPRETACIÓN DE LA GRÁFICA ("CON PALITOS Y PIEDRITAS")
-// ==========================================================================
 function actualizarInterpretacionGrafica() {
   const isMarte = (currentTheme === 'marte');
   const tagColor = isMarte ? 'text-[#FF9E4A]' : 'text-[#00F0FF]';
@@ -628,6 +779,189 @@ function cambiarTab(num) {
 // ==========================================================================
 // RENDERIZADO DE LAS 10 GRÁFICAS ADAPTADAS AL TEMA (CON RESALTADO NEÓN ÚNICO)
 // ==========================================================================
+
+// ==========================================================================
+// PLUGIN Y RENDERIZADO DE UMBRALES EN PRIMER PLANO (afterDatasetsDraw)
+// ==========================================================================
+function obtenerDiagnosticoTooltip(tab, items) {
+  if (!items || !items.length) return '';
+  const item = items[0];
+
+  switch (tab) {
+    case 1: {
+      const x = item.parsed.x;
+      const y = item.parsed.y;
+      let lines = [];
+      if (y >= 8.5) lines.push('✓ Meta CSAT Cumplida (≥ 8.5 pts)');
+      else if (y <= 7.0) lines.push('⚠ Alerta Crítica CSAT (≤ 7.0 pts)');
+      else lines.push('ℹ CSAT Aceptable (7.0 - 8.4 pts)');
+
+      if (x <= 40.0) lines.push('✓ CPA Eficiente (≤ $40.00 USD)');
+      else if (x >= 42.0) lines.push('⚠ CPA Saturado (≥ $42.00 USD)');
+      else lines.push('ℹ CPA Moderado ($40 - $42 USD)');
+      return lines.join('\n');
+    }
+    case 2:
+      return 'Umbrales CSAT: Meta ≥ 8.5 pts (Verde) | Alerta Crítica ≤ 6.5 pts (Rojo)';
+    case 3:
+      return 'Línea de Paridad: 100% Retención. Valores > 100% prueban Expansión Neta de flota.';
+    case 4:
+      return 'Umbrales: Saturación Pauta > $3.500 USD | CPA Óptimo ≤ $40.00 | Alerta ≥ $42.00';
+    case 5:
+      return 'Umbrales Conversión: Meta Eficiencia ≥ 5.50% | Base Histórica 5.00%';
+    case 6:
+      return 'Umbral Normativo: Mínimo $60.00 USD de Margen Limpio por Rover vendido.';
+    case 7:
+      return 'Ratio Maestro: Meta Excelencia ≥ 0.2000 pts/USD | Alerta Crítica < 0.1500';
+    case 8:
+      return 'Umbrales Financieros: Break-Even 2.50x | Multiplicador Base Empírico ~2.56x';
+    case 9:
+      return 'Expansión de Flota: Crecimiento compuesto proyectado (+55% sobre base Enero).';
+    case 10:
+      return 'Regla SIM: Reasignar 15% ($600 USD) a Soporte Técnico CX para blindar operaciones.';
+    default:
+      return '';
+  }
+}
+
+const thresholdPlugin = {
+  id: 'thresholdPlugin',
+  afterDatasetsDraw(chart) {
+    const { ctx, chartArea, scales } = chart;
+    if (!chartArea) return;
+    const { top, bottom, left, right } = chartArea;
+
+    ctx.save();
+
+    function drawHLine(yScale, val, label, color, dash = [5, 5], align = 'right') {
+      if (!yScale) return;
+      const yPx = yScale.getPixelForValue(val);
+      if (yPx < top - 2 || yPx > bottom + 2) return;
+
+      // Línea punteada destacada por encima de barras y curvas
+      ctx.beginPath();
+      ctx.setLineDash(dash);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.8;
+      ctx.moveTo(left, yPx);
+      ctx.lineTo(right, yPx);
+      ctx.stroke();
+
+      // Rótulo de texto con caja de contraste de alta visibilidad
+      ctx.setLineDash([]);
+      ctx.font = 'bold 9px "Plus Jakarta Sans", sans-serif';
+      const tw = ctx.measureText(label).width;
+      const padX = 5;
+      const xPos = (align === 'right') ? (right - tw - padX * 2 - 4) : (left + 6);
+      const yBox = yPx - 6;
+
+      ctx.fillStyle = 'rgba(12, 14, 20, 0.90)';
+      ctx.fillRect(xPos - padX, yBox - 7, tw + padX * 2, 14);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1;
+      ctx.strokeRect(xPos - padX, yBox - 7, tw + padX * 2, 14);
+
+      ctx.fillStyle = color;
+      ctx.fillText(label, xPos, yPx + 3);
+    }
+
+    function drawVLine(xScale, val, label, color, dash = [5, 5], align = 'top') {
+      if (!xScale) return;
+      const xPx = xScale.getPixelForValue(val);
+      if (xPx < left - 2 || xPx > right + 2) return;
+
+      // Línea punteada vertical
+      ctx.beginPath();
+      ctx.setLineDash(dash);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.8;
+      ctx.moveTo(xPx, top);
+      ctx.lineTo(xPx, bottom);
+      ctx.stroke();
+
+      // Rótulo
+      ctx.setLineDash([]);
+      ctx.font = 'bold 9px "Plus Jakarta Sans", sans-serif';
+      const tw = ctx.measureText(label).width;
+      const padX = 5;
+      const yPos = (align === 'top') ? (top + 14) : (bottom - 10);
+      const xPos = Math.min(Math.max(xPx + 4, left + 4), right - tw - 8);
+
+      ctx.fillStyle = 'rgba(12, 14, 20, 0.90)';
+      ctx.fillRect(xPos - padX, yPos - 9, tw + padX * 2, 14);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1;
+      ctx.strokeRect(xPos - padX, yPos - 9, tw + padX * 2, 14);
+
+      ctx.fillStyle = color;
+      ctx.fillText(label, xPos, yPos + 1);
+    }
+
+    switch (tabActiva) {
+      case 1:
+        // Gráfica 1: Scatter CPA vs CSAT
+        drawHLine(scales.y, 8.5, '✓ Meta CSAT (≥ 8.5)', '#10B981', [5, 5], 'right');
+        drawHLine(scales.y, 7.0, '⚠ Alerta Crítica CSAT (< 7.0)', '#F43F5E', [5, 5], 'right');
+        drawVLine(scales.x, 40.0, '✓ CPA Óptimo ($40)', '#10B981', [4, 4], 'top');
+        drawVLine(scales.x, 42.0, '⚠ CPA Alerta ($42)', '#F43F5E', [4, 4], 'bottom');
+        break;
+
+      case 2:
+        // Gráfica 2: CSAT (Eje derecho y1)
+        drawHLine(scales.y1, 8.5, '✓ Umbral Meta CSAT (≥ 8.5 pts)', '#10B981', [5, 5], 'right');
+        drawHLine(scales.y1, 6.5, '⚠ Alerta Crítica CSAT (≤ 6.5 pts)', '#F43F5E', [5, 5], 'right');
+        break;
+
+      case 3:
+        // Gráfica 3: Retención (Eje y)
+        drawHLine(scales.y, 1700, 'ℹ Paridad Base Flota (100% Retención)', '#F59E0B', [4, 4], 'left');
+        break;
+
+      case 4:
+        // Gráfica 4: Rendimientos Decrecientes
+        drawHLine(scales.y, 3500, '⚠ Umbral Saturación Pauta ($3.500 USD)', '#F59E0B', [5, 5], 'left');
+        drawHLine(scales.y1, 40.0, '✓ CPA Óptimo ($40.00 USD)', '#10B981', [4, 4], 'right');
+        drawHLine(scales.y1, 42.0, '⚠ CPA Alerta ($42.00 USD)', '#F43F5E', [4, 4], 'right');
+        break;
+
+      case 5:
+        // Gráfica 5: Embudo Visitas vs Conversión (Eje derecho y1)
+        drawHLine(scales.y1, 5.5, '✓ Meta Eficiencia CR (≥ 5.50%)', '#10B981', [5, 5], 'right');
+        drawHLine(scales.y1, 5.0, 'ℹ Base Histórica CR (5.00%)', '#94A3B8', [4, 4], 'right');
+        break;
+
+      case 6:
+        // Gráfica 6: Margen Limpio por Rover (Eje x)
+        drawVLine(scales.x, 60.0, '✓ Umbral Mínimo Viabilidad ($60 USD)', '#10B981', [5, 5], 'top');
+        break;
+
+      case 7:
+        // Gráfica 7: Ratio Maestro CSAT/CPA (Eje y)
+        drawHLine(scales.y, 0.20, '✓ Umbral Meta Excelencia (≥ 0.2000)', '#10B981', [5, 5], 'right');
+        drawHLine(scales.y, 0.15, '⚠ Alerta Crítica (< 0.1500)', '#F43F5E', [5, 5], 'right');
+        break;
+
+      case 8:
+        // Gráfica 8: ROAS (Eje derecho y1)
+        drawHLine(scales.y1, 2.50, '⚠ Umbral Break-Even (2.50x)', '#F59E0B', [5, 5], 'right');
+        drawHLine(scales.y1, 2.56, 'ℹ Multiplicador Empírico (~2.56x)', '#38BDF8', [3, 3], 'left');
+        break;
+
+      case 9:
+        // Gráfica 9: Cartera Total
+        drawHLine(scales.y, 1750, '✓ Trayectoria Base Expansión (+55%)', '#10B981', [3, 3], 'left');
+        break;
+
+      case 10:
+        // Gráfica 10: Reasignación 15%
+        drawHLine(scales.y, 4000, '🎯 Presupuesto Plan Junio ($4.000 USD)', '#10B981', [4, 4], 'left');
+        break;
+    }
+
+    ctx.restore();
+  }
+};
+
 function renderizarGraficaActiva() {
   const ctx = document.getElementById('lienzo-grafico').getContext('2d');
   if (chartInstance) chartInstance.destroy();
@@ -637,7 +971,7 @@ function renderizarGraficaActiva() {
   const colorSimulacion = isMarte ? '#FF6B00' : '#00F0FF';
   const colorSimulacionTrans = isMarte ? 'rgba(255, 107, 0, 0.25)' : 'rgba(0, 240, 255, 0.25)';
 
-  // Paleta base para datos históricos (Monocromo en Gerencial, Rojizo carbón en Marte)
+  // Paleta base para datos históricos
   const barHistoricoColor = isMarte ? '#451D24' : '#333A48';
   const lineHistoricoColor = isMarte ? '#EA580C' : '#94A3B8';
   const gridColor = isMarte ? '#3A1418' : '#1E232F';
@@ -647,7 +981,20 @@ function renderizarGraficaActiva() {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { labels: { color: textColor, font: { size: 10 } } }
+      legend: { labels: { color: textColor, font: { size: 10 } } },
+      tooltip: {
+        backgroundColor: '#0F172A',
+        titleColor: '#F8FAFC',
+        bodyColor: '#E2E8F0',
+        borderColor: '#334155',
+        borderWidth: 1,
+        padding: 8,
+        callbacks: {
+          footer: function(tooltipItems) {
+            return obtenerDiagnosticoTooltip(tabActiva, tooltipItems);
+          }
+        }
+      }
     },
     scales: {
       x: { ticks: { color: textColor, font: { size: 9 } }, grid: { color: gridColor } },
@@ -672,7 +1019,8 @@ function renderizarGraficaActiva() {
                 { x: 42.39, y: 8.1, label: 'Mayo' }
               ],
               backgroundColor: ['#64748B', '#F43F5E', '#64748B', '#10B981', '#F59E0B'],
-              pointRadius: 8
+              pointRadius: 8,
+              order: 0
             },
             {
               label: 'Tu Simulación Actual (Resaltado)',
@@ -681,7 +1029,8 @@ function renderizarGraficaActiva() {
               borderColor: '#FFFFFF',
               borderWidth: 2.5,
               pointRadius: 14,
-              pointStyle: 'triangle'
+              pointStyle: 'triangle',
+              order: -5
             },
             // Umbrales Normativos
             {
@@ -692,7 +1041,8 @@ function renderizarGraficaActiva() {
               borderDash: [5, 5],
               borderWidth: 2,
               pointRadius: 0,
-              showLine: true
+              showLine: true,
+              order: -10
             },
             {
               type: 'line',
@@ -702,7 +1052,8 @@ function renderizarGraficaActiva() {
               borderDash: [5, 5],
               borderWidth: 2,
               pointRadius: 0,
-              showLine: true
+              showLine: true,
+              order: -10
             },
             {
               type: 'line',
@@ -712,7 +1063,8 @@ function renderizarGraficaActiva() {
               borderDash: [4, 4],
               borderWidth: 1.5,
               pointRadius: 0,
-              showLine: true
+              showLine: true,
+              order: -10
             },
             {
               type: 'line',
@@ -722,10 +1074,12 @@ function renderizarGraficaActiva() {
               borderDash: [4, 4],
               borderWidth: 1.5,
               pointRadius: 0,
-              showLine: true
+              showLine: true,
+              order: -10
             }
           ]
         },
+        plugins: [thresholdPlugin],
         options: {
           ...commonOptions,
           scales: {
@@ -743,7 +1097,7 @@ function renderizarGraficaActiva() {
         data: {
           labels: [...datosReales.meses, 'Simulación'],
           datasets: [
-            // Línea CSAT con order: 1 (se dibuja POR ENCIMA de las barras)
+            // Línea CSAT con order: -5 (se dibuja POR ENCIMA de las barras)
             {
               type: 'line',
               label: 'CSAT Promedio (0-10)',
@@ -753,7 +1107,7 @@ function renderizarGraficaActiva() {
               borderWidth: 3.5,
               pointRadius: [6, 6, 6, 6, 6, 9],
               pointBackgroundColor: ['#10B981', '#F43F5E', '#10B981', '#10B981', '#F59E0B', colorSimulacion],
-              order: 1,
+              order: -5,
               yAxisID: 'y1'
             },
             {
@@ -764,7 +1118,7 @@ function renderizarGraficaActiva() {
               borderDash: [5, 5],
               borderWidth: 2,
               pointRadius: 0,
-              order: 1,
+              order: -10,
               yAxisID: 'y1'
             },
             {
@@ -775,7 +1129,7 @@ function renderizarGraficaActiva() {
               borderDash: [5, 5],
               borderWidth: 2,
               pointRadius: 0,
-              order: 1,
+              order: -10,
               yAxisID: 'y1'
             },
             // Barras de volumen con order: 2 (se dibujan POR DEBAJO)
@@ -792,6 +1146,7 @@ function renderizarGraficaActiva() {
             }
           ]
         },
+        plugins: [thresholdPlugin],
         options: {
           ...commonOptions,
           scales: {
@@ -809,8 +1164,8 @@ function renderizarGraficaActiva() {
         data: {
           labels: [...datosReales.meses, 'Simulación'],
           datasets: [
-            { label: 'Clientes Inicio (Base Flota)', data: [...datosReales.clientes_ini, 1700], backgroundColor: barHistoricoColor, borderRadius: 4 },
-            { label: 'Clientes Fin Retenidos', data: [...datosReales.clientes_fin, 1700 + Math.round(simState.clientes * 0.9)], backgroundColor: [lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, colorSimulacion], borderRadius: 4 },
+            { label: 'Clientes Inicio (Base Flota)', data: [...datosReales.clientes_ini, 1700], backgroundColor: barHistoricoColor, borderRadius: 4, order: 2 },
+            { label: 'Clientes Fin Retenidos', data: [...datosReales.clientes_fin, 1700 + Math.round(simState.clientes * 0.9)], backgroundColor: [lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, colorSimulacion], borderRadius: 4, order: 2 },
             {
               type: 'line',
               label: 'Paridad 100% Retención',
@@ -818,10 +1173,12 @@ function renderizarGraficaActiva() {
               borderColor: '#F59E0B',
               borderDash: [4, 4],
               borderWidth: 2,
-              pointRadius: 0
+              pointRadius: 0,
+              order: -10
             }
           ]
         },
+        plugins: [thresholdPlugin],
         options: commonOptions
       });
       break;
@@ -833,13 +1190,14 @@ function renderizarGraficaActiva() {
         data: {
           labels: [...datosReales.meses, 'Simulación'],
           datasets: [
-            { label: 'Gasto Marketing ($ USD)', data: [...datosReales.pauta, simState.gasto], borderColor: lineHistoricoColor, borderWidth: 2, pointRadius: [4,4,4,4,4,8], pointBackgroundColor: lineHistoricoColor, yAxisID: 'y' },
-            { label: 'CPA Resultante ($ USD)', data: [...datosReales.cpa, simState.cpa], borderColor: colorSimulacion, borderWidth: 2.5, borderDash: [4, 4], pointRadius: [4,4,4,4,4,9], pointBackgroundColor: colorSimulacion, yAxisID: 'y1' },
-            { label: 'Umbral Saturación Pauta ($3.500 USD)', data: [3500, 3500, 3500, 3500, 3500, 3500], borderColor: '#F59E0B', borderDash: [4, 4], borderWidth: 1.8, pointRadius: 0, yAxisID: 'y' },
-            { label: 'CPA Óptimo ($40.00 USD)', data: [40, 40, 40, 40, 40, 40], borderColor: '#10B981', borderDash: [4, 4], borderWidth: 1.8, pointRadius: 0, yAxisID: 'y1' },
-            { label: 'CPA Alerta ($42.00 USD)', data: [42, 42, 42, 42, 42, 42], borderColor: '#F43F5E', borderDash: [4, 4], borderWidth: 1.8, pointRadius: 0, yAxisID: 'y1' }
+            { label: 'Gasto Marketing ($ USD)', data: [...datosReales.pauta, simState.gasto], borderColor: lineHistoricoColor, borderWidth: 2, pointRadius: [4,4,4,4,4,8], pointBackgroundColor: lineHistoricoColor, yAxisID: 'y', order: 0 },
+            { label: 'CPA Resultante ($ USD)', data: [...datosReales.cpa, simState.cpa], borderColor: colorSimulacion, borderWidth: 2.5, borderDash: [4, 4], pointRadius: [4,4,4,4,4,9], pointBackgroundColor: colorSimulacion, yAxisID: 'y1', order: -5 },
+            { label: 'Umbral Saturación Pauta ($3.500 USD)', data: [3500, 3500, 3500, 3500, 3500, 3500], borderColor: '#F59E0B', borderDash: [4, 4], borderWidth: 1.8, pointRadius: 0, yAxisID: 'y', order: -10 },
+            { label: 'CPA Óptimo ($40.00 USD)', data: [40, 40, 40, 40, 40, 40], borderColor: '#10B981', borderDash: [4, 4], borderWidth: 1.8, pointRadius: 0, yAxisID: 'y1', order: -10 },
+            { label: 'CPA Alerta ($42.00 USD)', data: [42, 42, 42, 42, 42, 42], borderColor: '#F43F5E', borderDash: [4, 4], borderWidth: 1.8, pointRadius: 0, yAxisID: 'y1', order: -10 }
           ]
         },
+        plugins: [thresholdPlugin],
         options: {
           ...commonOptions,
           scales: {
@@ -857,7 +1215,7 @@ function renderizarGraficaActiva() {
         data: {
           labels: [...datosReales.meses, 'Simulación'],
           datasets: [
-            // Línea con order: 1 (se dibuja POR ENCIMA)
+            // Línea con order: -5 (se dibuja POR ENCIMA)
             {
               type: 'line',
               label: 'Tasa Conversión (CR %)',
@@ -866,7 +1224,7 @@ function renderizarGraficaActiva() {
               borderWidth: 3.5,
               pointRadius: [5, 5, 5, 5, 5, 9],
               pointBackgroundColor: colorSimulacion,
-              order: 1,
+              order: -5,
               yAxisID: 'y1'
             },
             {
@@ -877,7 +1235,7 @@ function renderizarGraficaActiva() {
               borderDash: [4, 4],
               borderWidth: 1.5,
               pointRadius: 0,
-              order: 1,
+              order: -10,
               yAxisID: 'y1'
             },
             {
@@ -888,7 +1246,7 @@ function renderizarGraficaActiva() {
               borderDash: [4, 4],
               borderWidth: 2,
               pointRadius: 0,
-              order: 1,
+              order: -10,
               yAxisID: 'y1'
             },
             // Barras con order: 2 (se dibujan POR DEBAJO)
@@ -905,6 +1263,7 @@ function renderizarGraficaActiva() {
             }
           ]
         },
+        plugins: [thresholdPlugin],
         options: {
           ...commonOptions,
           scales: {
@@ -927,30 +1286,11 @@ function renderizarGraficaActiva() {
             backgroundColor: [isMarte ? '#991B1B' : '#4B5563', '#F43F5E', colorSimulacion],
             borderColor: [isMarte ? '#EF4444' : '#6B7280', '#FB7185', colorSimulacion],
             borderWidth: 1.5,
-            borderRadius: 6
+            borderRadius: 6,
+            order: 2
           }]
         },
-        plugins: [{
-          id: 'lineaUmbralMargen',
-          afterDraw(chart) {
-            const chartCtx = chart.ctx;
-            const xAxis = chart.scales.x;
-            const yAxis = chart.scales.y;
-            const xVal = xAxis.getPixelForValue(60);
-            chartCtx.save();
-            chartCtx.beginPath();
-            chartCtx.setLineDash([5, 5]);
-            chartCtx.strokeStyle = '#10B981';
-            chartCtx.lineWidth = 2;
-            chartCtx.moveTo(xVal, yAxis.top);
-            chartCtx.lineTo(xVal, yAxis.bottom);
-            chartCtx.stroke();
-            chartCtx.fillStyle = '#10B981';
-            chartCtx.font = 'bold 9.5px Plus Jakarta Sans, sans-serif';
-            chartCtx.fillText('Umbral Mínimo Viabilidad ($60 USD)', xVal + 5, yAxis.top + 14);
-            chartCtx.restore();
-          }
-        }],
+        plugins: [thresholdPlugin],
         options: {
           ...commonOptions,
           indexAxis: 'y',
@@ -974,7 +1314,8 @@ function renderizarGraficaActiva() {
               backgroundColor: [barHistoricoColor, '#F43F5E', barHistoricoColor, '#10B981', barHistoricoColor, colorSimulacion],
               borderColor: [barHistoricoColor, '#FB7185', barHistoricoColor, '#34D399', barHistoricoColor, colorSimulacion],
               borderWidth: 1.5,
-              borderRadius: 4
+              borderRadius: 4,
+              order: 2
             },
             {
               type: 'line',
@@ -983,7 +1324,8 @@ function renderizarGraficaActiva() {
               borderColor: '#10B981',
               borderDash: [5, 5],
               borderWidth: 2,
-              pointRadius: 0
+              pointRadius: 0,
+              order: -10
             },
             {
               type: 'line',
@@ -992,10 +1334,12 @@ function renderizarGraficaActiva() {
               borderColor: '#F43F5E',
               borderDash: [5, 5],
               borderWidth: 2,
-              pointRadius: 0
+              pointRadius: 0,
+              order: -10
             }
           ]
         },
+        plugins: [thresholdPlugin],
         options: {
           ...commonOptions,
           scales: { y: { min: 0, max: 0.35, ticks: { color: textColor }, grid: { color: gridColor } } }
@@ -1015,6 +1359,7 @@ function renderizarGraficaActiva() {
               data: [...datosReales.ventas, simState.ventas],
               backgroundColor: [barHistoricoColor, barHistoricoColor, barHistoricoColor, barHistoricoColor, barHistoricoColor, colorSimulacion],
               borderRadius: 4,
+              order: 2,
               yAxisID: 'y'
             },
             {
@@ -1022,6 +1367,7 @@ function renderizarGraficaActiva() {
               data: [...datosReales.pauta, simState.gasto],
               backgroundColor: isMarte ? '#3A1418' : '#1F2430',
               borderRadius: 4,
+              order: 2,
               yAxisID: 'y'
             },
             {
@@ -1032,6 +1378,7 @@ function renderizarGraficaActiva() {
               borderWidth: 2.5,
               pointRadius: 5,
               pointBackgroundColor: colorSimulacion,
+              order: -5,
               yAxisID: 'y1'
             },
             {
@@ -1042,10 +1389,12 @@ function renderizarGraficaActiva() {
               borderDash: [5, 5],
               borderWidth: 2,
               pointRadius: 0,
+              order: -10,
               yAxisID: 'y1'
             }
           ]
         },
+        plugins: [thresholdPlugin],
         options: {
           ...commonOptions,
           scales: {
@@ -1071,7 +1420,8 @@ function renderizarGraficaActiva() {
               backgroundColor: colorSimulacion,
               borderWidth: 3,
               pointRadius: [4, 4, 4, 4, 4, 9],
-              pointBackgroundColor: [lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, colorSimulacion]
+              pointBackgroundColor: [lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, colorSimulacion],
+              order: -5
             },
             {
               label: 'Clientes Retenidos Base',
@@ -1079,7 +1429,8 @@ function renderizarGraficaActiva() {
               borderColor: isMarte ? '#7C2D12' : '#4B5563',
               borderDash: [4, 4],
               borderWidth: 2,
-              pointRadius: 3
+              pointRadius: 3,
+              order: -2
             },
             {
               label: 'Trayectoria Base (+55% Expansión)',
@@ -1087,10 +1438,12 @@ function renderizarGraficaActiva() {
               borderColor: '#10B981',
               borderDash: [2, 2],
               borderWidth: 1.5,
-              pointRadius: 0
+              pointRadius: 0,
+              order: -10
             }
           ]
         },
+        plugins: [thresholdPlugin],
         options: commonOptions
       });
       break;
@@ -1102,10 +1455,11 @@ function renderizarGraficaActiva() {
         data: {
           labels: ['Estrategia Actual (Gasto Ciego)', 'Estrategia Recomendada SIM (15% CX)'],
           datasets: [
-            { label: 'Inversión en Captación (Pauta Neta)', data: [3900, simState.pautaNeta], backgroundColor: isMarte ? '#381216' : '#1E232F' },
-            { label: 'Inversión en Posventa y CX (Soporte)', data: [0, simState.gastoCX], backgroundColor: colorSimulacion }
+            { label: 'Inversión en Captación (Pauta Neta)', data: [3900, simState.pautaNeta], backgroundColor: isMarte ? '#381216' : '#1E232F', order: 2 },
+            { label: 'Inversión en Posventa y CX (Soporte)', data: [0, simState.gastoCX], backgroundColor: colorSimulacion, order: 2 }
           ]
         },
+        plugins: [thresholdPlugin],
         options: {
           ...commonOptions,
           scales: {
@@ -1119,9 +1473,10 @@ function renderizarGraficaActiva() {
 }
 
 // ==========================================================================
-// CARGA RÁPIDA DE ESCENARIOS
+// CARGA RÁPIDA DE ESCENARIOS (HISTÓRICOS Y DE DECISIÓN GERENCIAL)
 // ==========================================================================
 function cargarEscenario(tipo) {
+  presetOrigen = tipo;
   if (tipo === 'enero') {
     rngGasto.value = 2200; rngSoporte.value = 8; rngVisitas.value = 1100;
   } else if (tipo === 'febrero') {
@@ -1140,22 +1495,69 @@ function cargarEscenario(tipo) {
   calcularParametros();
 }
 
+// ==========================================================================
+// INTEGRACIÓN DE KATEX: RENDERIZADOR MATEMÁTICO REAL
+// ==========================================================================
+function renderKatexMath(targetElement) {
+  if (typeof renderMathInElement === 'function') {
+    renderMathInElement(targetElement || document.body, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false }
+      ],
+      throwOnError: false,
+      ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+    });
+  } else {
+    // Si aún no ha terminado de cargar el script defer, reintentar brevemente
+    setTimeout(() => {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(targetElement || document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ],
+          throwOnError: false,
+          ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        });
+      }
+    }, 150);
+  }
+}
+
 function toggleModalCalculo() {
   const modal = document.getElementById('modal-calculo');
-  if (modal) modal.classList.toggle('hidden');
+  if (modal) {
+    modal.classList.toggle('hidden');
+    if (!modal.classList.contains('hidden')) {
+      renderKatexMath(modal);
+    }
+  }
 }
 
 function toggleModalAyuda() {
   const modal = document.getElementById('modal-ayuda');
-  modal.classList.toggle('hidden');
+  if (modal) modal.classList.toggle('hidden');
 }
 
-// EVENT LISTENERS
-rngGasto.addEventListener('input', calcularParametros);
-rngSoporte.addEventListener('input', calcularParametros);
-rngVisitas.addEventListener('input', calcularParametros);
+// ==========================================================================
+// EVENT LISTENERS Y ARRANQUE CONTROLADO
+// ==========================================================================
+function onSliderInput() {
+  presetOrigen = null; // Cambio manual desvincula preset fijo
+  calcularParametros();
+}
+
+rngGasto.addEventListener('input', onSliderInput);
+rngSoporte.addEventListener('input', onSliderInput);
+rngVisitas.addEventListener('input', onSliderInput);
 
 window.addEventListener('DOMContentLoaded', () => {
   calcularParametros();
   cambiarTab(1);
+  renderKatexMath();
+});
+
+window.addEventListener('load', () => {
+  renderKatexMath();
 });

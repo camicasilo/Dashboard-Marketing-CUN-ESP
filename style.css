@@ -265,6 +265,39 @@ input[type="range"]::-webkit-slider-thumb:hover {
   color: #FBBF24;
   border-color: rgba(217, 119, 6, 0.4);
 }
+.badge-neutro {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93C5FD;
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+/* ==========================================================================
+   KATEX MATH STYLING ENHANCEMENTS
+   ========================================================================== */
+.katex {
+  font-size: 1.05em;
+  color: #F8FAFC !important;
+}
+.katex-display {
+  margin: 0.35em 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 0;
+}
+.katex-display > .katex {
+  white-space: normal;
+}
+.katex-html {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.katex-box {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 6px;
+  padding: 4px 8px;
+  margin: 4px 0;
+}
 
 /* Utilidad para scroll táctil horizontal limpio sin barra en móviles */
 .scrollbar-none::-webkit-scrollbar {

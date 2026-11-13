@@ -8,6 +8,10 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX CDN para notación matemática real -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
   <link rel="stylesheet" href="./style.css">
 </head>
 <!-- ABRE SIEMPRE CON EL MODO MARTE POR DEFECTO -->
@@ -59,20 +63,20 @@
     <!-- Fila 2 en móvil / centro en desktop: Escenarios con scroll táctil -->
     <div class="w-full md:w-auto flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none whitespace-nowrap">
       <span class="text-[9.5px] uppercase font-bold text-slate-400 hidden xl:inline mr-1">Escenarios:</span>
-      <button onclick="cargarEscenario('enero')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-blue-500/50 text-blue-300 hover:bg-blue-950/70 transition flex items-center gap-1 shrink-0"><span>🔵</span> Ene (Base)</button>
-      <button onclick="cargarEscenario('febrero')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-rose-500/50 text-rose-300 hover:bg-rose-950/70 transition flex items-center gap-1 shrink-0">
+      <button id="btn-hdr-enero" onclick="cargarEscenario('enero')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-blue-500/50 text-blue-300 hover:bg-blue-950/70 transition flex items-center gap-1 shrink-0"><span>🔵</span> Ene (Base)</button>
+      <button id="btn-hdr-febrero" onclick="cargarEscenario('febrero')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-rose-500/50 text-rose-300 hover:bg-rose-950/70 transition flex items-center gap-1 shrink-0">
         <span>⚠️</span> Febrero (CSAT 4.2)
       </button>
-      <button onclick="cargarEscenario('abril')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-950/70 transition flex items-center gap-1 shrink-0">
+      <button id="btn-hdr-abril" onclick="cargarEscenario('abril')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-950/70 transition flex items-center gap-1 shrink-0">
         <span>⭐</span> Abril (CSAT 9.4)
       </button>
-      <button onclick="cargarEscenario('mayo')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-amber-500/50 text-amber-300 hover:bg-amber-950/70 transition flex items-center gap-1 shrink-0">
+      <button id="btn-hdr-mayo" onclick="cargarEscenario('mayo')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-amber-500/50 text-amber-300 hover:bg-amber-950/70 transition flex items-center gap-1 shrink-0">
         <span>📈</span> Mayo (CPA $42)
       </button>
-      <button onclick="cargarEscenario('recomendado')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-orange-950/60 border border-[#FF6B00] text-orange-100 font-bold hover:bg-orange-900 transition flex items-center gap-1 shadow-sm shadow-orange-500/30 btn-recomendado shrink-0">
+      <button id="btn-hdr-recomendado" onclick="cargarEscenario('recomendado')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-orange-950/60 border border-[#FF6B00] text-orange-100 font-bold hover:bg-orange-900 transition flex items-center gap-1 shadow-sm shadow-orange-500/30 btn-recomendado shrink-0">
         <span>🎯</span> Estrategia SIM (15%)
       </button>
-      <button onclick="cargarEscenario('agresivo')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-purple-500/50 text-purple-300 hover:bg-purple-950/70 transition items-center gap-1 shrink-0 hidden sm:flex">
+      <button id="btn-hdr-agresivo" onclick="cargarEscenario('agresivo')" class="btn-esc text-[10px] md:text-[11px] px-2 md:px-2.5 py-1 rounded bg-slate-900/90 border border-purple-500/50 text-purple-300 hover:bg-purple-950/70 transition items-center gap-1 shrink-0 hidden sm:flex">
         <span>🚀</span> Expansión ($5K)
       </button>
     </div>
@@ -202,7 +206,11 @@
             <button onclick="cargarEscenarioCanónico(1)" id="btn-esc-canon-1" class="px-1 py-0.5 rounded border border-rose-800/60 bg-rose-950/40 text-rose-300 hover:bg-rose-900/60 font-medium transition text-center truncate" title="Status Quo / Pauta Ciega (0% CX)">1. Pauta Ciega</button>
             <button onclick="cargarEscenarioCanónico(2)" id="btn-esc-canon-2" class="px-1 py-0.5 rounded border border-emerald-800/60 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/60 font-bold transition text-center truncate" title="Estrategia SIM / Equilibrio Óptimo (15% CX)">2. SIM Óptimo</button>
             <button onclick="cargarEscenarioCanónico(3)" id="btn-esc-canon-3" class="px-1 py-0.5 rounded border border-cyan-800/60 bg-cyan-950/40 text-cyan-300 hover:bg-cyan-900/60 font-medium transition text-center truncate" title="Hiper-Fidelización / Blindaje (25% CX)">3. Fidelización</button>
-            <button onclick="cargarEscenarioCanónico(4)" id="btn-esc-canon-4" class="px-1 py-0.5 rounded border border-amber-800/60 bg-amber-950/40 text-amber-300 hover:bg-amber-900/60 font-medium transition text-center truncate" title="Saturación de Audiencias (> $3.900 USD)">4. Saturación</button>
+            <button onclick="cargarEscenarioCanónico(4)" id="btn-esc-canon-4" class="px-1 py-0.5 rounded border border-amber-800/60 bg-amber-950/40 text-amber-300 hover:bg-amber-900/60 font-medium transition text-center truncate" title="Saturación de Audiencias ($4.500 USD | 0% CX)">4. Saturación</button>
+          </div>
+          <div class="text-[8px] text-slate-400 italic px-1 pt-1 border-t border-slate-800/50 flex items-center justify-between">
+            <span>💡 <strong>Guía Directiva:</strong> Meses arriba = Calibración empírica</span>
+            <span>Botones abajo = Arquetipos de decisión</span>
           </div>
         </div>
 
@@ -408,7 +416,7 @@
   <!-- ========================================================================= -->
   <!-- MODAL DE MEMORIA DE CÁLCULO & METODOLOGÍA DIRECTIVA (SOLICITADO)           -->
   <!-- ========================================================================= -->
-  <div id="modal-calculo" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 md:p-5">
+<div id="modal-calculo" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 md:p-5">
     <div class="card-box bg-[#1A0A0D] border border-[#571C1D] rounded-xl max-w-4xl w-full p-4 md:p-5 space-y-4 shadow-2xl flex flex-col max-h-[88vh]">
       
       <!-- Encabezado del Modal -->
@@ -419,7 +427,7 @@
             <h3 class="text-sm font-bold text-white flex items-center gap-2">
               Memoria de Cálculo &amp; Metodología de Estimación SIM
             </h3>
-            <p class="text-[10px] text-slate-400">Modelado matemático, ecuaciones de calibración y umbrales directivos de Ares Rover Dynamics</p>
+            <p class="text-[10px] text-slate-400">Modelado matemático en notación KaTeX rigurosa, ecuaciones de calibración y umbrales directivos</p>
           </div>
         </div>
         <button onclick="toggleModalCalculo()" class="text-slate-400 hover:text-white text-lg font-bold px-2 py-1">✕</button>
@@ -431,107 +439,137 @@
         <!-- SECCIÓN A: FÓRMULAS MATEMÁTICAS Y EJEMPLOS CON DATOS REALES -->
         <div class="p-3.5 rounded bg-black/50 border border-[#571C1D] space-y-3">
           <h4 class="text-xs font-bold text-[#FF9E4A] uppercase tracking-wider border-b border-[#571C1D] pb-1 flex items-center gap-1.5">
-            <span>🧮</span> A. Fórmulas Matemáticas y Ejemplos Paso a Paso con Datos Reales
+            <span>🧮</span> A. Fórmulas Matemáticas y Ejemplos Paso a Paso con Datos Reales (Notación KaTeX)
           </h4>
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
             
             <!-- 1. Tasa de Conversión (CR) -->
-            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1">
-              <span class="font-bold text-indigo-300 flex items-center justify-between">
-                1. Tasa de Conversión Web (CR)
+            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1.5">
+              <div class="font-bold text-indigo-300 flex items-center justify-between">
+                <span>1. Tasa de Conversión Web (CR)</span>
                 <span class="text-[9px] px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Meta &gt; 5.50%</span>
-              </span>
-              <p class="text-slate-300"><strong>Ecuación:</strong> <code class="text-amber-300 bg-black/40 px-1 py-0.5 rounded">CR = (Clientes Adquiridos / Visitas Web) × 100</code></p>
-              <p class="text-slate-400 text-[10px]"><strong>Ejemplo Real (Mayo 2026):</strong> Visitas = 1.580 | Clientes = 92.<br>
-              <code class="text-emerald-400">CR = (92 / 1.580) × 100 = 5.82%</code></p>
-              <p class="text-slate-400 text-[9.5px]"><em>Interpretación:</em> Mide la capacidad del landing page marciano para transformar tráfico frío en adquisiciones confirmadas.</p>
+              </div>
+              <div class="katex-box text-center">
+                $$\text{CR} = \left(\frac{\text{Clientes Adquiridos}}{\text{Visitas Web}}\right) \times 100$$
+              </div>
+              <p class="text-slate-400 text-[10px]"><strong>Ejemplo Real (Mayo 2026):</strong> Visitas = 1.580 | Clientes = 92.</p>
+              <div class="katex-box text-center text-emerald-400">
+                $$\text{CR} = \left(\frac{92}{1580}\right) \times 100 = 5.82\%$$
+              </div>
+              <p class="text-slate-400 text-[9.5px]"><em>Interpretación:</em> Mide la capacidad del landing page marciano para transformar tráfico frío en adquisiciones confirmadas de rovers.</p>
             </div>
 
             <!-- 2. ROAS -->
-            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1">
-              <span class="font-bold text-emerald-400 flex items-center justify-between">
-                2. Retorno Publicitario (ROAS)
+            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1.5">
+              <div class="font-bold text-emerald-400 flex items-center justify-between">
+                <span>2. Retorno Publicitario (ROAS)</span>
                 <span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Break-Even 2.50x</span>
-              </span>
-              <p class="text-slate-300"><strong>Ecuación:</strong> <code class="text-amber-300 bg-black/40 px-1 py-0.5 rounded">ROAS = Ventas Totales ($) / Gasto Publicitario ($)</code></p>
-              <p class="text-slate-400 text-[10px]"><strong>Ejemplo Real (Mayo 2026):</strong> Ventas = $10.200 USD | Gasto = $3.900 USD.<br>
-              <code class="text-emerald-400">ROAS = $10.200 / $3.900 = 2.62x (Multiplicador constante ~2.56x)</code></p>
-              <p class="text-slate-400 text-[9.5px]"><em>Interpretación:</em> Cada $1 invertido en pauta devolvió $2.62 USD en facturación bruta.</p>
+              </div>
+              <div class="katex-box text-center">
+                $$\text{ROAS} = \frac{\text{Ventas Facturadas (\$)}}{\text{Gasto Publicitario (\$)}}\quad (\text{Break-Even} = 2.50\text{x})$$
+              </div>
+              <p class="text-slate-400 text-[10px]"><strong>Ejemplo Real (Mayo 2026):</strong> Ventas = $10.200 USD | Gasto = $3.900 USD.</p>
+              <div class="katex-box text-center text-emerald-400">
+                $$\text{ROAS} = \frac{\$10.200}{\$3.900} = 2.62\text{x}\quad (\text{Multiplicador base } \sim 2.56\text{x})$$
+              </div>
+              <p class="text-slate-400 text-[9.5px]"><em>Interpretación:</em> Cada $1 invertido en pauta publicitaria devolvió $2.62 USD en facturación bruta de rovers y repuestos.</p>
             </div>
 
             <!-- 3. CPA Unitario -->
-            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1">
-              <span class="font-bold text-amber-400 flex items-center justify-between">
-                3. Costo por Adquisición (CPA)
+            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1.5">
+              <div class="font-bold text-amber-400 flex items-center justify-between">
+                <span>3. Costo por Adquisición (CPA)</span>
                 <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">Meta &lt; $40.00 USD</span>
-              </span>
-              <p class="text-slate-300"><strong>Ecuación:</strong> <code class="text-amber-300 bg-black/40 px-1 py-0.5 rounded">CPA = Pauta Neta Directa ($) / Clientes Adquiridos</code></p>
-              <p class="text-slate-400 text-[10px]"><strong>Ejemplo Real (Mayo 2026):</strong> Pauta = $3.900 USD | Clientes = 92.<br>
-              <code class="text-rose-400">CPA = $3.900 / 92 = $42.39 USD (Zona de Saturación)</code></p>
-              <p class="text-slate-400 text-[9.5px]"><em>Lección Directiva:</em> En Febrero fue $38.82 USD pero destruyó el servicio; en Mayo subió a $42.39 por saturar audiencias.</p>
+              </div>
+              <div class="katex-box text-center">
+                $$\text{CPA} = \frac{\text{Pauta Neta Directa (\$)}}{\text{Clientes Adquiridos}}$$
+              </div>
+              <p class="text-slate-400 text-[10px]"><strong>Ejemplo Real (Mayo 2026):</strong> Pauta = $3.900 USD | Clientes = 92.</p>
+              <div class="katex-box text-center text-rose-400">
+                $$\text{CPA} = \frac{\$3.900}{92} = \$42.39\text{ USD}\quad (\text{Zona de Saturación} > \$42.00)$$
+              </div>
+              <p class="text-slate-400 text-[9.5px]"><em>Interpretación:</em> Costo unitario en medios pagados para cerrar una venta de Rover. Superar $42 USD evidencia saturación.</p>
             </div>
 
-            <!-- 4. CSAT -->
-            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1">
-              <span class="font-bold text-rose-400 flex items-center justify-between">
-                4. Satisfacción del Cliente (CSAT)
-                <span class="text-[9px] px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">Meta ≥ 8.5 / 10</span>
-              </span>
-              <p class="text-slate-300"><strong>Ecuación:</strong> <code class="text-amber-300 bg-black/40 px-1 py-0.5 rounded">CSAT = (∑ Calificaciones / N Encuestas) [Escala 0-10]</code></p>
-              <p class="text-slate-400 text-[10px]"><strong>Contraste Real:</strong> Febrero = 4.2 / 10 (145 encuestas, colapso sin soporte).<br>
-              Abril = <code class="text-emerald-400">9.4 / 10</code> (165 encuestas, soporte estabilizado).</p>
-              <p class="text-slate-400 text-[9.5px]"><em>Semáforo:</em> Verde ≥ 8.5 (Fidelización) | Amarillo 7.0-8.4 | Rojo &lt; 7.0 (Riesgo de Fuga).</p>
+            <!-- 4. CSAT Promedio -->
+            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1.5">
+              <div class="font-bold text-rose-400 flex items-center justify-between">
+                <span>4. Satisfacción del Cliente (CSAT)</span>
+                <span class="text-[9px] px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">Meta ≥ 8.5 pts</span>
+              </div>
+              <div class="katex-box text-center">
+                $$\text{CSAT} = \frac{\sum_{i=1}^n \text{Calificación}_i}{n}\quad [\text{Escala } 0 \text{ a } 10]$$
+              </div>
+              <p class="text-slate-400 text-[10px]"><strong>Contraste Empírico Real:</strong></p>
+              <div class="katex-box text-center text-rose-300">
+                $$\text{Febrero (0\% CX): } 4.2/10 \quad \text{vs.} \quad \text{Abril (16\% CX): } 9.4/10$$
+              </div>
+              <p class="text-slate-400 text-[9.5px]"><em>Impacto Operativo:</em> La avalancha de ventas sin posventa destruyó el CSAT en Febrero (4.2); el soporte dedicado en Abril lo blindó en 9.4.</p>
             </div>
 
-            <!-- 5. Margen Limpio -->
-            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1">
-              <span class="font-bold text-emerald-300 flex items-center justify-between">
-                5. Margen Limpio por Unidad
+            <!-- 5. Margen Limpio por Unidad -->
+            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1.5">
+              <div class="font-bold text-emerald-300 flex items-center justify-between">
+                <span>5. Margen Limpio por Unidad</span>
                 <span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Mínimo $60.00 USD</span>
-              </span>
-              <p class="text-slate-300"><strong>Ecuación:</strong> <code class="text-amber-300 bg-black/40 px-1 py-0.5 rounded">Margen = Ticket Promedio ($101.50) - CPA</code></p>
-              <p class="text-slate-400 text-[10px]"><strong>Ejemplo Real (Abril 2026):</strong> CPA = $39.74 USD.<br>
-              <code class="text-emerald-400">Margen = $101.50 - $39.74 = $61.76 USD (60.8% margen neto libre)</code></p>
-              <p class="text-slate-400 text-[9.5px]"><em>Prueba Financiera:</em> El modelo de negocio en Marte es rentable; cada venta deja más de $60 USD limpios.</p>
+              </div>
+              <div class="katex-box text-center">
+                $$\text{Margen Limpio} = \text{Ticket Promedio (\$101.50)} - \text{CPA}$$
+              </div>
+              <p class="text-slate-400 text-[10px]"><strong>Ejemplo Real (Abril 2026):</strong> CPA = $39.74 USD.</p>
+              <div class="katex-box text-center text-emerald-400">
+                $$\text{Margen Limpio} = \$101.50 - \$39.74 = \$61.76\text{ USD}\quad (60.8\%\text{ margen neto libre})$$
+              </div>
+              <p class="text-slate-400 text-[9.5px]"><em>Prueba Financiera:</em> El modelo de negocio en Marte es rentable; cada venta deja más de $60 USD limpios a la organización.</p>
             </div>
 
             <!-- 6. Retención > 100% -->
-            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1">
-              <span class="font-bold text-cyan-300 flex items-center justify-between">
-                6. Retención (RR) y Expansión Neta
+            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1.5">
+              <div class="font-bold text-cyan-300 flex items-center justify-between">
+                <span>6. Retención (RR) y Expansión Neta</span>
                 <span class="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">Expansión &gt; 100%</span>
-              </span>
-              <p class="text-slate-300"><strong>Ecuación:</strong> <code class="text-amber-300 bg-black/40 px-1 py-0.5 rounded">RR = (Clientes Fin / Base Clientes Inicio) × 100</code></p>
-              <p class="text-slate-400 text-[10px]"><strong>Ejemplo Real (Febrero 2026):</strong> Inicio = 1.100 | Fin = 1.250.<br>
-              <code class="text-cyan-400">RR = (1.250 / 1.100) × 100 = 113.64%</code></p>
-              <p class="text-slate-400 text-[9.5px]"><em>Explicación de la Guía:</em> Valores &gt; 100% prueban expansión neta de flota sin deserción de clientes.</p>
+              </div>
+              <div class="katex-box text-center">
+                $$\text{RR} = \left(\frac{\text{Clientes Retenidos Fin}}{\text{Base Clientes Inicio}}\right) \times 100\quad (\text{Expansión Neta} > 100\%)$$
+              </div>
+              <p class="text-slate-400 text-[10px]"><strong>Ejemplo Real (Febrero 2026):</strong> Inicio = 1.100 | Fin = 1.250.</p>
+              <div class="katex-box text-center text-cyan-400">
+                $$\text{RR} = \left(\frac{1250}{1100}\right) \times 100 = 113.64\%$$
+              </div>
+              <p class="text-slate-400 text-[9.5px]"><em>Explicación de la Guía:</em> Valores &gt; 100% prueban expansión neta acumulada de flota operativa sin deserción de clientes.</p>
             </div>
 
             <!-- 7. Ratio Maestro CSAT/CPA -->
-            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1">
-              <span class="font-bold text-yellow-300 flex items-center justify-between">
-                7. Ratio Maestro CSAT / CPA
+            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1.5">
+              <div class="font-bold text-yellow-300 flex items-center justify-between">
+                <span>7. Ratio Maestro CSAT / CPA</span>
                 <span class="text-[9px] px-1.5 py-0.2 rounded bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">Meta ≥ 0.2000 pts/USD</span>
-              </span>
-              <p class="text-slate-300"><strong>Ecuación:</strong> <code class="text-amber-300 bg-black/40 px-1 py-0.5 rounded">Ratio = CSAT / CPA (Puntos de Calidad por $1 USD)</code></p>
-              <p class="text-slate-400 text-[10px]"><strong>Contraste Real:</strong> Febrero = 4.2 / 38.82 = <code class="text-rose-400">0.1082 pts/USD</code>.<br>
-              Abril = 9.4 / 39.74 = <code class="text-emerald-400">0.2365 pts/USD</code> (Récord de productividad directiva).</p>
-              <p class="text-slate-400 text-[9.5px]"><em>Significado:</em> Sintetiza en un solo indicador la satisfacción devuelta por cada dólar gastado.</p>
+              </div>
+              <div class="katex-box text-center">
+                $$\text{Ratio Maestro} = \frac{\text{CSAT}}{\text{CPA}}\quad \left[\frac{\text{puntos}}{\text{USD}}\right]\quad (\text{Meta} \ge 0.2000)$$
+              </div>
+              <p class="text-slate-400 text-[10px]"><strong>Contraste Empírico Real:</strong></p>
+              <div class="katex-box text-center text-amber-300">
+                $$\text{Febrero: } \frac{4.2}{\$38.82} = 0.1082 \quad \text{vs.} \quad \text{Abril: } \frac{9.4}{\$39.74} = 0.2365\text{ pts/USD}$$
+              </div>
+              <p class="text-slate-400 text-[9.5px]"><em>Significado:</em> Sintetiza en un solo indicador la satisfacción devuelta por cada dólar gastado (productividad directiva de 360°).</p>
             </div>
 
             <!-- 8. Desglose Financiero -->
-            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1">
-              <span class="font-bold text-slate-200 flex items-center justify-between">
-                8. Desglose Financiero Unitario
+            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 space-y-1.5">
+              <div class="font-bold text-slate-200 flex items-center justify-between">
+                <span>8. Desglose Presupuestal Dual</span>
                 <span class="text-[9px] px-1.5 py-0.2 rounded bg-slate-700 text-slate-300">Presupuesto Dual</span>
-              </span>
-              <p class="text-slate-300"><strong>Ecuaciones de Asignación:</strong></p>
-              <ul class="text-slate-400 text-[10px] space-y-0.5 list-disc pl-3">
-                <li><code class="text-amber-300">Inversión CX = Presupuesto Total × (% CX / 100)</code></li>
-                <li><code class="text-amber-300">Pauta Neta = Presupuesto Total - Inversión CX</code></li>
-                <li><code class="text-emerald-300">Estrategia SIM ($4.000 USD):</code> $600 USD a CX (15%) + $3.400 USD a Pauta.</li>
-              </ul>
+              </div>
+              <div class="katex-box text-center">
+                $$\text{Inversión CX} = P_{\text{total}} \times S_{\text{CX}} \quad \text{y} \quad \text{Pauta Neta} = P_{\text{total}} \times (1 - S_{\text{CX}})$$
+              </div>
+              <p class="text-slate-400 text-[10px]"><strong>Estrategia SIM Recomendada ($4.000 USD, 15% CX):</strong></p>
+              <div class="katex-box text-center text-emerald-300">
+                $$\text{CX} = \$4.000 \times 0.15 = \$600\text{ USD} \quad \text{y} \quad \text{Pauta} = \$4.000 \times 0.85 = \$3.400\text{ USD}$$
+              </div>
+              <p class="text-slate-400 text-[9.5px]"><em>Distribución de Recursos:</em> Reasignar $600 USD a CX mitiga la tensión operativa sin sacrificar volumen de captación.</p>
             </div>
 
           </div>
@@ -540,39 +578,70 @@
         <!-- SECCIÓN B: METODOLOGÍA DE ESTIMACIÓN Y PROYECCIONES PARAMÉTRICAS -->
         <div class="p-3.5 rounded bg-black/50 border border-[#571C1D] space-y-2.5">
           <h4 class="text-xs font-bold text-cyan-300 uppercase tracking-wider border-b border-[#571C1D] pb-1 flex items-center gap-1.5">
-            <span>⚙️</span> B. Metodología de Estimación de Proyecciones del Simulador
+            <span>⚙️</span> B. Metodología de Estimación de Proyecciones del Simulador (Formulación Rigurosa)
           </h4>
           
-          <div class="space-y-2 text-[10.5px] text-slate-300">
-            <div class="p-2 rounded bg-slate-900/70 border border-slate-800">
-              <strong class="text-white">1. Modelo de Elasticidad y Factor de Saturación Web:</strong>
-              <p class="text-slate-400 mt-0.5">
-                Para evitar proyecciones lineales irreales, el simulador incorpora la ley de rendimientos decrecientes del tráfico web:<br>
-                <code class="text-cyan-300 bg-black/50 px-1 py-0.5 rounded">factorSaturacion = Math.max(0.85, 1 - (visitas - 1100) * 0.0001)</code><br>
-                <code class="text-cyan-300 bg-black/50 px-1 py-0.5 rounded">tasaConv = Math.min(6.2, Math.max(4.5, (5.2 * factorSaturacion)))</code><br>
-                <code class="text-cyan-300 bg-black/50 px-1 py-0.5 rounded">clientes = Math.round(visitas * (tasaConv / 100))</code><br>
-                <em>Fundamento:</em> Si las visitas superan las 1.600 sesiones sin filtrado previo, la tasa de conversión marginal decrece debido a la dispersión de prospectos fríos.
+          <div class="space-y-2.5 text-[10.5px] text-slate-300">
+            <div class="p-2.5 rounded bg-slate-900/70 border border-slate-800 space-y-1">
+              <strong class="text-white text-xs">1. Modelo de Elasticidad y Factor de Saturación Web:</strong>
+              <p class="text-slate-400">
+                Para evitar proyecciones lineales irreales, el simulador incorpora la ley de rendimientos decrecientes del tráfico web mediante una función de amortiguación:
               </p>
+              <div class="katex-box text-center text-cyan-300">
+                $$\alpha(V) = \max\left(0.85,\, 1 - (V - 1100) \times 10^{-4}\right)$$
+              </div>
+              <div class="katex-box text-center text-cyan-300">
+                $$\text{CR}(V) = \min\left(6.2\%,\, \max\left(4.5\%,\, 5.2\% \times \alpha(V)\right)\right)$$
+              </div>
+              <div class="katex-box text-center text-emerald-400">
+                $$C(V) = \operatorname{round}\left(V \times \frac{\text{CR}(V)}{100}\right)$$
+              </div>
+              <div class="text-[9.5px] text-slate-400 space-y-0.5 mt-1 bg-black/30 p-2 rounded border border-slate-800/60">
+                <p><strong>Definición de Variables:</strong></p>
+                <ul class="list-disc pl-4 space-y-0.5">
+                  <li>$V$: Volumen mensual de visitas web ($V \in [900,\, 2500]$ sesiones).</li>
+                  <li>$\alpha(V)$: Factor de saturación de audiencia marciana ($\alpha \le 1.0$; cota inferior en $0.85$).</li>
+                  <li>$\text{CR}(V)$: Tasa de conversión efectiva acotada al intervalo empírico histórico $[4.5\%,\, 6.2\%]$.</li>
+                  <li>$C(V)$: Volumen proyectado de clientes adquiridos en el período.</li>
+                </ul>
+                <p class="pt-0.5"><em>Fundamento Directivo:</em> Si las visitas superan las 1.600 sesiones sin filtrado previo, la tasa de conversión marginal decrece debido a la dispersión de prospectos fríos.</p>
+              </div>
             </div>
 
-            <div class="p-2 rounded bg-slate-900/70 border border-slate-800">
-              <strong class="text-white">2. Modelo Logístico de Capacidad Operativa y Alivio por Soporte (CSAT):</strong>
-              <p class="text-slate-400 mt-0.5">
-                La satisfacción no depende solo de la publicidad, sino de la capacidad de atender a los clientes captados:<br>
-                <code class="text-cyan-300 bg-black/50 px-1 py-0.5 rounded">sobrecarga = (clientes - 55) * 0.085</code><br>
-                <code class="text-cyan-300 bg-black/50 px-1 py-0.5 rounded">alivioSoporte = (soporte / 15) * 3.3</code><br>
-                <code class="text-cyan-300 bg-black/50 px-1 py-0.5 rounded">csat = Math.min(9.8, Math.max(3.2, 7.5 - sobrecarga + alivioSoporte))</code><br>
-                <em>Fundamento:</em> Con 0% de soporte y 85 clientes (caso Febrero), la sobrecarga destruye el CSAT hacia 4.2. Con 15% de soporte, el alivio operativo de +3.3 puntos blinda el CSAT en &gt; 9.0 puntos.
+            <div class="p-2.5 rounded bg-slate-900/70 border border-slate-800 space-y-1">
+              <strong class="text-white text-xs">2. Modelo Logístico de Capacidad Operativa y Alivio por Soporte (CSAT):</strong>
+              <p class="text-slate-400">
+                La satisfacción no depende únicamente de la captación comercial, sino de la capacidad física de los ingenieros para alistar y mantener cada Rover en Marte:
               </p>
+              <div class="katex-box text-center text-cyan-300">
+                $$\text{CSAT}(C, S) = \min\left(9.8,\, \max\left(3.2,\, 7.5 - 0.085(C - 55) + 3.3 \cdot \frac{S}{15\%}\right)\right)$$
+              </div>
+              <div class="text-[9.5px] text-slate-400 space-y-0.5 mt-1 bg-black/30 p-2 rounded border border-slate-800/60">
+                <p><strong>Definición de Variables:</strong></p>
+                <ul class="list-disc pl-4 space-y-0.5">
+                  <li>$C$: Clientes cerrados que ingresan a servicio técnico en el mes.</li>
+                  <li>$S$: Porcentaje presupuestal reasignado a CX y soporte posventa ($S \in [0\%,\, 30\%]$).</li>
+                  <li>$7.5$: Calificación base histórica con capacidad nominal de flota (55 clientes).</li>
+                  <li>$-0.085(C - 55)$: Tasa de penalización por sobrecarga técnica de los talleres por cada cliente por encima de 55.</li>
+                  <li>$+3.3 \cdot \frac{S}{15\%}$: Alivio operativo proporcional otorgado por el equipo de soporte técnico dedicado.</li>
+                </ul>
+                <p class="pt-0.5"><em>Fundamento Directivo:</em> Con $S = 0\%$ y 85 clientes (caso Febrero), la sobrecarga destruye el CSAT hacia 4.2 (Zona Roja). Con $S = 15\%$, el alivio operativo de $+3.3$ puntos blinda el CSAT en $\ge 9.0$ puntos (Zona Verde de Excelencia).</p>
+              </div>
             </div>
 
-            <div class="p-2 rounded bg-slate-900/70 border border-slate-800">
-              <strong class="text-white">3. Proyección de Margen Neto Consolidado:</strong>
-              <p class="text-slate-400 mt-0.5">
-                <code class="text-cyan-300 bg-black/50 px-1 py-0.5 rounded">pautaNeta = gastoTotal - gastoCX</code> | 
-                <code class="text-cyan-300 bg-black/50 px-1 py-0.5 rounded">CPA = pautaNeta / clientes</code> | 
-                <code class="text-cyan-300 bg-black/50 px-1 py-0.5 rounded">Margen = $101.50 - CPA</code><br>
-                Demuestra rigurosamente que al reasignar el 15% a soporte, el CPA de captación neta disminuye a ~$33.78 USD y el margen unitario limpio aumenta a $67.72 USD.
+            <div class="p-2.5 rounded bg-slate-900/70 border border-slate-800 space-y-1">
+              <strong class="text-white text-xs">3. Modelo de Margen Unitario Limpio y Optimización Presupuestal:</strong>
+              <p class="text-slate-400">
+                Formulación de la rentabilidad limpia por unidad comercializada:
+              </p>
+              <div class="katex-box text-center text-cyan-300">
+                $$\text{CPA}(P_{\text{total}}, S, C) = \frac{P_{\text{total}} \times (1 - S)}{C}$$
+              </div>
+              <div class="katex-box text-center text-emerald-400">
+                $$\text{Margen Limpio} = \text{Ticket Promedio (\$101.50)} - \text{CPA}$$
+              </div>
+              <p class="text-slate-400 text-[10px] mt-1">
+                Demuestra rigurosamente que al reasignar el 15% a soporte en el Plan Junio ($4.000 USD), la Pauta Neta es de $3.400 USD, el CPA neto disminuye a ~$37.78 USD y el margen unitario limpio aumenta a más de $63.70 USD libres por unidad vendida.
               </p>
             </div>
           </div>
