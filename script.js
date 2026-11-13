@@ -838,7 +838,7 @@ const thresholdPlugin = {
       const yPx = yScale.getPixelForValue(val);
       if (yPx < top - 2 || yPx > bottom + 2) return;
 
-      // Línea punteada destacada por encima de barras y curvas
+      // Línea punteada destacada por encima de barras y curvas (afterDatasetsDraw)
       ctx.beginPath();
       ctx.setLineDash(dash);
       ctx.strokeStyle = color;
@@ -847,22 +847,19 @@ const thresholdPlugin = {
       ctx.lineTo(right, yPx);
       ctx.stroke();
 
-      // Rótulo de texto con caja de contraste de alta visibilidad
+      // Rótulo limpio rotulado directamente sobre la línea (ESTILO MARGEN LIMPIO: CERO CAJAS O RECUADROS)
       ctx.setLineDash([]);
-      ctx.font = 'bold 9px "Plus Jakarta Sans", sans-serif';
+      ctx.font = 'bold 9.5px "Plus Jakarta Sans", sans-serif';
       const tw = ctx.measureText(label).width;
-      const padX = 5;
-      const xPos = (align === 'right') ? (right - tw - padX * 2 - 4) : (left + 6);
-      const yBox = yPx - 6;
+      const xPos = (align === 'right') ? (right - tw - 8) : (left + 8);
+      const yPos = yPx - 4; // Ligeramente por encima de la línea
 
-      ctx.fillStyle = 'rgba(12, 14, 20, 0.90)';
-      ctx.fillRect(xPos - padX, yBox - 7, tw + padX * 2, 14);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 1;
-      ctx.strokeRect(xPos - padX, yBox - 7, tw + padX * 2, 14);
-
+      // Sombra oscura sutil de contraste para máxima legibilidad sin marcos artificiales
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+      ctx.shadowBlur = 4;
       ctx.fillStyle = color;
-      ctx.fillText(label, xPos, yPx + 3);
+      ctx.fillText(label, xPos, yPos);
+      ctx.shadowBlur = 0; // reset sombra
     }
 
     function drawVLine(xScale, val, label, color, dash = [5, 5], align = 'top') {
@@ -879,22 +876,18 @@ const thresholdPlugin = {
       ctx.lineTo(xPx, bottom);
       ctx.stroke();
 
-      // Rótulo
+      // Rótulo limpio sin cajas ni marcos desfasados (idéntico a Gráfica 6)
       ctx.setLineDash([]);
-      ctx.font = 'bold 9px "Plus Jakarta Sans", sans-serif';
+      ctx.font = 'bold 9.5px "Plus Jakarta Sans", sans-serif';
       const tw = ctx.measureText(label).width;
-      const padX = 5;
-      const yPos = (align === 'top') ? (top + 14) : (bottom - 10);
-      const xPos = Math.min(Math.max(xPx + 4, left + 4), right - tw - 8);
+      const yPos = (align === 'top') ? (top + 12) : (bottom - 6);
+      const xPos = Math.min(Math.max(xPx + 4, left + 4), right - tw - 4);
 
-      ctx.fillStyle = 'rgba(12, 14, 20, 0.90)';
-      ctx.fillRect(xPos - padX, yPos - 9, tw + padX * 2, 14);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 1;
-      ctx.strokeRect(xPos - padX, yPos - 9, tw + padX * 2, 14);
-
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+      ctx.shadowBlur = 4;
       ctx.fillStyle = color;
-      ctx.fillText(label, xPos, yPos + 1);
+      ctx.fillText(label, xPos, yPos);
+      ctx.shadowBlur = 0;
     }
 
     switch (tabActiva) {
@@ -1499,27 +1492,24 @@ function cargarEscenario(tipo) {
 // INTEGRACIÓN DE KATEX: RENDERIZADOR MATEMÁTICO REAL
 // ==========================================================================
 function renderKatexMath(targetElement) {
+  const container = targetElement || document.getElementById('modal-calculo') || document.body;
+  const config = {
+    delimiters: [
+      { left: '$$', right: '$$', display: true },
+      { left: '\\(', right: '\\)', display: false }
+    ],
+    throwOnError: false,
+    ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'table'],
+    ignoredClasses: ['has-tooltip', 'tooltip-content', 'kpi-tooltip', 'control-tooltip', 'tabla-umbrales', 'financial-breakdown']
+  };
+
   if (typeof renderMathInElement === 'function') {
-    renderMathInElement(targetElement || document.body, {
-      delimiters: [
-        { left: '$$', right: '$$', display: true },
-        { left: '$', right: '$', display: false }
-      ],
-      throwOnError: false,
-      ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-    });
+    renderMathInElement(container, config);
   } else {
     // Si aún no ha terminado de cargar el script defer, reintentar brevemente
     setTimeout(() => {
       if (typeof renderMathInElement === 'function') {
-        renderMathInElement(targetElement || document.body, {
-          delimiters: [
-            { left: '$$', right: '$$', display: true },
-            { left: '$', right: '$', display: false }
-          ],
-          throwOnError: false,
-          ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-        });
+        renderMathInElement(container, config);
       }
     }, 150);
   }
