@@ -728,3 +728,106 @@ body.theme-light .border-\[\#571C1D\]\/80,
 body.theme-light .border-\[\#571C1D\] {
   border-color: #E2E8F0 !important;
 }
+
+
+/* Tooltips de KPIs fijos sin desborde en extremos izquierdo y derecho */
+#tour-kpis > div:first-child .kpi-tooltip {
+  left: 0 !important;
+  transform: none !important;
+}
+#tour-kpis > div:last-child .kpi-tooltip {
+  left: auto !important;
+  right: 0 !important;
+  transform: none !important;
+}
+
+/* Modal de Guía / Tour Onboarding en Modo Claro: Fondo blanco puro */
+body.theme-light #tour-card {
+  background-color: #FFFFFF !important;
+  border: 2px solid #EA580C !important;
+  color: #0F172A !important;
+  box-shadow: 0 25px 50px -12px rgba(234, 88, 12, 0.25) !important;
+}
+body.theme-light #tour-card h3,
+body.theme-light #tour-card p,
+body.theme-light #tour-card li {
+  color: #0F172A !important;
+}
+body.theme-light #tour-card .bg-slate-800\/80 {
+  background-color: #F1F5F9 !important;
+  border-color: #CBD5E1 !important;
+}
+
+/* Modal de Memoria de Cálculo y Ayuda en Modo Claro: Fondo blanco y KaTeX limpio */
+body.theme-light #modal-calculo .card-box,
+body.theme-light #modal-ayuda .card-box {
+  background-color: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+body.theme-light #modal-calculo .katex-box {
+  background-color: #F8FAFC !important;
+  border: 1.5px solid #CBD5E1 !important;
+  color: #0F172A !important;
+}
+body.theme-light #modal-calculo .katex {
+  color: #0F172A !important;
+}
+body.theme-light #modal-calculo .bg-slate-900\/80,
+body.theme-light #modal-calculo .bg-black\/40 {
+  background-color: #F8FAFC !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+/* Badges oscuros de escenarios en Modo Claro: fondos pastel con texto oscuro */
+body.theme-light .bg-emerald-950 {
+  background-color: #D1FAE5 !important;
+  color: #065F46 !important;
+  border: 1.5px solid #34D399 !important;
+}
+body.theme-light .bg-amber-950 {
+  background-color: #FEF3C7 !important;
+  color: #92400E !important;
+  border: 1.5px solid #FBBF24 !important;
+}
+body.theme-light .bg-rose-950 {
+  background-color: #FEE2E2 !important;
+  color: #991B1B !important;
+  border: 1.5px solid #F87171 !important;
+}
+body.theme-light .bg-blue-950 {
+  background-color: #DBEAFE !important;
+  color: #1E40AF !important;
+  border: 1.5px solid #60A5FA !important;
+}
+
+/* Tooltips de escenarios y controles en Modo Claro */
+body.theme-light .tooltip-content,
+body.theme-light .control-tooltip,
+body.theme-light .kpi-tooltip {
+  background-color: #FFFFFF !important;
+  border: 1.5px solid #CBD5E1 !important;
+  color: #0F172A !important;
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.15) !important;
+}
+body.theme-light .tooltip-content span,
+body.theme-light .tooltip-content p,
+body.theme-light .tooltip-content div {
+  color: #1E293B !important;
+}
+
+/* Pestañas inactivas con estilo limpio que pulsa en hover */
+.tab-btn:not(.active) {
+  --btn-glow-color: rgba(148, 163, 184, 0.4);
+  background: rgba(15, 23, 42, 0.85);
+  border-color: rgba(51, 65, 85, 0.8);
+  color: #E2E8F0 !important;
+  font-weight: 700;
+}
+body.theme-light .tab-btn:not(.active) {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #1E293B !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}

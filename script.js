@@ -207,7 +207,7 @@ function actualizarDiagnostico() {
     badgeClase = 'badge-alerta';
     html = `
       <p class="text-rose-400 font-bold text-sm md:text-base">⚠️ Estás repitiendo la crisis de febrero de 2026.</p>
-      <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">Captaste <strong>${simState.clientes} clientes</strong> pero solo dejaste un <strong>${simState.soporte}% en soporte</strong>. El CPA parece barato ($${simState.cpa.toFixed(2)}), pero la satisfacción cayó a <strong>${simState.csat.toFixed(1)}/10</strong>. Los clientes no volverán a comprar repuestos ni misiones.</p>
+      <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">Captaste <strong>${simState.clientes} clientes</strong> pero solo dejaste un <strong>${simState.soporte}% en soporte</strong>. El CPA parece barato ($${simState.cpa.toFixed(2)}), pero la satisfacción cayó a <strong>${simState.csat.toFixed(1)}/10</strong>. Los clientes no volverán a comprar repuestos ni misiones.</p>
       <div class="p-2 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300 text-xs md:text-sm font-bold">
         <strong>Solución:</strong> Sube la palanca de soporte a mínimo 12-15%.
       </div>
@@ -217,21 +217,21 @@ function actualizarDiagnostico() {
     badgeClase = 'badge-advertencia';
     html = `
       <p class="text-amber-400 font-bold text-sm md:text-base">⚠️ Saturación publicitaria en curso (Efecto Mayo).</p>
-      <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">El CPA subió a <strong>$${simState.cpa.toFixed(2)} USD</strong>. Estás pagando una prima muy alta por atraer tráfico frío a la misión.</p>
+      <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">El CPA subió a <strong>$${simState.cpa.toFixed(2)} USD</strong>. Estás pagando una prima muy alta por atraer tráfico frío a la misión.</p>
     `;
   } else if (simState.csat >= 8.8 && simState.cpa <= 41.0) {
     badge = 'EXCELENCIA ESTRATÉGICA (TIPO ABRIL)';
     badgeClase = 'badge-exito';
     html = `
       <p class="text-emerald-400 font-bold text-sm md:text-base">⭐ Punto de Oro Gerencial.</p>
-      <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">Con <strong>${simState.soporte}% en soporte</strong> mantienes la satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong> y el margen limpio en <strong>$${simState.margen.toFixed(2)} USD</strong> por vehículo. Es la propuesta a defender en el ACA.</p>
+      <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">Con <strong>${simState.soporte}% en soporte</strong> mantienes la satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong> y el margen limpio en <strong>$${simState.margen.toFixed(2)} USD</strong> por vehículo. Es la propuesta a defender en el ACA.</p>
     `;
   } else {
     badge = 'ZONA ESTABLE DE CONTROL';
     badgeClase = 'badge-advertencia';
     html = `
       <p class="text-slate-200 font-bold text-sm md:text-base">ℹ️ Operación en rango aceptable.</p>
-      <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">Margen de <strong>$${simState.margen.toFixed(2)} USD</strong> y satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong>. Se puede optimizar aumentando el cuidado de los clientes.</p>
+      <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">Margen de <strong>$${simState.margen.toFixed(2)} USD</strong> y satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong>. Se puede optimizar aumentando el cuidado de los clientes.</p>
     `;
   }
 
@@ -264,7 +264,7 @@ function actualizarExplicacionEscenarios() {
           <span>🟡 Escenario 4: Saturación de Pauta ($4.500 USD | 0% CX | 1.900 Visitas)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">Saturación Crítica</span>
         </p>
-        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
+        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
           <strong>Diagnóstico Directivo:</strong> Arquetipo de <strong>rendimientos decrecientes extremos y colapso dual</strong>. 
           Al forzar la inversión a $4.500 USD con 0% en soporte y 1.900 visitas, el tráfico frío se dispersa, el <strong>CPA sube a $${simState.cpa.toFixed(2)} USD</strong> y la avalancha de ${simState.clientes} clientes sin servicio técnico hunde el <strong>CSAT a un crítico ${simState.csat.toFixed(1)}/10 (Zona Roja)</strong>. 
           Prueba contundente de que inyectar más presupuesto a tráfico frío sin soporte acelera la quiebra del modelo.
@@ -284,7 +284,7 @@ function actualizarExplicacionEscenarios() {
           <span>🔵 Enero (Línea Base Histórica)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">Calibración Inicial</span>
         </p>
-        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
+        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
           <strong>Significado Real:</strong> Punto de partida empírico de Ares Rover Dynamics en Marte. Inversión inicial moderada de $2.200 USD con 8% en soporte ($176 USD) y 1.100 visitas, manteniendo una operación equilibrada: <strong>CSAT de 7.5/10</strong> y <strong>CPA de $40.00 USD</strong> antes de experimentar el estrés del escalamiento comercial.
         </p>
       </div>
@@ -302,7 +302,7 @@ function actualizarExplicacionEscenarios() {
           <span>🔴 Febrero (Crisis Operativa por Pauta Ciega - 0% CX)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800">Crisis Febrero</span>
         </p>
-        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
+        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
           <strong>Significado Real:</strong> El error directivo de canalizar el 100% del presupuesto ($3.300 USD) a captación publicitaria sin asignar $1 a posventa. Se captaron 85 clientes (1.650 visitas), pero el colapso del taller técnico hundió la satisfacción al nivel más bajo del semestre: <strong>CSAT de 4.2/10 (Zona Roja)</strong>. Evidencia empírica de que captar sin cuidar destruye el valor de vida del cliente.
         </p>
       </div>
@@ -320,7 +320,7 @@ function actualizarExplicacionEscenarios() {
           <span>⭐ Abril (Mes de Oro - Equilibrio Virtuoso)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Récord de Calidad</span>
         </p>
-        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
+        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
           <strong>Significado Real:</strong> El mes de mayor excelencia operativa y eficiencia histórica. Con $3.100 USD y un 16% reasignado a soporte posventa ($496 USD), los ingenieros garantizaron alistamiento óptimo de cada Rover, logrando el <strong>récord histórico de CSAT en 9.4/10</strong>, CPA de <strong>$39.74 USD</strong> y Ratio Maestro supremo de <strong>0.2365 pts/USD</strong>.
         </p>
       </div>
@@ -338,7 +338,7 @@ function actualizarExplicacionEscenarios() {
           <span>📈 Mayo (Saturación y Rendimientos Decrecientes)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">Efecto Mayo</span>
         </p>
-        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
+        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
           <strong>Significado Real:</strong> Demostración de saturación de audiencias marcianas. Al subir la pauta a $3.900 USD con solo 8% a soporte, el tráfico frío se dispersó y el <strong>CPA se disparó a $42.39 USD (Zona Roja > $42)</strong>. Aunque se captaron 92 clientes, cada adquisición marginal fue sustancialmente más costosa, comprobando la ley de rendimientos decrecientes.
         </p>
       </div>
@@ -356,7 +356,7 @@ function actualizarExplicacionEscenarios() {
           <span>🟢 Escenario 2: Estrategia SIM / Equilibrio Óptimo (15% CX = $600 USD)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Plan Junio Recomendado</span>
         </p>
-        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
+        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
           <strong>Diagnóstico Directivo:</strong> La propuesta canónica del Sistema de Información de Marketing para el Plan Junio ($4.000 USD). Reasigna $600 USD (15%) a posventa y $3.400 USD a pauta neta, logrando <strong>CSAT blindado en Zona Verde (${simState.csat.toFixed(1)}/10 &gt; 9.0)</strong>, CPA optimizado de <strong>$${simState.cpa.toFixed(2)} USD</strong> y <strong>margen limpio de $${simState.margen.toFixed(2)} USD</strong> por unidad.
         </p>
       </div>
@@ -374,7 +374,7 @@ function actualizarExplicacionEscenarios() {
           <span>🔵 Escenario 3: Hiper-Fidelización / Blindaje Total (20-30% CX)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">Lealtad VIP</span>
         </p>
-        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
+        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
           <strong>Diagnóstico Directivo:</strong> Arquetipo de máxima lealtad y retención acumulada (&gt; 113%). Al destinar $${simState.gastoCX} USD (${simState.soporte}%) a posventa, el equipo técnico brinda atención personalizada y mantenimiento preventivo continuo, elevando el <strong>CSAT a ${simState.csat.toFixed(1)}/10</strong> y asegurando recompra garantizada de contratos en Marte.
         </p>
       </div>
@@ -391,7 +391,7 @@ function actualizarExplicacionEscenarios() {
           <span>🚀 Expansión Agresiva de Mercado ($5.200 USD | 2% CX)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">Alto Riesgo</span>
         </p>
-        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
+        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
           <strong>Diagnóstico Directivo:</strong> Gran volumen bruto de ventas (${simState.clientes} unidades), pero con sobrecosto publicitario por saturación y grave riesgo de deterioro de CSAT (${simState.csat.toFixed(1)}/10) por cuello de botella técnico.
         </p>
       </div>
@@ -408,7 +408,7 @@ function actualizarExplicacionEscenarios() {
           <span>🔴 Escenario 1: Status Quo / Pauta Ciega (0% CX)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800">Crisis Febrero</span>
         </p>
-        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
+        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
           <strong>Diagnóstico:</strong> El 100% del presupuesto ($${simState.gasto.toLocaleString()} USD) se consume en anuncios sin soporte postventa. 
           Desencadena saturación técnica y colapso del <strong>CSAT en Zona Roja (${simState.csat.toFixed(1)}/10)</strong>.
         </p>
@@ -425,7 +425,7 @@ function actualizarExplicacionEscenarios() {
           <span>🟡 Escenario 4: Saturación de Audiencias (&gt; $3.900 USD)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">Efecto Mayo</span>
         </p>
-        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
+        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
           <strong>Diagnóstico:</strong> Entrada en la ley de rendimientos decrecientes. Al forzar la inversión con tráfico frío, el <strong>CPA se eleva a $${simState.cpa.toFixed(2)} USD</strong>.
         </p>
       </div>
@@ -441,7 +441,7 @@ function actualizarExplicacionEscenarios() {
           <span>🟢 Escenario 2: Estrategia SIM / Equilibrio Óptimo (15% CX)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Punto de Oro</span>
         </p>
-        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
+        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
           <strong>Diagnóstico:</strong> CSAT blindado en Zona Verde (${simState.csat.toFixed(1)}/10), CPA optimizado en $${simState.cpa.toFixed(2)} USD y margen limpio de $${simState.margen.toFixed(2)} USD.
         </p>
       </div>
@@ -453,7 +453,7 @@ function actualizarExplicacionEscenarios() {
     contenido = `
       <div class="space-y-1">
         <p class="font-bold text-slate-200">ℹ️ Configuración Paramétrica Intermedia</p>
-        <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">
+        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
           Inversión de $${simState.gasto.toLocaleString()} USD con $${simState.gastoCX} USD a CX (${simState.soporte}%) y $${simState.pautaNeta.toLocaleString()} USD a pauta. 
           CSAT: <strong>${simState.csat.toFixed(1)}/10</strong>, CPA: <strong>$${simState.cpa.toFixed(2)} USD</strong> y Margen: <strong>$${simState.margen.toFixed(2)} USD</strong>.
         </p>
@@ -462,23 +462,23 @@ function actualizarExplicacionEscenarios() {
   }
 
   badgeEscenarioActivo.textContent = badgeTexto;
-  badgeEscenarioActivo.className = `text-[8.5px] px-1.5 py-0.5 rounded font-bold border ${badgeClase}`;
+  badgeEscenarioActivo.className = `text-xs md:text-[13px] px-2.5 py-1 rounded-md font-extrabold border ${badgeClase}`;
   boxExplicacionEscenarios.innerHTML = contenido;
 
-  // Actualizar botones de escenarios canónicos (4 arquetipos)
+  // Sincronización de los 4 botones canónicos preservando siempre su estilo neón brillante
   const botonesCanon = [
-    { btn: btnEscCanon1, id: 1, activeClass: 'border-rose-500 bg-rose-900/80 text-white font-bold shadow-sm shadow-rose-500/30' },
-    { btn: btnEscCanon2, id: 2, activeClass: 'border-emerald-500 bg-emerald-900/80 text-white font-bold shadow-sm shadow-emerald-500/30' },
-    { btn: btnEscCanon3, id: 3, activeClass: 'border-cyan-500 bg-cyan-900/80 text-white font-bold shadow-sm shadow-cyan-500/30' },
-    { btn: btnEscCanon4, id: 4, activeClass: 'border-amber-500 bg-amber-900/80 text-white font-bold shadow-sm shadow-amber-500/30' }
+    { btn: btnEscCanon1, id: 1 },
+    { btn: btnEscCanon2, id: 2 },
+    { btn: btnEscCanon3, id: 3 },
+    { btn: btnEscCanon4, id: 4 }
   ];
 
   botonesCanon.forEach(item => {
     if (!item.btn) return;
     if (item.id === activeCanonId) {
-      item.btn.className = `px-1 py-0.5 rounded transition text-center truncate ${item.activeClass}`;
+      item.btn.classList.add('ring-2', 'ring-white', 'scale-105', 'shadow-xl');
     } else {
-      item.btn.className = 'px-1 py-0.5 rounded border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-white hover:bg-slate-800 transition text-center truncate';
+      item.btn.classList.remove('ring-2', 'ring-white', 'scale-105', 'shadow-xl');
     }
   });
 
@@ -778,14 +778,17 @@ function cambiarTab(num) {
 
   for (let i = 1; i <= 10; i++) {
     const btn = document.getElementById(`tab-${i}`);
+    if (!btn) continue;
     if (i === num) {
-      btn.className = "tab-btn active text-xs px-2.5 py-1.5 rounded-lg font-bold border shrink-0";
+      btn.className = "tab-btn btn-accent active text-xs px-2 py-1.5 rounded-lg font-bold text-center truncate";
     } else {
-      btn.className = "tab-btn text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium";
+      btn.className = "tab-btn btn-accent text-xs px-2 py-1.5 rounded-lg font-bold text-center truncate";
     }
   }
 
-  tabDescripcion.innerHTML = `Gráfica ${num}: ${document.getElementById(`tab-${num}`).textContent}`;
+  const btnActivo = document.getElementById(`tab-${num}`);
+  const nombreTab = btnActivo ? btnActivo.textContent : `Gráfica ${num}`;
+  tabDescripcion.innerHTML = `<span>📊</span> Gráfica ${num}: ${nombreTab}`;
   txtExplicacionCorta.innerHTML = `📌 <strong>Lectura Ejecutiva:</strong> El elemento neón resalta tu decisión simulada frente a los datos históricos reales.`;
   actualizarInterpretacionGrafica();
   renderizarGraficaActiva();

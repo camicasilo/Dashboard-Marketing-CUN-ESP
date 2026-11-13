@@ -422,24 +422,28 @@
       <!-- ===================================================================== -->
       <div id="tour-graficas" class="card-box bg-[#1C0C10]/95 border border-[#571C1D] rounded-xl p-3 flex-1 flex flex-col min-h-0 md:overflow-hidden shadow-xl">
         
-        <!-- BARRA DE PESTAÑAS (10 TABS DINÁMICAS) CON SCROLL TÁCTIL HORIZONTAL -->
-        <div class="flex items-center justify-between gap-1.5 border-b border-[#571C1D]/80 pb-2 shrink-0">
-          <div class="flex items-center gap-1.5 overflow-x-auto py-0.5 scrollbar-none whitespace-nowrap max-w-full">
-            <span class="text-xs uppercase font-extrabold text-slate-400 mr-1 hidden sm:inline">10 Gráficas:</span>
-            <button onclick="cambiarTab(1)" id="tab-1" class="tab-btn btn-interactive active text-xs px-2.5 py-1.5 rounded-lg bg-[#381216] font-bold text-[#FF6B00] border border-[#FF6B00] shrink-0">1. CPA vs CSAT</button>
-            <button onclick="cambiarTab(2)" id="tab-2" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">2. Ecuación CSAT</button>
-            <button onclick="cambiarTab(3)" id="tab-3" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">3. Retención &gt;100%</button>
-            <button onclick="cambiarTab(4)" id="tab-4" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">4. Rendim. Decrec.</button>
-            <button onclick="cambiarTab(5)" id="tab-5" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">5. Embudo Visitas</button>
-            <button onclick="cambiarTab(6)" id="tab-6" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">6. Margen Limpio</button>
-            <button onclick="cambiarTab(7)" id="tab-7" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">7. Ratio CSAT/CPA</button>
-            <button onclick="cambiarTab(8)" id="tab-8" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">8. ROAS 2.56x</button>
-            <button onclick="cambiarTab(9)" id="tab-9" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">9. Cartera Total</button>
-            <button onclick="cambiarTab(10)" id="tab-10" class="tab-btn btn-interactive text-xs px-2.5 py-1.5 rounded-lg bg-slate-900/90 text-slate-300 hover:text-white border border-slate-800 shrink-0 font-medium">10. Reasignación 15%</button>
+        <!-- BARRA DE PESTAÑAS (10 TABS EN 2 FILAS DE 5) + TÍTULO DEDICADO ABAJO -->
+        <div class="flex flex-col gap-1.5 border-b border-[#571C1D]/80 pb-2 shrink-0">
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 w-full">
+            <button onclick="cambiarTab(1)" id="tab-1" class="tab-btn btn-accent text-xs px-2 py-1.5 rounded-lg font-bold text-center truncate">1. CPA vs CSAT</button>
+            <button onclick="cambiarTab(2)" id="tab-2" class="tab-btn btn-accent text-xs px-2 py-1.5 rounded-lg font-bold text-center truncate">2. Ecuación CSAT</button>
+            <button onclick="cambiarTab(3)" id="tab-3" class="tab-btn btn-accent text-xs px-2 py-1.5 rounded-lg font-bold text-center truncate">3. Retención &gt;100%</button>
+            <button onclick="cambiarTab(4)" id="tab-4" class="tab-btn btn-accent text-xs px-2 py-1.5 rounded-lg font-bold text-center truncate">4. Rendim. Decrec.</button>
+            <button onclick="cambiarTab(5)" id="tab-5" class="tab-btn btn-accent text-xs px-2 py-1.5 rounded-lg font-bold text-center truncate">5. Embudo Visitas</button>
+            <button onclick="cambiarTab(6)" id="tab-6" class="tab-btn btn-accent text-xs px-2 py-1.5 rounded-lg font-bold text-center truncate">6. Margen Limpio</button>
+            <button onclick="cambiarTab(7)" id="tab-7" class="tab-btn btn-accent text-xs px-2 py-1.5 rounded-lg font-bold text-center truncate">7. Ratio CSAT/CPA</button>
+            <button onclick="cambiarTab(8)" id="tab-8" class="tab-btn btn-accent text-xs px-2 py-1.5 rounded-lg font-bold text-center truncate">8. ROAS 2.56x</button>
+            <button onclick="cambiarTab(9)" id="tab-9" class="tab-btn btn-accent text-xs px-2 py-1.5 rounded-lg font-bold text-center truncate">9. Cartera Total</button>
+            <button onclick="cambiarTab(10)" id="tab-10" class="tab-btn btn-accent text-xs px-2 py-1.5 rounded-lg font-bold text-center truncate">10. Reasignación 15%</button>
           </div>
-          <span id="tab-descripcion" class="text-xs text-[#FF9E4A] font-bold truncate hidden lg:inline">
-            Gráfica 1: Mapa del Dilema Estratégico (CPA vs. CSAT)
-          </span>
+
+          <!-- TÍTULO DE LA GRÁFICA ACTIVA EN LÍNEA DEDICADA ABAJO (SIN CORTARSE) -->
+          <div class="flex items-center justify-between px-2.5 py-1 rounded-lg bg-black/40 border border-[#571C1D]/60 mt-0.5">
+            <span id="tab-descripcion" class="text-xs md:text-sm text-[#FF9E4A] font-extrabold truncate flex items-center gap-1.5">
+              <span>📊</span> Gráfica 1: Mapa del Dilema Estratégico (CPA vs. CSAT)
+            </span>
+            <span class="text-[11px] text-slate-400 font-semibold hidden sm:inline">Perspectiva Analítica Directiva</span>
+          </div>
         </div>
 
         <!-- LIENZO DINÁMICO REACTIVO (CHART.JS) CON ALTURA MÍNIMA GARANTIZADA EN MÓVIL -->
