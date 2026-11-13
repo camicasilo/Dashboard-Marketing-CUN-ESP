@@ -162,35 +162,37 @@ function calcularParametros() {
 }
 
 function actualizarUI() {
-  txtGasto.textContent = `$${simState.gasto.toLocaleString('es-CO')}`;
-  txtSoporte.textContent = `${simState.soporte} %`;
-  txtVisitas.textContent = simState.visitas.toLocaleString('es-CO');
+  if (txtGasto) txtGasto.textContent = `$${simState.gasto.toLocaleString('es-CO')}`;
+  if (txtSoporte) txtSoporte.textContent = `${simState.soporte} %`;
+  if (txtVisitas) txtVisitas.textContent = simState.visitas.toLocaleString('es-CO');
 
-  kpiVentas.textContent = `$${simState.ventas.toLocaleString('es-CO')}`;
-  kpiRoas.textContent = `ROAS: ${simState.roas}x`;
-  kpiClientes.textContent = simState.clientes;
-  kpiTasaConv.textContent = `CR: ${simState.tasaConv.toFixed(2)}%`;
-  kpiCpa.textContent = `$${simState.cpa.toFixed(2)}`;
-  kpiCsat.textContent = `${simState.csat.toFixed(1)} / 10`;
-  kpiMargen.textContent = `$${simState.margen.toFixed(2)}`;
-  kpiRatio.textContent = simState.ratio;
+  if (kpiVentas) kpiVentas.textContent = `$${simState.ventas.toLocaleString('es-CO')}`;
+  if (kpiRoas) kpiRoas.textContent = `ROAS: ${simState.roas}x`;
+  if (kpiClientes) kpiClientes.textContent = simState.clientes;
+  if (kpiTasaConv) kpiTasaConv.textContent = `CR: ${simState.tasaConv.toFixed(2)}%`;
+  if (kpiCpa) kpiCpa.textContent = `$${simState.cpa.toFixed(2)}`;
+  if (kpiCsat) kpiCsat.textContent = `${simState.csat.toFixed(1)} / 10`;
+  if (kpiMargen) kpiMargen.textContent = `$${simState.margen.toFixed(2)}`;
+  if (kpiRatio) kpiRatio.textContent = simState.ratio;
 
-  lblMiniMargen.textContent = `$${simState.margen.toFixed(2)} USD`;
-  lblMiniCX.textContent = `$${simState.gastoCX} USD`;
-  lblMiniPauta.textContent = `$${simState.pautaNeta} USD`;
+  if (lblMiniMargen) lblMiniMargen.textContent = `$${simState.margen.toFixed(2)} USD`;
+  if (lblMiniCX) lblMiniCX.textContent = `$${simState.gastoCX} USD`;
+  if (lblMiniPauta) lblMiniPauta.textContent = `$${simState.pautaNeta} USD`;
 
-  if (simState.csat >= 8.5) {
-    kpiCsatStatus.textContent = 'Excelente (Óptimo)';
-    kpiCsatStatus.className = 'text-[9px] text-emerald-400 font-semibold';
-    kpiCsat.className = 'text-base font-black text-emerald-400 mt-0.5';
-  } else if (simState.csat >= 6.5) {
-    kpiCsatStatus.textContent = 'Aceptable';
-    kpiCsatStatus.className = 'text-[9px] text-amber-400 font-semibold';
-    kpiCsat.className = 'text-base font-black text-amber-400 mt-0.5';
-  } else {
-    kpiCsatStatus.textContent = '¡Alerta de Colapso!';
-    kpiCsatStatus.className = 'text-[9px] text-rose-400 font-semibold animate-pulse';
-    kpiCsat.className = 'text-base font-black text-rose-400 mt-0.5';
+  if (kpiCsatStatus) {
+    if (simState.csat >= 8.5) {
+      kpiCsatStatus.textContent = 'Excelente (Óptimo)';
+      kpiCsatStatus.className = 'text-[9px] text-emerald-400 font-semibold';
+      if (kpiCsat) kpiCsat.className = 'text-base font-black text-emerald-400 mt-0.5';
+    } else if (simState.csat >= 6.5) {
+      kpiCsatStatus.textContent = 'Aceptable';
+      kpiCsatStatus.className = 'text-[9px] text-amber-400 font-semibold';
+      if (kpiCsat) kpiCsat.className = 'text-base font-black text-amber-400 mt-0.5';
+    } else {
+      kpiCsatStatus.textContent = '¡Alerta de Colapso!';
+      kpiCsatStatus.className = 'text-[9px] text-rose-400 font-semibold animate-pulse';
+      if (kpiCsat) kpiCsat.className = 'text-base font-black text-rose-400 mt-0.5';
+    }
   }
 
   actualizarDiagnostico();
@@ -200,6 +202,7 @@ function actualizarUI() {
 }
 
 function actualizarDiagnostico() {
+  if (!boxDiagnostico) return;
   let badge = 'EQUILIBRIO SALUDABLE';
   let badgeClase = 'badge-exito';
   let html = '';
@@ -237,8 +240,10 @@ function actualizarDiagnostico() {
     `;
   }
 
-  badgeEstado.textContent = badge;
-  badgeEstado.className = `text-xs px-2.5 py-1 rounded-md font-extrabold border ${badgeClase}`;
+  if (badgeEstado) {
+    badgeEstado.textContent = badge;
+    badgeEstado.className = `text-xs px-2.5 py-1 rounded-md font-extrabold border ${badgeClase}`;
+  }
   boxDiagnostico.innerHTML = html;
 }
 
@@ -522,7 +527,8 @@ function cargarEscenarioCanónico(id) {
 }
 
 function actualizarInterpretacionGrafica() {
-  const isMarte = (currentTheme === 'marte');
+  if (!boxInterpretacion) return;
+  const isMarte = (currentTheme === 'marte' || currentTheme === 'dark');
   const tagColor = isMarte ? 'text-[#FF9E4A]' : 'text-[#00F0FF]';
   const colorNeonNombre = isMarte ? 'Naranja Neón Marciano' : 'Cyan Neón Eléctrico';
   let html = '';
@@ -772,7 +778,7 @@ function actualizarInterpretacionGrafica() {
       break;
   }
 
-  boxInterpretacion.innerHTML = html;
+  if (boxInterpretacion) boxInterpretacion.innerHTML = html;
 }
 
 function cambiarTab(num) {
@@ -1332,6 +1338,7 @@ const thresholdPlugin = {
 
 function renderizarGraficaActiva() {
   const canvas = document.getElementById('lienzo-grafico');
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
   initThresholdCanvasListener(canvas);
   if (chartInstance) chartInstance.destroy();
