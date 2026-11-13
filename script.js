@@ -40,6 +40,7 @@ let simState = {
 let tabActiva = 1;
 // Tema persistido o por defecto oscuro
 let currentTheme = localStorage.getItem('sim_theme') || 'dark';
+var isMarte = (currentTheme === 'marte' || currentTheme === 'dark');
 let chartInstance = null;
 let presetOrigen = 'recomendado';
 
@@ -89,6 +90,7 @@ const themeLabel = document.getElementById('theme-label');
 // ==========================================================================
 function aplicarTema(tema) {
   currentTheme = tema;
+  isMarte = (tema === 'marte' || tema === 'dark');
   localStorage.setItem('sim_theme', tema);
 
   const mobIcon = document.querySelector('.theme-icon-mob');
@@ -206,9 +208,9 @@ function actualizarDiagnostico() {
     badge = 'PELIGRO: CRISIS TIPO FEBRERO';
     badgeClase = 'badge-alerta';
     html = `
-      <p class="text-rose-400 font-bold text-sm md:text-base">⚠️ Estás repitiendo la crisis de febrero de 2026.</p>
-      <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">Captaste <strong>${simState.clientes} clientes</strong> pero solo dejaste un <strong>${simState.soporte}% en soporte</strong>. El CPA parece barato ($${simState.cpa.toFixed(2)}), pero la satisfacción cayó a <strong>${simState.csat.toFixed(1)}/10</strong>. Los clientes no volverán a comprar repuestos ni misiones.</p>
-      <div class="p-2 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300 text-xs md:text-sm font-bold">
+      <p class="text-rose-400 font-bold text-xs font-bold">⚠️ Estás repitiendo la crisis de febrero de 2026.</p>
+      <p class="text-slate-200 text-xs leading-normal">Captaste <strong>${simState.clientes} clientes</strong> pero solo dejaste un <strong>${simState.soporte}% en soporte</strong>. El CPA parece barato ($${simState.cpa.toFixed(2)}), pero la satisfacción cayó a <strong>${simState.csat.toFixed(1)}/10</strong>. Los clientes no volverán a comprar repuestos ni misiones.</p>
+      <div class="p-2 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300 text-xs font-bold">
         <strong>Solución:</strong> Sube la palanca de soporte a mínimo 12-15%.
       </div>
     `;
@@ -216,22 +218,22 @@ function actualizarDiagnostico() {
     badge = 'ALERTA: RENDIMIENTOS DECRECIENTES';
     badgeClase = 'badge-advertencia';
     html = `
-      <p class="text-amber-400 font-bold text-sm md:text-base">⚠️ Saturación publicitaria en curso (Efecto Mayo).</p>
-      <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">El CPA subió a <strong>$${simState.cpa.toFixed(2)} USD</strong>. Estás pagando una prima muy alta por atraer tráfico frío a la misión.</p>
+      <p class="text-amber-400 font-bold text-xs font-bold">⚠️ Saturación publicitaria en curso (Efecto Mayo).</p>
+      <p class="text-slate-200 text-xs leading-normal">El CPA subió a <strong>$${simState.cpa.toFixed(2)} USD</strong>. Estás pagando una prima muy alta por atraer tráfico frío a la misión.</p>
     `;
   } else if (simState.csat >= 8.8 && simState.cpa <= 41.0) {
     badge = 'EXCELENCIA ESTRATÉGICA (TIPO ABRIL)';
     badgeClase = 'badge-exito';
     html = `
-      <p class="text-emerald-400 font-bold text-sm md:text-base">⭐ Punto de Oro Gerencial.</p>
-      <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">Con <strong>${simState.soporte}% en soporte</strong> mantienes la satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong> y el margen limpio en <strong>$${simState.margen.toFixed(2)} USD</strong> por vehículo. Es la propuesta a defender en el ACA.</p>
+      <p class="text-emerald-400 font-bold text-xs font-bold">⭐ Punto de Oro Gerencial.</p>
+      <p class="text-slate-200 text-xs leading-normal">Con <strong>${simState.soporte}% en soporte</strong> mantienes la satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong> y el margen limpio en <strong>$${simState.margen.toFixed(2)} USD</strong> por vehículo. Es la propuesta a defender en el ACA.</p>
     `;
   } else {
     badge = 'ZONA ESTABLE DE CONTROL';
     badgeClase = 'badge-advertencia';
     html = `
-      <p class="text-slate-200 font-bold text-sm md:text-base">ℹ️ Operación en rango aceptable.</p>
-      <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">Margen de <strong>$${simState.margen.toFixed(2)} USD</strong> y satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong>. Se puede optimizar aumentando el cuidado de los clientes.</p>
+      <p class="text-slate-200 font-bold text-xs font-bold">ℹ️ Operación en rango aceptable.</p>
+      <p class="text-slate-200 text-xs leading-normal">Margen de <strong>$${simState.margen.toFixed(2)} USD</strong> y satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong>. Se puede optimizar aumentando el cuidado de los clientes.</p>
     `;
   }
 
@@ -264,7 +266,7 @@ function actualizarExplicacionEscenarios() {
           <span>🟡 Escenario 4: Saturación de Pauta ($4.500 USD | 0% CX | 1.900 Visitas)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">Saturación Crítica</span>
         </p>
-        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
+        <p class="text-slate-200 text-xs leading-normal">
           <strong>Diagnóstico Directivo:</strong> Arquetipo de <strong>rendimientos decrecientes extremos y colapso dual</strong>. 
           Al forzar la inversión a $4.500 USD con 0% en soporte y 1.900 visitas, el tráfico frío se dispersa, el <strong>CPA sube a $${simState.cpa.toFixed(2)} USD</strong> y la avalancha de ${simState.clientes} clientes sin servicio técnico hunde el <strong>CSAT a un crítico ${simState.csat.toFixed(1)}/10 (Zona Roja)</strong>. 
           Prueba contundente de que inyectar más presupuesto a tráfico frío sin soporte acelera la quiebra del modelo.
@@ -284,7 +286,7 @@ function actualizarExplicacionEscenarios() {
           <span>🔵 Enero (Línea Base Histórica)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">Calibración Inicial</span>
         </p>
-        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
+        <p class="text-slate-200 text-xs leading-normal">
           <strong>Significado Real:</strong> Punto de partida empírico de Ares Rover Dynamics en Marte. Inversión inicial moderada de $2.200 USD con 8% en soporte ($176 USD) y 1.100 visitas, manteniendo una operación equilibrada: <strong>CSAT de 7.5/10</strong> y <strong>CPA de $40.00 USD</strong> antes de experimentar el estrés del escalamiento comercial.
         </p>
       </div>
@@ -302,7 +304,7 @@ function actualizarExplicacionEscenarios() {
           <span>🔴 Febrero (Crisis Operativa por Pauta Ciega - 0% CX)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800">Crisis Febrero</span>
         </p>
-        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
+        <p class="text-slate-200 text-xs leading-normal">
           <strong>Significado Real:</strong> El error directivo de canalizar el 100% del presupuesto ($3.300 USD) a captación publicitaria sin asignar $1 a posventa. Se captaron 85 clientes (1.650 visitas), pero el colapso del taller técnico hundió la satisfacción al nivel más bajo del semestre: <strong>CSAT de 4.2/10 (Zona Roja)</strong>. Evidencia empírica de que captar sin cuidar destruye el valor de vida del cliente.
         </p>
       </div>
@@ -320,7 +322,7 @@ function actualizarExplicacionEscenarios() {
           <span>⭐ Abril (Mes de Oro - Equilibrio Virtuoso)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Récord de Calidad</span>
         </p>
-        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
+        <p class="text-slate-200 text-xs leading-normal">
           <strong>Significado Real:</strong> El mes de mayor excelencia operativa y eficiencia histórica. Con $3.100 USD y un 16% reasignado a soporte posventa ($496 USD), los ingenieros garantizaron alistamiento óptimo de cada Rover, logrando el <strong>récord histórico de CSAT en 9.4/10</strong>, CPA de <strong>$39.74 USD</strong> y Ratio Maestro supremo de <strong>0.2365 pts/USD</strong>.
         </p>
       </div>
@@ -338,7 +340,7 @@ function actualizarExplicacionEscenarios() {
           <span>📈 Mayo (Saturación y Rendimientos Decrecientes)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">Efecto Mayo</span>
         </p>
-        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
+        <p class="text-slate-200 text-xs leading-normal">
           <strong>Significado Real:</strong> Demostración de saturación de audiencias marcianas. Al subir la pauta a $3.900 USD con solo 8% a soporte, el tráfico frío se dispersó y el <strong>CPA se disparó a $42.39 USD (Zona Roja > $42)</strong>. Aunque se captaron 92 clientes, cada adquisición marginal fue sustancialmente más costosa, comprobando la ley de rendimientos decrecientes.
         </p>
       </div>
@@ -356,7 +358,7 @@ function actualizarExplicacionEscenarios() {
           <span>🟢 Escenario 2: Estrategia SIM / Equilibrio Óptimo (15% CX = $600 USD)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Plan Junio Recomendado</span>
         </p>
-        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
+        <p class="text-slate-200 text-xs leading-normal">
           <strong>Diagnóstico Directivo:</strong> La propuesta canónica del Sistema de Información de Marketing para el Plan Junio ($4.000 USD). Reasigna $600 USD (15%) a posventa y $3.400 USD a pauta neta, logrando <strong>CSAT blindado en Zona Verde (${simState.csat.toFixed(1)}/10 &gt; 9.0)</strong>, CPA optimizado de <strong>$${simState.cpa.toFixed(2)} USD</strong> y <strong>margen limpio de $${simState.margen.toFixed(2)} USD</strong> por unidad.
         </p>
       </div>
@@ -374,7 +376,7 @@ function actualizarExplicacionEscenarios() {
           <span>🔵 Escenario 3: Hiper-Fidelización / Blindaje Total (20-30% CX)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">Lealtad VIP</span>
         </p>
-        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
+        <p class="text-slate-200 text-xs leading-normal">
           <strong>Diagnóstico Directivo:</strong> Arquetipo de máxima lealtad y retención acumulada (&gt; 113%). Al destinar $${simState.gastoCX} USD (${simState.soporte}%) a posventa, el equipo técnico brinda atención personalizada y mantenimiento preventivo continuo, elevando el <strong>CSAT a ${simState.csat.toFixed(1)}/10</strong> y asegurando recompra garantizada de contratos en Marte.
         </p>
       </div>
@@ -391,7 +393,7 @@ function actualizarExplicacionEscenarios() {
           <span>🚀 Expansión Agresiva de Mercado ($5.200 USD | 2% CX)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">Alto Riesgo</span>
         </p>
-        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
+        <p class="text-slate-200 text-xs leading-normal">
           <strong>Diagnóstico Directivo:</strong> Gran volumen bruto de ventas (${simState.clientes} unidades), pero con sobrecosto publicitario por saturación y grave riesgo de deterioro de CSAT (${simState.csat.toFixed(1)}/10) por cuello de botella técnico.
         </p>
       </div>
@@ -408,7 +410,7 @@ function actualizarExplicacionEscenarios() {
           <span>🔴 Escenario 1: Status Quo / Pauta Ciega (0% CX)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800">Crisis Febrero</span>
         </p>
-        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
+        <p class="text-slate-200 text-xs leading-normal">
           <strong>Diagnóstico:</strong> El 100% del presupuesto ($${simState.gasto.toLocaleString()} USD) se consume en anuncios sin soporte postventa. 
           Desencadena saturación técnica y colapso del <strong>CSAT en Zona Roja (${simState.csat.toFixed(1)}/10)</strong>.
         </p>
@@ -425,7 +427,7 @@ function actualizarExplicacionEscenarios() {
           <span>🟡 Escenario 4: Saturación de Audiencias (&gt; $3.900 USD)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">Efecto Mayo</span>
         </p>
-        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
+        <p class="text-slate-200 text-xs leading-normal">
           <strong>Diagnóstico:</strong> Entrada en la ley de rendimientos decrecientes. Al forzar la inversión con tráfico frío, el <strong>CPA se eleva a $${simState.cpa.toFixed(2)} USD</strong>.
         </p>
       </div>
@@ -441,7 +443,7 @@ function actualizarExplicacionEscenarios() {
           <span>🟢 Escenario 2: Estrategia SIM / Equilibrio Óptimo (15% CX)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Punto de Oro</span>
         </p>
-        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
+        <p class="text-slate-200 text-xs leading-normal">
           <strong>Diagnóstico:</strong> CSAT blindado en Zona Verde (${simState.csat.toFixed(1)}/10), CPA optimizado en $${simState.cpa.toFixed(2)} USD y margen limpio de $${simState.margen.toFixed(2)} USD.
         </p>
       </div>
@@ -453,7 +455,7 @@ function actualizarExplicacionEscenarios() {
     contenido = `
       <div class="space-y-1">
         <p class="font-bold text-slate-200">ℹ️ Configuración Paramétrica Intermedia</p>
-        <p class="text-slate-200 text-sm md:text-[14.5px] leading-relaxed">
+        <p class="text-slate-200 text-xs leading-normal">
           Inversión de $${simState.gasto.toLocaleString()} USD con $${simState.gastoCX} USD a CX (${simState.soporte}%) y $${simState.pautaNeta.toLocaleString()} USD a pauta. 
           CSAT: <strong>${simState.csat.toFixed(1)}/10</strong>, CPA: <strong>$${simState.cpa.toFixed(2)} USD</strong> y Margen: <strong>$${simState.margen.toFixed(2)} USD</strong>.
         </p>
@@ -531,9 +533,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 1: El Dilema Central (CPA vs CSAT)</strong>
+            <strong class="${tagColor} text-xs font-bold uppercase font-black tracking-wide">Gráfica 1: El Dilema Central (CPA vs CSAT)</strong>
           </div>
-          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
+          <div class="text-xs space-y-1 text-slate-200 leading-normal">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Costo de Adquisición (CPA) en dólares ($30 a $48 USD). <em>Hacia la izquierda es más barato, hacia la derecha es más caro.</em></li>
@@ -555,9 +557,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 2: La Trampa de la Ecuación de Satisfacción</strong>
+            <strong class="${tagColor} text-xs font-bold uppercase font-black tracking-wide">Gráfica 2: La Trampa de la Ecuación de Satisfacción</strong>
           </div>
-          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
+          <div class="text-xs space-y-1 text-slate-200 leading-normal">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Los meses analizados (Enero a Mayo + Columna de Simulación).</li>
@@ -580,9 +582,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 3: La Trampa de la Ecuación de Retención (>100 %)</strong>
+            <strong class="${tagColor} text-xs font-bold uppercase font-black tracking-wide">Gráfica 3: La Trampa de la Ecuación de Retención (>100 %)</strong>
           </div>
-          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
+          <div class="text-xs space-y-1 text-slate-200 leading-normal">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses de operación comercial.</li>
@@ -604,9 +606,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 4: Ley de Rendimientos Decrecientes en Pauta</strong>
+            <strong class="${tagColor} text-xs font-bold uppercase font-black tracking-wide">Gráfica 4: Ley de Rendimientos Decrecientes en Pauta</strong>
           </div>
-          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
+          <div class="text-xs space-y-1 text-slate-200 leading-normal">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Cronología de meses.</li>
@@ -629,9 +631,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 5: Dinámica del Embudo de Conversión (Visitas vs Compras)</strong>
+            <strong class="${tagColor} text-xs font-bold uppercase font-black tracking-wide">Gráfica 5: Dinámica del Embudo de Conversión (Visitas vs Compras)</strong>
           </div>
-          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
+          <div class="text-xs space-y-1 text-slate-200 leading-normal">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses evaluados.</li>
@@ -654,9 +656,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 6: Economía Unitaria y Margen Limpio por Rover</strong>
+            <strong class="${tagColor} text-xs font-bold uppercase font-black tracking-wide">Gráfica 6: Economía Unitaria y Margen Limpio por Rover</strong>
           </div>
-          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
+          <div class="text-xs space-y-1 text-slate-200 leading-normal">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje Y (Vertical):</strong> Las 3 variables clave: Precio de venta, Costo de adquisición (CPA) y Ganancia limpia.</li>
@@ -678,9 +680,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 7: El Ratio Maestro (CSAT / CPA)</strong>
+            <strong class="${tagColor} text-xs font-bold uppercase font-black tracking-wide">Gráfica 7: El Ratio Maestro (CSAT / CPA)</strong>
           </div>
-          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
+          <div class="text-xs space-y-1 text-slate-200 leading-normal">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses evaluados.</li>
@@ -702,9 +704,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 8: Correlación Causal de Crecimiento (Ventas vs Gasto y ROAS)</strong>
+            <strong class="${tagColor} text-xs font-bold uppercase font-black tracking-wide">Gráfica 8: Correlación Causal de Crecimiento (Ventas vs Gasto y ROAS)</strong>
           </div>
-          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
+          <div class="text-xs space-y-1 text-slate-200 leading-normal">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses de facturación.</li>
@@ -726,9 +728,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 9: Evolución de Cartera Total de la Misión</strong>
+            <strong class="${tagColor} text-xs font-bold uppercase font-black tracking-wide">Gráfica 9: Evolución de Cartera Total de la Misión</strong>
           </div>
-          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
+          <div class="text-xs space-y-1 text-slate-200 leading-normal">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses de acumulación de clientes.</li>
@@ -750,9 +752,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 10: La Decisión Estratégica Directiva (Reasignación del 15 %)</strong>
+            <strong class="${tagColor} text-xs font-bold uppercase font-black tracking-wide">Gráfica 10: La Decisión Estratégica Directiva (Reasignación del 15 %)</strong>
           </div>
-          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
+          <div class="text-xs space-y-1 text-slate-200 leading-normal">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Dos escenarios comparados: Estrategia Actual (Gasto ciego) vs Estrategia Optimizada SIM.</li>
@@ -946,7 +948,7 @@ const thresholdPlugin = {
     ctx.save();
 
     function drawHLine(yScale, val, label, color, options = {}) {
-      if (!yScale) return;
+      if (!yScale || typeof yScale.getPixelForValue !== 'function') return;
       const yPx = yScale.getPixelForValue(val);
       if (yPx < top - 2 || yPx > bottom + 2) return;
 
@@ -960,6 +962,7 @@ const thresholdPlugin = {
       const thresholdId = `H_${yScale.id}_${val}_${label}`;
       const isHovered = hoveredThreshold && hoveredThreshold.id === thresholdId;
       const isLight = (currentTheme === 'light');
+  const isMarte = (currentTheme === 'marte' || currentTheme === 'dark');
 
       // 1. Línea punteada horizontal limpia
       ctx.beginPath();
@@ -1039,7 +1042,7 @@ const thresholdPlugin = {
     }
 
     function drawVLine(xScale, val, label, color, options = {}) {
-      if (!xScale) return;
+      if (!xScale || typeof xScale.getPixelForValue !== 'function') return;
       const xPx = xScale.getPixelForValue(val);
       if (xPx < left - 2 || xPx > right + 2) return;
 
@@ -1053,6 +1056,7 @@ const thresholdPlugin = {
       const thresholdId = `V_${xScale.id}_${val}_${label}`;
       const isHovered = hoveredThreshold && hoveredThreshold.id === thresholdId;
       const isLight = (currentTheme === 'light');
+  const isMarte = (currentTheme === 'marte' || currentTheme === 'dark');
 
       // 1. Línea punteada vertical
       ctx.beginPath();
@@ -1333,6 +1337,7 @@ function renderizarGraficaActiva() {
   if (chartInstance) chartInstance.destroy();
 
   const isLight = (currentTheme === 'light');
+  const isMarte = (currentTheme === 'marte' || currentTheme === 'dark');
 
   // Colores dinámicos adaptados a modo claro / modo oscuro
   const colorSimulacion = isLight ? '#EA580C' : '#FF6B00';
@@ -1803,24 +1808,86 @@ window.addEventListener('load', () => {
 
 
 // ==========================================================================
-// GUÍA DE USO DE INICIO E INDUCCIÓN GERENCIAL (TOUR GUIADO INTERACTIVO)
+// GUÍA DE USO DE INICIO E INDUCCIÓN GERENCIAL (TOUR GUIADO INTERACTIVO - 7 PASOS)
 // ==========================================================================
+function seleccionarModoDesdeTour(tema) {
+  aplicarTema(tema);
+  actualizarCardsTourTheme();
+}
+
+function actualizarCardsTourTheme() {
+  const optDark = document.getElementById('tour-opt-dark');
+  const optLight = document.getElementById('tour-opt-light');
+  const badgeDark = document.getElementById('tour-badge-dark');
+  const badgeLight = document.getElementById('tour-badge-light');
+  
+  const isLight = (currentTheme === 'light');
+  
+  if (optDark && optLight && badgeDark && badgeLight) {
+    if (isLight) {
+      optLight.className = "tour-theme-opt p-3 rounded-xl border-2 transition-all flex flex-col items-center text-center gap-1 cursor-pointer bg-orange-50 border-orange-600 ring-2 ring-orange-400 shadow-md";
+      badgeLight.className = "mt-1 text-[10px] uppercase font-black px-2 py-0.5 rounded-full bg-orange-600 text-white block";
+      badgeLight.textContent = "Activo ✓";
+      
+      optDark.className = "tour-theme-opt p-3 rounded-xl border-2 transition-all flex flex-col items-center text-center gap-1 cursor-pointer bg-slate-800 border-slate-700 text-slate-300 hover:border-slate-500 opacity-60";
+      badgeDark.className = "mt-1 text-[10px] uppercase font-black px-2 py-0.5 rounded-full hidden bg-slate-700 text-slate-400";
+      badgeDark.textContent = "Elegir";
+    } else {
+      optDark.className = "tour-theme-opt p-3 rounded-xl border-2 transition-all flex flex-col items-center text-center gap-1 cursor-pointer bg-[#2A0E13] border-orange-500 ring-2 ring-orange-500/50 shadow-md shadow-orange-500/30";
+      badgeDark.className = "mt-1 text-[10px] uppercase font-black px-2 py-0.5 rounded-full bg-orange-500/30 text-orange-300 border border-orange-500/50 block";
+      badgeDark.textContent = "Activo ✓";
+      
+      optLight.className = "tour-theme-opt p-3 rounded-xl border-2 transition-all flex flex-col items-center text-center gap-1 cursor-pointer bg-slate-800 border-slate-700 text-slate-300 opacity-60 hover:opacity-90";
+      badgeLight.className = "mt-1 text-[10px] uppercase font-black px-2 py-0.5 rounded-full hidden bg-slate-800 text-white";
+      badgeLight.textContent = "Elegir";
+    }
+  }
+}
+
 const tourPasos = [
   {
-    titulo: "1. Misión Ejecutiva: Flota Corporativa en Marte",
+    titulo: "1. Experiencia Visual: Seleccione su Modo de Trabajo",
     targetId: null,
     contenido: `
-      <p class="font-bold text-orange-400">Bienvenido al Simulador de Información de Marketing (SIM), Señor Gerente General.</p>
-      <p>Usted lidera la dirección de <strong>Ares Rover Dynamics</strong>. A mayo de 2026, la empresa cuenta con una <strong>base acumulada de 1.792 contratos corporativos de rovers</strong> operando en Marte (1.700 contratos vigentes de meses anteriores + 92 nuevos clientes adquiridos).</p>
-      <p>El desafío directivo no es captar rovers a ciegas, sino <strong>equilibrar la pauta publicitaria con la capacidad operativa de los talleres mecánicos posventa</strong> para evitar cancelaciones masivas y maximizar el margen neto.</p>
+      <p class="font-bold text-orange-400 text-xs">Personalice su entorno de comando directivo:</p>
+      <p class="text-xs">Para comenzar la simulación de <strong>Ares Rover Dynamics</strong>, elija la paleta visual de su preferencia. El simulador adaptará todos los contrastes, textos y gráficas en tiempo real:</p>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 my-2">
+        <!-- Opción Modo Oscuro -->
+        <div onclick="seleccionarModoDesdeTour('dark')" id="tour-opt-dark" class="tour-theme-opt p-3 rounded-xl border-2 transition-all flex flex-col items-center text-center gap-1 cursor-pointer bg-[#2A0E13] border-orange-500 ring-2 ring-orange-500/50 shadow-md shadow-orange-500/30">
+          <span class="text-2xl">🌙</span>
+          <span class="font-extrabold text-xs text-orange-200">Modo Oscuro (Marte)</span>
+          <span class="text-[11px] text-slate-300 leading-tight">Entorno inmersivo espacial de baja fatiga visual. Recomendado para trabajo extendido.</span>
+          <span id="tour-badge-dark" class="mt-1 text-[10px] uppercase font-black px-2 py-0.5 rounded-full bg-orange-500/30 text-orange-300 border border-orange-500/50">Activo ✓</span>
+        </div>
+
+        <!-- Opción Modo Claro -->
+        <div onclick="seleccionarModoDesdeTour('light')" id="tour-opt-light" class="tour-theme-opt p-3 rounded-xl border-2 transition-all flex flex-col items-center text-center gap-1 cursor-pointer bg-slate-800 border-slate-700 text-slate-300 opacity-60 hover:opacity-90">
+          <span class="text-2xl">☀️</span>
+          <span class="font-extrabold text-xs text-slate-100">Modo Claro (Corporativo)</span>
+          <span class="text-[11px] text-slate-300 leading-tight">Fondo blanco pulcro y alto contraste ejecutivo para juntas directivas e informes.</span>
+          <span id="tour-badge-light" class="mt-1 text-[10px] uppercase font-black px-2 py-0.5 rounded-full hidden bg-slate-800 text-white">Elegir</span>
+        </div>
+      </div>
+
+      <p class="text-[11px] text-slate-400 italic">💡 Podrá alternar este modo en cualquier momento con el botón «☀️/🌙 Modo» en la barra superior.</p>
     `
   },
   {
-    titulo: "2. Palancas Estratégicas de Decisión (Controles)",
+    titulo: "2. Misión Ejecutiva: Flota Corporativa en Marte",
+    targetId: null,
+    contenido: `
+      <p class="font-bold text-orange-400 text-xs">Bienvenido al Simulador de Información de Marketing (SIM), Señor Gerente General.</p>
+      <p class="text-xs">Usted lidera la dirección de <strong>Ares Rover Dynamics</strong>. A mayo de 2026, la empresa cuenta con una <strong>base acumulada de 1.792 contratos corporativos de rovers</strong> operando en Marte (1.700 contratos vigentes de meses anteriores + 92 nuevos clientes adquiridos).</p>
+      <p class="text-xs">El desafío directivo no es captar rovers a ciegas, sino <strong>equilibrar la pauta publicitaria con la capacidad operativa de los talleres mecánicos posventa</strong> para evitar cancelaciones masivas y maximizar el margen neto.</p>
+    `
+  },
+  {
+    titulo: "3. Palancas Estratégicas de Decisión (Controles)",
     targetId: "tour-palancas",
     contenido: `
-      <p>En este cuadrante usted comanda las <strong>3 variables maestras</strong> de la estrategia empresarial:</p>
-      <ul class="list-disc list-inside space-y-1 text-slate-300">
+      <p class="text-xs">En este cuadrante usted comanda las <strong>3 variables maestras</strong> de la estrategia empresarial:</p>
+      <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs">
         <li><strong>Presupuesto de Marketing ($ USD):</strong> Inversión total mensual asignada.</li>
         <li><strong>Soporte Posventa / CX (%):</strong> Porcentaje del presupuesto reservado para ingenieros y repuestos en talleres marcianos.</li>
         <li><strong>Visitas Estimadas:</strong> Volumen de tráfico proyectado en el portal corporativo.</li>
@@ -1829,10 +1896,10 @@ const tourPasos = [
     `
   },
   {
-    titulo: "3. Laboratorio de Escenarios Históricos",
+    titulo: "4. Laboratorio de Escenarios Históricos",
     targetId: "tour-escenarios-panel",
     contenido: `
-      <p>Evalúe su propuesta frente a los hitos reales auditados durante el primer semestre de 2026:</p>
+      <p class="text-xs">Evalúe su propuesta frente a los hitos reales auditados durante el primer semestre de 2026:</p>
       <div class="grid grid-cols-2 gap-2 text-xs my-2">
         <div class="p-2 rounded bg-slate-800/80 border border-slate-700">
           <span class="text-rose-400 font-bold">⚠️ Febrero 2026:</span>
@@ -1847,11 +1914,11 @@ const tourPasos = [
     `
   },
   {
-    titulo: "4. Tablero de Control Directivo (KPIs)",
+    titulo: "5. Tablero de Control Directivo (KPIs)",
     targetId: "tour-kpis",
     contenido: `
-      <p>Monitoreo continuo de los 6 indicadores vitales para la Junta Directiva:</p>
-      <ul class="list-disc list-inside space-y-1 text-slate-300">
+      <p class="text-xs">Monitoreo continuo de los 6 indicadores vitales para la Junta Directiva:</p>
+      <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs">
         <li><strong>Ventas Totales & ROAS:</strong> Facturación estimada y retorno bruto de inversión.</li>
         <li><strong>Nuevos Clientes & Tasa CR:</strong> Eficiencia de transformación en embudo.</li>
         <li><strong>CPA (Costo por Adquisición):</strong> Semáforo de eficiencia en captación.</li>
@@ -1860,21 +1927,21 @@ const tourPasos = [
     `
   },
   {
-    titulo: "5. Analítica Visual de 10 Gráficas con Umbrales",
+    titulo: "6. Analítica Visual de 10 Gráficas con Umbrales",
     targetId: "tour-graficas",
     contenido: `
-      <p>Navegue a través de las <strong>10 perspectivas analíticas</strong> del SIM para fundamentar sus decisiones.</p>
-      <p><strong>Novedad Interactiva:</strong> Cada gráfica incorpora líneas de umbral gerencial (Meta CSAT, Alerta Crítica, Break-Even, etc.).</p>
+      <p class="text-xs">Navegue a través de las <strong>10 perspectivas analíticas</strong> del SIM para fundamentar sus decisiones.</p>
+      <p class="text-xs"><strong>Novedad Interactiva:</strong> Cada gráfica incorpora líneas de umbral gerencial (Meta CSAT, Alerta Crítica, Break-Even, etc.).</p>
       <p class="text-emerald-400 font-bold text-xs mt-1">👉 Pase el cursor sobre cualquiera de las pastillas de umbral para abrir la justificación estratégica detallada.</p>
     `
   },
   {
-    titulo: "6. Auditoría de Fórmulas y Modo Visual",
+    titulo: "7. Auditoría de Fórmulas y Cierre",
     targetId: "btn-theme-toggle",
     contenido: `
-      <p>Para su comodidad ejecutiva, puede alternar en cualquier momento entre el <strong>Modo Oscuro (espacial Marte)</strong> y el <strong>Modo Claro (informe corporativo blanco)</strong> con el botón superior.</p>
-      <p>Además, el botón <strong>«Fórmulas Matemáticas»</strong> le despliega la memoria de cálculo completa auditada en LaTeX con sus 5 fuentes bibliográficas del ACA.</p>
-      <p class="text-orange-400 font-bold mt-2">¡Listo para comenzar! Explore el simulador y tome el control de Ares Rover Dynamics.</p>
+      <p class="text-xs">El botón <strong>«Fórmulas Matemáticas»</strong> le despliega la memoria de cálculo completa auditada en LaTeX con sus 5 fuentes bibliográficas del ACA.</p>
+      <p class="text-xs">Además, recuerde que puede alternar en cualquier momento entre el <strong>Modo Oscuro</strong> y el <strong>Modo Claro</strong> con el botón superior.</p>
+      <p class="text-orange-400 font-bold text-xs mt-2">¡Listo para comenzar! Explore el simulador y tome el control de Ares Rover Dynamics.</p>
     `
   }
 ];
@@ -1913,6 +1980,10 @@ function mostrarPasoTour(index) {
   const btnNextText = document.getElementById('btn-tour-next-text');
   if (btnNextText) {
     btnNextText.textContent = (index === tourPasos.length - 1) ? 'Finalizar Guía' : 'Siguiente';
+  }
+
+  if (index === 0) {
+    setTimeout(actualizarCardsTourTheme, 20);
   }
 
   // Limpiar spotlights previos

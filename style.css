@@ -831,3 +831,146 @@ body.theme-light .tab-btn:not(.active) {
   color: #1E293B !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
+
+
+/* ==========================================================================
+   HOMOGENIZACIÓN TOTAL DE LOS 3 MÓDULOS LATERALES (ALTURA EXACTA Y LETRA 12PX)
+   ========================================================================== */
+.module-inner-box {
+  background-color: rgba(0, 0, 0, 0.45) !important;
+  border: 1.5px solid rgba(87, 28, 29, 0.75) !important;
+  border-radius: 0.5rem !important;
+  padding: 0.625rem !important;
+  height: 125px !important;
+  max-height: 125px !important;
+  min-height: 125px !important;
+  overflow-y: auto !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  color: #F1F5F9 !important;
+  scrollbar-width: thin;
+}
+.module-inner-box p,
+.module-inner-box li,
+.module-inner-box span,
+.module-inner-box div,
+.module-inner-box strong,
+.module-inner-box b {
+  font-size: 12px !important;
+}
+.module-inner-box strong,
+.module-inner-box b {
+  font-weight: 700 !important;
+}
+
+body.theme-light .module-inner-box {
+  background-color: #FFFFFF !important;
+  border: 1.5px solid #CBD5E1 !important;
+  color: #0F172A !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+body.theme-light .module-inner-box strong,
+body.theme-light .module-inner-box b {
+  color: #0F172A !important;
+}
+body.theme-light .module-inner-box p,
+body.theme-light .module-inner-box li,
+body.theme-light .module-inner-box span,
+body.theme-light .module-inner-box div {
+  color: #1E293B !important;
+}
+
+/* Scrollbar suave en las 3 cajas homogéneas */
+.module-inner-box::-webkit-scrollbar {
+  width: 5px;
+}
+.module-inner-box::-webkit-scrollbar-track {
+  background: transparent;
+}
+body.theme-dark .module-inner-box::-webkit-scrollbar-thumb,
+body.theme-marte .module-inner-box::-webkit-scrollbar-thumb {
+  background: rgba(234, 88, 12, 0.4);
+  border-radius: 4px;
+}
+body.theme-light .module-inner-box::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   ALINEACIÓN SEGURA DE TOOLTIPS EN EXTREMOS (EVITA CORTES EN PANTALLA)
+   ========================================================================== */
+.tooltip-align-left,
+#btn-esc-canon-1 + .tooltip-content,
+#btn-esc-canon-1 ~ .tooltip-content,
+.has-tooltip:first-child .tooltip-content {
+  left: 0 !important;
+  right: auto !important;
+  transform: none !important;
+}
+
+.tooltip-align-right,
+#btn-esc-canon-4 + .tooltip-content,
+#btn-esc-canon-4 ~ .tooltip-content,
+.has-tooltip:last-child .tooltip-content {
+  left: auto !important;
+  right: 0 !important;
+  transform: none !important;
+}
+
+/* ==========================================================================
+   TOUR ONBOARDING EN MODO CLARO: MÁXIMO CONTRASTE GERENCIAL
+   ========================================================================== */
+body.theme-light #tour-card {
+  background-color: #FFFFFF !important;
+  border: 2px solid #EA580C !important;
+  color: #0F172A !important;
+  box-shadow: 0 25px 50px -12px rgba(234, 88, 12, 0.25) !important;
+}
+body.theme-light #tour-card h3 {
+  color: #0F172A !important;
+  font-weight: 800 !important;
+}
+body.theme-light #tour-card p,
+body.theme-light #tour-card li {
+  color: #1E293B !important;
+}
+body.theme-light #tour-card strong {
+  color: #0F172A !important;
+}
+body.theme-light #tour-step-indicator {
+  background-color: #FFEDD5 !important;
+  color: #C2410C !important;
+  border: 1.5px solid #FB923C !important;
+  font-weight: 800 !important;
+}
+body.theme-light #btn-tour-prev {
+  background-color: #E2E8F0 !important;
+  color: #0F172A !important;
+  border: 1.5px solid #CBD5E1 !important;
+  font-weight: 700 !important;
+}
+body.theme-light #btn-tour-prev:hover {
+  background-color: #CBD5E1 !important;
+  color: #000000 !important;
+}
+body.theme-light #tour-card button[onclick="finalizarTour()"] {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+body.theme-light #tour-card button[onclick="finalizarTour()"]:hover {
+  color: #0F172A !important;
+  background-color: #F1F5F9 !important;
+}
+body.theme-light #tour-card button[title="Cerrar Guía"] {
+  color: #64748B !important;
+}
+body.theme-light #tour-card button[title="Cerrar Guía"]:hover {
+  color: #0F172A !important;
+  background-color: #F1F5F9 !important;
+}
+body.theme-light #tour-card .bg-slate-800\/80 {
+  background-color: #F8FAFC !important;
+  border: 1.5px solid #CBD5E1 !important;
+  color: #0F172A !important;
+}

@@ -182,43 +182,45 @@
         </div>
       </section>
 
-      <!-- CARD 2: DICTAMEN DIRECTIVO + EXPLICACIÓN DE ESCENARIOS + INTERPRETACIÓN DE LA GRÁFICA -->
-      <section id="tour-escenarios-panel" class="card-box bg-[#1C0C10]/95 border border-[#571C1D] rounded-xl p-3 flex-1 flex flex-col min-h-0 md:overflow-hidden shadow-lg">
+      <!-- CARD 2: TRES MÓDULOS HOMOGÉNEOS CON ALTURA IDÉNTICA (125PX) Y LETRA A 12PX -->
+      <section id="tour-escenarios-panel" class="card-box bg-[#1C0C10]/95 border border-[#571C1D] rounded-xl p-3 flex-1 flex flex-col gap-2 min-h-0 shadow-lg">
         
-        <!-- Dictamen del Escenario -->
-        <div class="flex items-center justify-between border-b border-[#571C1D]/80 pb-1.5 shrink-0">
-          <span class="text-xs font-black uppercase tracking-wider text-slate-100 flex items-center gap-1">
-            <span>📋</span> Dictamen Directivo
-          </span>
-          <span id="badge-estado" class="text-xs px-2.5 py-0.5 rounded-full font-bold border badge-exito">
-            EQUILIBRIO ÓPTIMO
-          </span>
+        <!-- MÓDULO 1: DICTAMEN DIRECTIVO (ALTURA 125PX, LETRA 12PX) -->
+        <div class="flex flex-col gap-1 shrink-0">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black uppercase tracking-wider text-slate-100 flex items-center gap-1.5">
+              <span>📋</span> Dictamen Directivo
+            </span>
+            <span id="badge-estado" class="text-[11px] px-2.5 py-0.5 rounded-full font-extrabold border badge-exito">
+              EQUILIBRIO SALUDABLE
+            </span>
+          </div>
+          <div id="box-diagnostico" class="module-inner-box space-y-1.5">
+            <!-- Inyectado por JS estrictamente en 12px -->
+          </div>
         </div>
 
-        <div id="box-diagnostico" class="mt-1.5 text-xs md:text-[13px] leading-relaxed space-y-1.5 overflow-y-auto pr-1 shrink-0 max-h-28 md:max-h-32">
-          <!-- Inyectado por JS -->
-        </div>
-
-        <!-- PANEL: EXPLICACIÓN DE ESCENARIOS (DINÁMICO E INTERACTIVO) -->
-        <div class="mt-2 pt-2 border-t border-[#571C1D]/80 shrink-0">
-          <div class="flex items-center justify-between mb-1.5">
-            <span class="text-xs font-black uppercase tracking-wider text-[#FF9E4A] flex items-center gap-1">
+        <!-- MÓDULO 2: EXPLICACIÓN DE ESCENARIOS (ALTURA 125PX, LETRA 12PX + 4 BOTONES CANÓNICOS) -->
+        <div class="flex flex-col gap-1 pt-1.5 border-t border-[#571C1D]/70 shrink-0">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black uppercase tracking-wider text-[#FF9E4A] flex items-center gap-1.5">
               <span>🧭</span> Explicación de Escenarios
             </span>
-            <span id="badge-escenario-activo" class="text-[11px] px-2 py-0.5 rounded-full font-bold border badge-exito">
+            <span id="badge-escenario-activo" class="text-[11px] px-2.5 py-0.5 rounded-full font-extrabold border badge-exito">
               Escenario 2: SIM Óptimo
             </span>
           </div>
-          <div id="box-explicacion-escenarios" class="text-xs md:text-[13px] leading-relaxed p-2.5 rounded-lg bg-black/40 border border-[#571C1D]/60 space-y-1.5 max-h-36 md:max-h-40 overflow-y-auto">
-            <!-- Inyectado dinámicamente por JS -->
+          <div id="box-explicacion-escenarios" class="module-inner-box space-y-1.5">
+            <!-- Inyectado por JS estrictamente en 12px -->
           </div>
-          <!-- Selector rápido de los 4 escenarios clave con acento neón y tooltips directivos -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2 text-xs">
+
+          <!-- Selector rápido de los 4 escenarios clave (100% conservados con pulso neón y tooltips sin corte) -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 mt-1 text-xs">
             <div class="has-tooltip w-full">
               <button onclick="cargarEscenarioCanónico(1)" id="btn-esc-canon-1" class="btn-accent btn-accent-red w-full px-2 py-1.5 text-xs rounded-lg font-bold">
                 <span>⚠️</span> 1. Pauta Ciega
               </button>
-              <div class="tooltip-content text-xs">
+              <div class="tooltip-content text-xs tooltip-align-left">
                 <strong class="text-rose-400">Escenario 1: Crisis de Febrero (Pauta Ciega)</strong><br>
                 <span class="text-slate-200">Gasto: $3.300 USD | Soporte CX: 0% | Visitas: 1.650</span><br>
                 <span class="text-slate-300">CPA bajo ($38.82) pero satisfacción colapsada a <strong>4.2 / 10</strong> por talleres mecánicos saturados.</span>
@@ -251,7 +253,7 @@
               <button onclick="cargarEscenarioCanónico(4)" id="btn-esc-canon-4" class="btn-accent btn-accent-yellow w-full px-2 py-1.5 text-xs rounded-lg font-bold">
                 <span>📈</span> 4. Saturación
               </button>
-              <div class="tooltip-content text-xs">
+              <div class="tooltip-content text-xs tooltip-align-right">
                 <strong class="text-amber-400">Escenario 4: Rendimientos Decrecientes (Mayo)</strong><br>
                 <span class="text-slate-200">Gasto: $4.500 USD | Soporte CX: 0% | Visitas: 1.900</span><br>
                 <span class="text-slate-300">Gasto masivo con tráfico frío que dispara el CPA a <strong>$42.39 USD</strong> destruyendo la eficiencia del embudo.</span>
@@ -260,51 +262,36 @@
           </div>
         </div>
 
-        <!-- SECCIÓN: INTERPRETACIÓN DINÁMICA DE LA GRÁFICA ACTIVA -->
-        <div class="mt-2 pt-2 border-t border-[#571C1D]/80 flex-1 flex flex-col min-h-0 overflow-hidden">
-          <div class="flex items-center justify-between shrink-0 mb-1">
-            <span class="text-xs font-black uppercase tracking-wider text-[#FF9E4A] flex items-center gap-1">
+        <!-- MÓDULO 3: INTERPRETACIÓN DE LA GRÁFICA (ALTURA 125PX, LETRA 12PX) -->
+        <div class="flex flex-col gap-1 pt-1.5 border-t border-[#571C1D]/70 shrink-0">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
               <span>📊</span> Interpretación de la Gráfica
             </span>
-            <span class="text-[11px] text-slate-400">En tiempo real</span>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded-full border border-slate-700 text-slate-400">
+              En tiempo real
+            </span>
           </div>
-          <div id="box-interpretacion-grafica" class="interpretacion-box text-xs md:text-[13px] leading-relaxed text-slate-100 p-2.5 rounded-lg overflow-y-auto flex-1 min-h-[110px] md:min-h-0">
-            <!-- Inyectado dinámicamente por JS al cambiar de tab o slider -->
+          <div id="box-interpretacion-grafica" class="module-inner-box space-y-1.5">
+            <!-- Inyectado dinámicamente por JS al cambiar de tab o slider estrictamente en 12px -->
           </div>
         </div>
 
         <!-- Desglose Financiero Rápido con Tooltips Interactivos -->
-        <div class="mt-2 pt-1.5 border-t border-[#571C1D]/80 grid grid-cols-2 gap-1.5 text-xs text-slate-300 shrink-0">
+        <div class="pt-1.5 border-t border-[#571C1D]/80 grid grid-cols-2 gap-1.5 text-xs text-slate-300 shrink-0">
           <div class="has-tooltip">
             Precio Rover: <strong class="text-white">$101.5 USD</strong> <span class="text-xs text-slate-400">ⓘ</span>
-            <div class="tooltip-content text-xs">
+            <div class="tooltip-content text-xs tooltip-align-left">
               <strong class="text-cyan-300">Precio Unitario de Venta:</strong><br>
               Ticket promedio ponderado ($101.5 USD) de cada vehículo Rover comercializado en Marte. Rango en datos del caso: $100.00 (Ene) a $110.87 (May).
             </div>
           </div>
           <div class="has-tooltip">
             Margen Neto: <strong id="lbl-mini-margen" class="text-emerald-400">$67.72 USD</strong> <span class="text-xs text-slate-400">ⓘ</span>
-            <div class="tooltip-content text-xs">
+            <div class="tooltip-content text-xs tooltip-align-right">
               <strong class="text-cyan-300">Margen Unitario Limpio:</strong><br>
               <strong>Fórmula:</strong> Margen = Ticket ($101.50) - CPA.<br>
               <strong>Umbral Viabilidad:</strong> &gt; $60.00 USD (Margen &gt; 60%).<br>
-              Utilidad neta libre generada tras costear la pauta publicitaria.
-            </div>
-          </div>
-          <div class="has-tooltip">
-            Inversión CX: <strong id="lbl-mini-cx" class="text-amber-400">$465 USD</strong> <span class="text-xs text-slate-400">ⓘ</span>
-            <div class="tooltip-content text-xs">
-              <strong class="text-cyan-300">Inversión en Soporte y Posventa:</strong><br>
-              <strong>Fórmula:</strong> Presupuesto Total × (% CX / 100).<br>
-              <strong>Propuesta SIM:</strong> 15% ($465-$600 USD) para blindar el equipo técnico y mantener CSAT &gt; 9.0.
-            </div>
-          </div>
-          <div class="has-tooltip">
-            Pauta Neta: <strong id="lbl-mini-pauta" class="text-white">$2.635 USD</strong> <span class="text-xs text-slate-400">ⓘ</span>
-            <div class="tooltip-content text-xs">
-              <strong class="text-cyan-300">Presupuesto Publicitario Neto:</strong><br>
-              <strong>Fórmula:</strong> Presupuesto Total - Inversión CX.<br>
-              Dinero puro transferido a campañas de adquisición y conversión.
             </div>
           </div>
         </div>
@@ -917,7 +904,7 @@
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <span id="tour-step-indicator" class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 font-bold border border-orange-500/40">Paso 1 de 6</span>
+          <span id="tour-step-indicator" class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 font-bold border border-orange-500/40">Paso 1 de 7</span>
           <button onclick="finalizarTour()" class="text-slate-400 hover:text-white text-lg font-bold px-2 py-0.5 rounded hover:bg-white/10 transition" title="Cerrar Guía">✕</button>
         </div>
       </div>
