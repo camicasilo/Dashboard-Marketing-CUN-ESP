@@ -206,9 +206,9 @@ function actualizarDiagnostico() {
     badge = 'PELIGRO: CRISIS TIPO FEBRERO';
     badgeClase = 'badge-alerta';
     html = `
-      <p class="text-rose-400 font-bold">⚠️ Estás repitiendo la crisis de febrero de 2026.</p>
+      <p class="text-rose-400 font-bold text-sm md:text-base">⚠️ Estás repitiendo la crisis de febrero de 2026.</p>
       <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">Captaste <strong>${simState.clientes} clientes</strong> pero solo dejaste un <strong>${simState.soporte}% en soporte</strong>. El CPA parece barato ($${simState.cpa.toFixed(2)}), pero la satisfacción cayó a <strong>${simState.csat.toFixed(1)}/10</strong>. Los clientes no volverán a comprar repuestos ni misiones.</p>
-      <div class="p-1 rounded bg-rose-950/40 border border-rose-800/40 text-rose-300 text-xs">
+      <div class="p-2 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300 text-xs md:text-sm font-bold">
         <strong>Solución:</strong> Sube la palanca de soporte a mínimo 12-15%.
       </div>
     `;
@@ -216,21 +216,21 @@ function actualizarDiagnostico() {
     badge = 'ALERTA: RENDIMIENTOS DECRECIENTES';
     badgeClase = 'badge-advertencia';
     html = `
-      <p class="text-amber-400 font-bold">⚠️ Saturación publicitaria en curso (Efecto Mayo).</p>
+      <p class="text-amber-400 font-bold text-sm md:text-base">⚠️ Saturación publicitaria en curso (Efecto Mayo).</p>
       <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">El CPA subió a <strong>$${simState.cpa.toFixed(2)} USD</strong>. Estás pagando una prima muy alta por atraer tráfico frío a la misión.</p>
     `;
   } else if (simState.csat >= 8.8 && simState.cpa <= 41.0) {
     badge = 'EXCELENCIA ESTRATÉGICA (TIPO ABRIL)';
     badgeClase = 'badge-exito';
     html = `
-      <p class="text-emerald-400 font-bold">⭐ Punto de Oro Gerencial.</p>
+      <p class="text-emerald-400 font-bold text-sm md:text-base">⭐ Punto de Oro Gerencial.</p>
       <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">Con <strong>${simState.soporte}% en soporte</strong> mantienes la satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong> y el margen limpio en <strong>$${simState.margen.toFixed(2)} USD</strong> por vehículo. Es la propuesta a defender en el ACA.</p>
     `;
   } else {
     badge = 'ZONA ESTABLE DE CONTROL';
     badgeClase = 'badge-advertencia';
     html = `
-      <p class="text-slate-200 font-bold">ℹ️ Operación en rango aceptable.</p>
+      <p class="text-slate-200 font-bold text-sm md:text-base">ℹ️ Operación en rango aceptable.</p>
       <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">Margen de <strong>$${simState.margen.toFixed(2)} USD</strong> y satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong>. Se puede optimizar aumentando el cuidado de los clientes.</p>
     `;
   }
@@ -531,9 +531,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 1: El Dilema Central (CPA vs CSAT)</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 1: El Dilema Central (CPA vs CSAT)</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Costo de Adquisición (CPA) en dólares ($30 a $48 USD). <em>Hacia la izquierda es más barato, hacia la derecha es más caro.</em></li>
@@ -555,9 +555,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 2: La Trampa de la Ecuación de Satisfacción</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 2: La Trampa de la Ecuación de Satisfacción</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Los meses analizados (Enero a Mayo + Columna de Simulación).</li>
@@ -580,9 +580,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 3: La Trampa de la Ecuación de Retención (>100 %)</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 3: La Trampa de la Ecuación de Retención (>100 %)</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses de operación comercial.</li>
@@ -604,9 +604,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 4: Ley de Rendimientos Decrecientes en Pauta</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 4: Ley de Rendimientos Decrecientes en Pauta</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Cronología de meses.</li>
@@ -629,9 +629,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 5: Dinámica del Embudo de Conversión (Visitas vs Compras)</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 5: Dinámica del Embudo de Conversión (Visitas vs Compras)</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses evaluados.</li>
@@ -654,9 +654,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 6: Economía Unitaria y Margen Limpio por Rover</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 6: Economía Unitaria y Margen Limpio por Rover</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje Y (Vertical):</strong> Las 3 variables clave: Precio de venta, Costo de adquisición (CPA) y Ganancia limpia.</li>
@@ -678,9 +678,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 7: El Ratio Maestro (CSAT / CPA)</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 7: El Ratio Maestro (CSAT / CPA)</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses evaluados.</li>
@@ -702,9 +702,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 8: Correlación Causal de Crecimiento (Ventas vs Gasto y ROAS)</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 8: Correlación Causal de Crecimiento (Ventas vs Gasto y ROAS)</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses de facturación.</li>
@@ -726,9 +726,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 9: Evolución de Cartera Total de la Misión</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 9: Evolución de Cartera Total de la Misión</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses de acumulación de clientes.</li>
@@ -750,9 +750,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 10: La Decisión Estratégica Directiva (Reasignación del 15 %)</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 10: La Decisión Estratégica Directiva (Reasignación del 15 %)</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Dos escenarios comparados: Estrategia Actual (Gasto ciego) vs Estrategia Optimizada SIM.</li>

@@ -487,8 +487,26 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 
 /* ==========================================================================
-   SISTEMA DE BOTONES CON ACENTO Y RESPLANDOR NEÓN (ESTILO TOUR GUIADO)
+   SISTEMA DE BOTONES CON ACENTO Y RESPLANDOR NEÓN (TITILANDO BRILLANTEMENTE)
    ========================================================================== */
+@keyframes brilliantNeonPulse {
+  0%, 100% {
+    filter: brightness(1.05) saturate(1.15);
+    box-shadow: 0 0 10px var(--btn-glow-color, rgba(255, 107, 0, 0.7)),
+                0 0 20px var(--btn-glow-color, rgba(255, 107, 0, 0.45)),
+                inset 0 1px 2px rgba(255, 255, 255, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    filter: brightness(1.35) saturate(1.45);
+    box-shadow: 0 0 24px var(--btn-glow-color, rgba(255, 107, 0, 1)),
+                0 0 45px var(--btn-glow-color, rgba(255, 107, 0, 0.85)),
+                0 0 65px var(--btn-glow-color, rgba(255, 107, 0, 0.5)),
+                inset 0 1px 4px rgba(255, 255, 255, 0.85);
+    transform: scale(1.035);
+  }
+}
+
 .btn-accent {
   display: inline-flex;
   align-items: center;
@@ -497,142 +515,233 @@ input[type="range"]::-webkit-slider-thumb:hover {
   font-weight: 800;
   border-radius: 0.5rem;
   color: #FFFFFF !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
-  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   position: relative;
   user-select: none;
   border-width: 1.5px;
   border-style: solid;
+  animation: brilliantNeonPulse 2.1s infinite ease-in-out;
 }
 .btn-accent:hover {
-  transform: translateY(-1.5px) scale(1.03);
+  animation: none !important;
+  transform: translateY(-2px) scale(1.06) !important;
+  filter: brightness(1.4) saturate(1.5) !important;
+  box-shadow: 0 0 32px var(--btn-glow-color, rgba(255, 107, 0, 1)),
+              0 0 60px var(--btn-glow-color, rgba(255, 107, 0, 0.8)),
+              inset 0 1px 4px rgba(255, 255, 255, 0.9) !important;
 }
 .btn-accent:active {
-  transform: translateY(0.5px) scale(0.97);
+  transform: translateY(1px) scale(0.97) !important;
 }
 
 /* 1. AZUL (Enero / Base) */
 .btn-accent-blue {
-  background: linear-gradient(135deg, #1E40AF 0%, #2563EB 50%, #38BDF8 100%) !important;
-  border-color: #93C5FD !important;
-  box-shadow: 0 0 14px rgba(37, 99, 235, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+  --btn-glow-color: rgba(56, 189, 248, 0.95);
+  background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 50%, #38BDF8 100%) !important;
+  border-color: #BAE6FD !important;
   color: #FFFFFF !important;
-}
-.btn-accent-blue:hover {
-  box-shadow: 0 0 24px rgba(56, 189, 248, 0.95), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* 2. ROJO (Febrero / Crisis / Pauta Ciega) */
 .btn-accent-red {
-  background: linear-gradient(135deg, #991B1B 0%, #DC2626 50%, #F87171 100%) !important;
-  border-color: #FCA5A5 !important;
-  box-shadow: 0 0 14px rgba(220, 38, 38, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+  --btn-glow-color: rgba(248, 113, 113, 0.98);
+  background: linear-gradient(135deg, #B91C1C 0%, #DC2626 50%, #F87171 100%) !important;
+  border-color: #FECACA !important;
   color: #FFFFFF !important;
-}
-.btn-accent-red:hover {
-  box-shadow: 0 0 24px rgba(248, 113, 113, 0.95), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* 3. VERDE (Abril / Óptimo / SIM Óptimo) */
 .btn-accent-green {
-  background: linear-gradient(135deg, #065F46 0%, #059669 50%, #34D399 100%) !important;
+  --btn-glow-color: rgba(52, 211, 153, 0.98);
+  background: linear-gradient(135deg, #047857 0%, #059669 50%, #34D399 100%) !important;
   border-color: #A7F3D0 !important;
-  box-shadow: 0 0 14px rgba(16, 185, 129, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
   color: #FFFFFF !important;
-}
-.btn-accent-green:hover {
-  box-shadow: 0 0 24px rgba(52, 211, 153, 0.95), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* 4. AMARILLO / ÁMBAR (Mayo / Saturación) */
 .btn-accent-yellow {
-  background: linear-gradient(135deg, #92400E 0%, #D97706 50%, #FBBF24 100%) !important;
-  border-color: #FDE68A !important;
-  box-shadow: 0 0 14px rgba(245, 158, 11, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+  --btn-glow-color: rgba(251, 191, 36, 0.98);
+  background: linear-gradient(135deg, #B45309 0%, #D97706 50%, #FBBF24 100%) !important;
+  border-color: #FEF08A !important;
   color: #FFFFFF !important;
-}
-.btn-accent-yellow:hover {
-  box-shadow: 0 0 24px rgba(251, 191, 36, 0.95), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* 5. MORADO / VIOLETA (Expansión / Fidelización) */
 .btn-accent-purple {
-  background: linear-gradient(135deg, #5B21B6 0%, #7C3AED 50%, #A78BFA 100%) !important;
+  --btn-glow-color: rgba(167, 139, 250, 0.98);
+  background: linear-gradient(135deg, #6D28D9 0%, #7C3AED 50%, #A78BFA 100%) !important;
   border-color: #DDD6FE !important;
-  box-shadow: 0 0 14px rgba(124, 58, 237, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
   color: #FFFFFF !important;
-}
-.btn-accent-purple:hover {
-  box-shadow: 0 0 24px rgba(167, 139, 250, 0.95), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* 6. COLOR MORA / FRAMBUESA (Memoria de Cálculo / Fórmulas) */
 .btn-accent-mora {
-  background: linear-gradient(135deg, #701A75 0%, #A21CAF 50%, #F472B6 100%) !important;
+  --btn-glow-color: rgba(244, 114, 182, 0.98);
+  background: linear-gradient(135deg, #86198F 0%, #C026D3 50%, #F472B6 100%) !important;
   border-color: #FBCFE8 !important;
-  box-shadow: 0 0 14px rgba(162, 28, 175, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
   color: #FFFFFF !important;
-}
-.btn-accent-mora:hover {
-  box-shadow: 0 0 24px rgba(244, 114, 182, 0.95), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* 7. CYAN NEÓN (Guía de Uso / Tour) */
 .btn-accent-cyan {
-  background: linear-gradient(135deg, #0E7490 0%, #06B6D4 50%, #38BDF8 100%) !important;
+  --btn-glow-color: rgba(34, 211, 238, 0.98);
+  background: linear-gradient(135deg, #0891B2 0%, #06B6D4 50%, #38BDF8 100%) !important;
   border-color: #BAE6FD !important;
-  box-shadow: 0 0 14px rgba(6, 182, 212, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
   color: #FFFFFF !important;
-}
-.btn-accent-cyan:hover {
-  box-shadow: 0 0 24px rgba(56, 189, 248, 0.95), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* 8. BLANCO Y NEGRO / PLATA (Selector Modo Claro / Oscuro) */
 body.theme-dark .btn-accent-bw {
+  --btn-glow-color: rgba(255, 255, 255, 0.75);
   background: linear-gradient(135deg, #1E293B 0%, #334155 50%, #64748B 100%) !important;
-  border-color: #CBD5E1 !important;
-  box-shadow: 0 0 14px rgba(255, 255, 255, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+  border-color: #F1F5F9 !important;
   color: #FFFFFF !important;
-}
-body.theme-dark .btn-accent-bw:hover {
-  box-shadow: 0 0 24px rgba(255, 255, 255, 0.55), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
 }
 body.theme-light .btn-accent-bw {
+  --btn-glow-color: rgba(15, 23, 42, 0.55);
   background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #334155 100%) !important;
   border-color: #0F172A !important;
-  box-shadow: 0 0 12px rgba(15, 23, 42, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
   color: #FFFFFF !important;
-}
-body.theme-light .btn-accent-bw:hover {
-  box-shadow: 0 0 22px rgba(15, 23, 42, 0.5), 0 2px 10px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* 9. NARANJA NEÓN (Estrategia SIM / Siguiente) */
 .btn-accent-orange {
+  --btn-glow-color: rgba(255, 107, 0, 1);
   background: linear-gradient(135deg, #C2410C 0%, #EA580C 50%, #FBA544 100%) !important;
-  border-color: #FED7AA !important;
-  box-shadow: 0 0 14px rgba(234, 88, 12, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+  border-color: #FFEDD5 !important;
   color: #FFFFFF !important;
-}
-.btn-accent-orange:hover {
-  box-shadow: 0 0 24px rgba(249, 115, 22, 1), 0 2px 10px rgba(0, 0, 0, 0.4) !important;
 }
 
-/* TABS ACTIVAS CON RESPLANDOR NEÓN */
+/* TABS ACTIVAS CON TITILADO Y RESPLANDOR NEÓN */
 .tab-btn.active {
+  --btn-glow-color: rgba(255, 107, 0, 1);
   background: linear-gradient(135deg, #C2410C 0%, #EA580C 50%, #FB923C 100%) !important;
   border-color: #FFEDD5 !important;
-  box-shadow: 0 0 14px rgba(234, 88, 12, 0.75), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 0 0 16px rgba(234, 88, 12, 0.85), inset 0 1px 2px rgba(255, 255, 255, 0.45) !important;
   color: #FFFFFF !important;
   font-weight: 800 !important;
+  animation: brilliantNeonPulse 2.4s infinite ease-in-out;
 }
 body.theme-light .tab-btn.active {
+  --btn-glow-color: rgba(234, 88, 12, 0.7);
   background: linear-gradient(135deg, #EA580C 0%, #F97316 50%, #FB923C 100%) !important;
   border-color: #F97316 !important;
-  box-shadow: 0 0 14px rgba(234, 88, 12, 0.55) !important;
+  box-shadow: 0 0 16px rgba(234, 88, 12, 0.7) !important;
   color: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   MEJORAS CRÍTICAS DE CONTRASTE Y LEGIBILIDAD EN MODO CLARO (THEME-LIGHT)
+   ========================================================================== */
+body.theme-light .text-slate-100,
+body.theme-light .text-slate-200,
+body.theme-light .text-slate-300,
+body.theme-light .text-white {
+  color: #0F172A !important;
+}
+body.theme-light .text-slate-400 {
+  color: #334155 !important;
+}
+body.theme-light .text-slate-500 {
+  color: #475569 !important;
+}
+body.theme-light .text-\[\#FF9E4A\],
+body.theme-light .text-orange-400 {
+  color: #C2410C !important;
+  font-weight: 800 !important;
+}
+body.theme-light .text-amber-400 {
+  color: #92400E !important;
+  font-weight: 800 !important;
+}
+body.theme-light .text-emerald-400,
+body.theme-light .text-emerald-300 {
+  color: #065F46 !important;
+  font-weight: 800 !important;
+}
+body.theme-light .text-rose-400,
+body.theme-light .text-rose-300 {
+  color: #991B1B !important;
+  font-weight: 800 !important;
+}
+body.theme-light .text-blue-400,
+body.theme-light .text-blue-300 {
+  color: #1E40AF !important;
+  font-weight: 800 !important;
+}
+body.theme-light .text-purple-400,
+body.theme-light .text-purple-300 {
+  color: #6D28D9 !important;
+  font-weight: 800 !important;
+}
+body.theme-light .text-cyan-400,
+body.theme-light .text-cyan-300 {
+  color: #0E7490 !important;
+  font-weight: 800 !important;
+}
+
+/* Badges en Modo Claro con Alto Contraste */
+body.theme-light .badge-alerta {
+  background: #FEE2E2 !important;
+  color: #991B1B !important;
+  border: 1.5px solid #F87171 !important;
+  font-weight: 800 !important;
+}
+body.theme-light .badge-exito {
+  background: #D1FAE5 !important;
+  color: #065F46 !important;
+  border: 1.5px solid #34D399 !important;
+  font-weight: 800 !important;
+}
+body.theme-light .badge-advertencia {
+  background: #FEF3C7 !important;
+  color: #92400E !important;
+  border: 1.5px solid #FBBF24 !important;
+  font-weight: 800 !important;
+}
+body.theme-light .badge-neutro {
+  background: #DBEAFE !important;
+  color: #1E40AF !important;
+  border: 1.5px solid #60A5FA !important;
+  font-weight: 800 !important;
+}
+
+/* Cajas de Alerta y Diagnóstico en Modo Claro */
+body.theme-light .bg-rose-950\/40 {
+  background-color: #FEE2E2 !important;
+  border: 1.5px solid #FCA5A5 !important;
+  color: #7F1D1D !important;
+}
+body.theme-light .bg-black\/40 {
+  background-color: #F8FAFC !important;
+  border: 1.5px solid #CBD5E1 !important;
+  color: #0F172A !important;
+}
+body.theme-light .bg-slate-900\/80,
+body.theme-light .bg-slate-900\/90 {
+  background-color: #F1F5F9 !important;
+  border: 1.5px solid #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+/* Caja de Interpretación de Gráfica en Modo Claro */
+body.theme-light .interpretacion-box {
+  background-color: #FFFFFF !important;
+  border: 2px solid #CBD5E1 !important;
+  color: #0F172A !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06) !important;
+}
+body.theme-light .interpretacion-box strong {
+  color: #0F172A !important;
+}
+body.theme-light .interpretacion-box li {
+  color: #1E293B !important;
+}
+body.theme-light .border-\[\#571C1D\]\/80,
+body.theme-light .border-\[\#571C1D\] {
+  border-color: #E2E8F0 !important;
 }
 
 </style>
@@ -736,10 +845,10 @@ body.theme-light .tab-btn.active {
   <!-- ========================================================================= -->
   <!-- CONTENEDOR PRINCIPAL: RESPONSIVE FLUIDO EN MÓVIL, CERO SCROLL EN DESKTOP  -->
   <!-- ========================================================================= -->
-  <main class="flex-1 p-2 md:p-3 gap-3 flex flex-col md:grid md:grid-cols-12 min-h-0 md:overflow-hidden w-full max-w-[1740px] mx-auto">
+  <main class="flex-1 px-3 md:px-5 py-2.5 gap-3.5 flex flex-col md:grid md:grid-cols-12 min-h-0 md:overflow-hidden w-full max-w-none">
 
     <!-- COLUMNA IZQUIERDA: CONTROLES + DIAGNÓSTICO + INTERPRETACIÓN DE GRÁFICA -->
-    <aside class="w-full md:col-span-5 lg:col-span-4 xl:col-span-4 flex flex-col gap-2.5 min-h-0 md:overflow-hidden">
+    <aside class="w-full md:col-span-5 lg:col-span-5 xl:col-span-5 2xl:col-span-4 flex flex-col gap-2.5 min-h-0 md:overflow-hidden">
       
       <!-- CARD 1: CONTROLES / PALANCAS (PASO 2 DEL TOUR) -->
       <section id="tour-palancas" class="card-box bg-[#1C0C10]/95 border border-[#571C1D] rounded-xl p-3 flex flex-col gap-2.5 shrink-0 shadow-lg">
@@ -935,7 +1044,7 @@ body.theme-light .tab-btn.active {
     </aside>
 
     <!-- COLUMNA DERECHA: KPIS CON TOOLTIPS + 10 GRÁFICAS CON TABS -->
-    <section class="w-full md:col-span-7 lg:col-span-8 xl:col-span-8 flex flex-col gap-2.5 min-h-0 md:overflow-hidden">
+    <section class="w-full md:col-span-7 lg:col-span-7 xl:col-span-7 2xl:col-span-8 flex flex-col gap-2.5 min-h-0 md:overflow-hidden">
 
       <!-- ===================================================================== -->
       <!-- 6 TARJETAS KPI CON TOOLTIPS FLOTANTES EXPLICATIVOS (PASO 4 DEL TOUR) -->
@@ -1779,9 +1888,9 @@ function actualizarDiagnostico() {
     badge = 'PELIGRO: CRISIS TIPO FEBRERO';
     badgeClase = 'badge-alerta';
     html = `
-      <p class="text-rose-400 font-bold">⚠️ Estás repitiendo la crisis de febrero de 2026.</p>
+      <p class="text-rose-400 font-bold text-sm md:text-base">⚠️ Estás repitiendo la crisis de febrero de 2026.</p>
       <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">Captaste <strong>${simState.clientes} clientes</strong> pero solo dejaste un <strong>${simState.soporte}% en soporte</strong>. El CPA parece barato ($${simState.cpa.toFixed(2)}), pero la satisfacción cayó a <strong>${simState.csat.toFixed(1)}/10</strong>. Los clientes no volverán a comprar repuestos ni misiones.</p>
-      <div class="p-1 rounded bg-rose-950/40 border border-rose-800/40 text-rose-300 text-xs">
+      <div class="p-2 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300 text-xs md:text-sm font-bold">
         <strong>Solución:</strong> Sube la palanca de soporte a mínimo 12-15%.
       </div>
     `;
@@ -1789,21 +1898,21 @@ function actualizarDiagnostico() {
     badge = 'ALERTA: RENDIMIENTOS DECRECIENTES';
     badgeClase = 'badge-advertencia';
     html = `
-      <p class="text-amber-400 font-bold">⚠️ Saturación publicitaria en curso (Efecto Mayo).</p>
+      <p class="text-amber-400 font-bold text-sm md:text-base">⚠️ Saturación publicitaria en curso (Efecto Mayo).</p>
       <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">El CPA subió a <strong>$${simState.cpa.toFixed(2)} USD</strong>. Estás pagando una prima muy alta por atraer tráfico frío a la misión.</p>
     `;
   } else if (simState.csat >= 8.8 && simState.cpa <= 41.0) {
     badge = 'EXCELENCIA ESTRATÉGICA (TIPO ABRIL)';
     badgeClase = 'badge-exito';
     html = `
-      <p class="text-emerald-400 font-bold">⭐ Punto de Oro Gerencial.</p>
+      <p class="text-emerald-400 font-bold text-sm md:text-base">⭐ Punto de Oro Gerencial.</p>
       <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">Con <strong>${simState.soporte}% en soporte</strong> mantienes la satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong> y el margen limpio en <strong>$${simState.margen.toFixed(2)} USD</strong> por vehículo. Es la propuesta a defender en el ACA.</p>
     `;
   } else {
     badge = 'ZONA ESTABLE DE CONTROL';
     badgeClase = 'badge-advertencia';
     html = `
-      <p class="text-slate-200 font-bold">ℹ️ Operación en rango aceptable.</p>
+      <p class="text-slate-200 font-bold text-sm md:text-base">ℹ️ Operación en rango aceptable.</p>
       <p class="text-slate-200 text-xs md:text-[13px] leading-relaxed">Margen de <strong>$${simState.margen.toFixed(2)} USD</strong> y satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong>. Se puede optimizar aumentando el cuidado de los clientes.</p>
     `;
   }
@@ -2104,9 +2213,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 1: El Dilema Central (CPA vs CSAT)</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 1: El Dilema Central (CPA vs CSAT)</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Costo de Adquisición (CPA) en dólares ($30 a $48 USD). <em>Hacia la izquierda es más barato, hacia la derecha es más caro.</em></li>
@@ -2128,9 +2237,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 2: La Trampa de la Ecuación de Satisfacción</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 2: La Trampa de la Ecuación de Satisfacción</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Los meses analizados (Enero a Mayo + Columna de Simulación).</li>
@@ -2153,9 +2262,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 3: La Trampa de la Ecuación de Retención (>100 %)</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 3: La Trampa de la Ecuación de Retención (>100 %)</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses de operación comercial.</li>
@@ -2177,9 +2286,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 4: Ley de Rendimientos Decrecientes en Pauta</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 4: Ley de Rendimientos Decrecientes en Pauta</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Cronología de meses.</li>
@@ -2202,9 +2311,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 5: Dinámica del Embudo de Conversión (Visitas vs Compras)</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 5: Dinámica del Embudo de Conversión (Visitas vs Compras)</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses evaluados.</li>
@@ -2227,9 +2336,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 6: Economía Unitaria y Margen Limpio por Rover</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 6: Economía Unitaria y Margen Limpio por Rover</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje Y (Vertical):</strong> Las 3 variables clave: Precio de venta, Costo de adquisición (CPA) y Ganancia limpia.</li>
@@ -2251,9 +2360,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 7: El Ratio Maestro (CSAT / CPA)</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 7: El Ratio Maestro (CSAT / CPA)</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses evaluados.</li>
@@ -2275,9 +2384,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 8: Correlación Causal de Crecimiento (Ventas vs Gasto y ROAS)</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 8: Correlación Causal de Crecimiento (Ventas vs Gasto y ROAS)</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses de facturación.</li>
@@ -2299,9 +2408,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 9: Evolución de Cartera Total de la Misión</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 9: Evolución de Cartera Total de la Misión</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Meses de acumulación de clientes.</li>
@@ -2323,9 +2432,9 @@ function actualizarInterpretacionGrafica() {
       html = `
         <div class="space-y-1.5">
           <div class="border-b border-slate-700/60 pb-1">
-            <strong class="${tagColor} text-xs uppercase font-extrabold">Gráfica 10: La Decisión Estratégica Directiva (Reasignación del 15 %)</strong>
+            <strong class="${tagColor} text-sm md:text-base uppercase font-black tracking-wide">Gráfica 10: La Decisión Estratégica Directiva (Reasignación del 15 %)</strong>
           </div>
-          <div class="text-xs md:text-[13px] space-y-1.5 text-slate-200 leading-relaxed">
+          <div class="text-sm md:text-[14.5px] space-y-2 text-slate-200 leading-relaxed">
             <p><strong>📐 ¿Cómo leer los ejes (Palitos y Piedritas)?</strong></p>
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Dos escenarios comparados: Estrategia Actual (Gasto ciego) vs Estrategia Optimizada SIM.</li>
