@@ -2000,6 +2000,99 @@ function obtenerDiagnosticoTooltip(tab, items) {
   }
 }
 
+// ==========================================================================
+// SISTEMA DE UMBRALES INTERACTIVOS Y BADGES DE ALTO CONTRASTE
+// ==========================================================================
+let chartThresholds = [];
+let hoveredThreshold = null;
+let thresholdInteractivityInitialized = false;
+
+function drawRoundedRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  if (typeof ctx.roundRect === 'function') {
+    ctx.roundRect(x, y, width, height, radius);
+  } else {
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+  }
+  ctx.closePath();
+}
+
+function wrapCanvasLines(ctx, text, maxWidth) {
+  const words = text.split(' ');
+  const lines = [];
+  let currentLine = words[0];
+
+  for (let i = 1; i < words.length; i++) {
+    const word = words[i];
+    const width = ctx.measureText(currentLine + ' ' + word).width;
+    if (width < maxWidth) {
+      currentLine += ' ' + word;
+    } else {
+      lines.push(currentLine);
+      currentLine = word;
+    }
+  }
+  lines.push(currentLine);
+  return lines;
+}
+
+function initThresholdCanvasListener(canvas) {
+  if (thresholdInteractivityInitialized || !canvas) return;
+  thresholdInteractivityInitialized = true;
+
+  canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    let match = null;
+    for (let i = chartThresholds.length - 1; i >= 0; i--) {
+      const t = chartThresholds[i];
+      // 1. Detección sobre la pastilla/badge con margen de captura
+      const inBadge = (mouseX >= t.bbox.x - 2 && mouseX <= t.bbox.x + t.bbox.w + 2 &&
+                       mouseY >= t.bbox.y - 2 && mouseY <= t.bbox.y + t.bbox.h + 2);
+      
+      // 2. Detección sobre la línea punteada (tolerancia ±6px)
+      let onLine = false;
+      if (t.type === 'H') {
+        onLine = (Math.abs(mouseY - t.lineY) <= 6 && mouseX >= t.lineX1 && mouseX <= t.lineX2);
+      } else if (t.type === 'V') {
+        onLine = (Math.abs(mouseX - t.lineX) <= 6 && mouseY >= t.lineY1 && mouseY <= t.lineY2);
+      }
+
+      if (inBadge || onLine) {
+        match = { ...t, mouseX, mouseY };
+        break;
+      }
+    }
+
+    const prevId = hoveredThreshold ? hoveredThreshold.id : null;
+    const newId = match ? match.id : null;
+
+    if (prevId !== newId) {
+      hoveredThreshold = match;
+      canvas.style.cursor = match ? 'pointer' : 'default';
+      if (chartInstance) chartInstance.draw();
+    }
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    if (hoveredThreshold) {
+      hoveredThreshold = null;
+      canvas.style.cursor = 'default';
+      if (chartInstance) chartInstance.draw();
+    }
+  });
+}
+
 const thresholdPlugin = {
   id: 'thresholdPlugin',
   afterDatasetsDraw(chart) {
@@ -2007,124 +2100,365 @@ const thresholdPlugin = {
     if (!chartArea) return;
     const { top, bottom, left, right } = chartArea;
 
+    chartThresholds = []; // Reset en cada ciclo de render
     ctx.save();
 
-    function drawHLine(yScale, val, label, color, dash = [5, 5], align = 'right') {
+    function drawHLine(yScale, val, label, color, options = {}) {
       if (!yScale) return;
       const yPx = yScale.getPixelForValue(val);
       if (yPx < top - 2 || yPx > bottom + 2) return;
 
-      // Línea punteada destacada por encima de barras y curvas (afterDatasetsDraw)
+      const {
+        dash = [5, 5],
+        align = 'right',
+        zone = 'Normativa Directiva',
+        desc = 'Umbral de referencia para control y gobernanza.'
+      } = options;
+
+      const thresholdId = `H_${yScale.id}_${val}_${label}`;
+      const isHovered = hoveredThreshold && hoveredThreshold.id === thresholdId;
+
+      // 1. Línea punteada (con iluminación reactiva al hover)
       ctx.beginPath();
       ctx.setLineDash(dash);
       ctx.strokeStyle = color;
-      ctx.lineWidth = 1.8;
+      ctx.lineWidth = isHovered ? 2.8 : 1.6;
+      if (isHovered) {
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 10;
+      } else {
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+      }
       ctx.moveTo(left, yPx);
       ctx.lineTo(right, yPx);
       ctx.stroke();
 
-      // Rótulo limpio rotulado directamente sobre la línea (ESTILO MARGEN LIMPIO: CERO CAJAS O RECUADROS)
+      // Reset sombra de línea
       ctx.setLineDash([]);
+      ctx.shadowBlur = 0;
+
+      // 2. Pastilla / Badge de Alto Contraste con Separación Vertical Limpia
       ctx.font = 'bold 9.5px "Plus Jakarta Sans", sans-serif';
       const tw = ctx.measureText(label).width;
-      const xPos = (align === 'right') ? (right - tw - 8) : (left + 8);
-      const yPos = yPx - 4; // Ligeramente por encima de la línea
+      const padX = 8;
+      const badgeH = 19;
+      const badgeW = tw + padX * 2;
 
-      // Sombra oscura sutil de contraste para máxima legibilidad sin marcos artificiales
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-      ctx.shadowBlur = 4;
-      ctx.fillStyle = color;
-      ctx.fillText(label, xPos, yPos);
+      // Posición vertical: Separada de la línea por 7px de aire (no pegada ni cruzada)
+      const placeBelow = (yPx < top + 32);
+      const badgeY = placeBelow ? (yPx + 7) : (yPx - badgeH - 7);
+      const textY = badgeY + 13;
+
+      // Posición horizontal
+      const badgeX = (align === 'right') ? (right - badgeW - 8) : (left + 8);
+      const textX = badgeX + padX;
+
+      // Dibujar caja del badge con bordes redondeados y fondo oscuro opaco
+      drawRoundedRect(ctx, badgeX, badgeY, badgeW, badgeH, 5);
+      ctx.fillStyle = isHovered ? 'rgba(32, 20, 28, 0.98)' : 'rgba(14, 10, 16, 0.94)';
+      ctx.fill();
+
+      // Borde del badge con color del semáforo
+      ctx.strokeStyle = color;
+      ctx.lineWidth = isHovered ? 1.8 : 1.0;
+      if (isHovered) {
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 12;
+      } else {
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+        ctx.shadowBlur = 4;
+      }
+      ctx.stroke();
       ctx.shadowBlur = 0; // reset sombra
+
+      // Texto nítido de alto contraste
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(label, textX, textY);
+
+      // Registrar para interactividad
+      chartThresholds.push({
+        id: thresholdId,
+        type: 'H',
+        val,
+        label,
+        color,
+        zone,
+        desc,
+        bbox: { x: badgeX, y: badgeY, w: badgeW, h: badgeH },
+        lineY: yPx,
+        lineX1: left,
+        lineX2: right
+      });
     }
 
-    function drawVLine(xScale, val, label, color, dash = [5, 5], align = 'top') {
+    function drawVLine(xScale, val, label, color, options = {}) {
       if (!xScale) return;
       const xPx = xScale.getPixelForValue(val);
       if (xPx < left - 2 || xPx > right + 2) return;
 
-      // Línea punteada vertical
+      const {
+        dash = [5, 5],
+        align = 'top',
+        zone = 'Normativa Directiva',
+        desc = 'Umbral de referencia para control y gobernanza.'
+      } = options;
+
+      const thresholdId = `V_${xScale.id}_${val}_${label}`;
+      const isHovered = hoveredThreshold && hoveredThreshold.id === thresholdId;
+
+      // 1. Línea punteada vertical
       ctx.beginPath();
       ctx.setLineDash(dash);
       ctx.strokeStyle = color;
-      ctx.lineWidth = 1.8;
+      ctx.lineWidth = isHovered ? 2.8 : 1.6;
+      if (isHovered) {
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 10;
+      } else {
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+      }
       ctx.moveTo(xPx, top);
       ctx.lineTo(xPx, bottom);
       ctx.stroke();
 
-      // Rótulo limpio sin cajas ni marcos desfasados (idéntico a Gráfica 6)
       ctx.setLineDash([]);
+      ctx.shadowBlur = 0;
+
+      // 2. Pastilla de Alto Contraste Separada Horizontalmente
       ctx.font = 'bold 9.5px "Plus Jakarta Sans", sans-serif';
       const tw = ctx.measureText(label).width;
-      const yPos = (align === 'top') ? (top + 12) : (bottom - 6);
-      const xPos = Math.min(Math.max(xPx + 4, left + 4), right - tw - 4);
+      const padX = 8;
+      const badgeH = 19;
+      const badgeW = tw + padX * 2;
 
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-      ctx.shadowBlur = 4;
-      ctx.fillStyle = color;
-      ctx.fillText(label, xPos, yPos);
+      // Posición vertical
+      const badgeY = (align === 'top') ? (top + 10) : (bottom - badgeH - 10);
+      const textY = badgeY + 13;
+
+      // Posición horizontal separada 7px de la línea vertical
+      const placeLeft = (xPx > right - badgeW - 20);
+      const badgeX = placeLeft ? (xPx - badgeW - 7) : (xPx + 7);
+      const textX = badgeX + padX;
+
+      drawRoundedRect(ctx, badgeX, badgeY, badgeW, badgeH, 5);
+      ctx.fillStyle = isHovered ? 'rgba(32, 20, 28, 0.98)' : 'rgba(14, 10, 16, 0.94)';
+      ctx.fill();
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = isHovered ? 1.8 : 1.0;
+      if (isHovered) {
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 12;
+      } else {
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+        ctx.shadowBlur = 4;
+      }
+      ctx.stroke();
       ctx.shadowBlur = 0;
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(label, textX, textY);
+
+      chartThresholds.push({
+        id: thresholdId,
+        type: 'V',
+        val,
+        label,
+        color,
+        zone,
+        desc,
+        bbox: { x: badgeX, y: badgeY, w: badgeW, h: badgeH },
+        lineX: xPx,
+        lineY1: top,
+        lineY2: bottom
+      });
     }
 
+    // Dibujado de umbrales según la gráfica activa
     switch (tabActiva) {
       case 1:
         // Gráfica 1: Scatter CPA vs CSAT
-        drawHLine(scales.y, 8.5, '✓ Meta CSAT (≥ 8.5)', '#10B981', [5, 5], 'right');
-        drawHLine(scales.y, 7.0, '⚠ Alerta Crítica CSAT (< 7.0)', '#F43F5E', [5, 5], 'right');
-        drawVLine(scales.x, 40.0, '✓ CPA Óptimo ($40)', '#10B981', [4, 4], 'top');
-        drawVLine(scales.x, 42.0, '⚠ CPA Alerta ($42)', '#F43F5E', [4, 4], 'bottom');
+        drawHLine(scales.y, 8.5, '✓ Meta CSAT (≥ 8.5)', '#10B981', {
+          zone: 'Zona Verde (Meta Directiva)',
+          desc: 'Garantiza la retención neta de la flota corporativa en Marte y recompra recurrente de repuestos.'
+        });
+        drawHLine(scales.y, 7.0, '⚠ Alerta Crítica CSAT (< 7.0)', '#F43F5E', {
+          zone: 'Zona Roja (Mandato de Crisis)',
+          desc: 'Activa el freno inmediato de pauta publicitaria para evitar el colapso operativo en talleres mecánicos.'
+        });
+        drawVLine(scales.x, 40.0, '✓ CPA Óptimo ($40)', '#10B981', {
+          align: 'top',
+          zone: 'Zona Verde (Eficiencia)',
+          desc: 'Rango de captación eficiente antes de incurrir en saturación por audiencias frías.'
+        });
+        drawVLine(scales.x, 42.0, '⚠ CPA Alerta ($42)', '#F43F5E', {
+          align: 'bottom',
+          zone: 'Zona Roja (Saturación)',
+          desc: 'Costo por adquisición en zona de rendimientos decrecientes; encarecimiento de ventas.'
+        });
         break;
 
       case 2:
-        // Gráfica 2: CSAT (Eje derecho y1)
-        drawHLine(scales.y1, 8.5, '✓ Umbral Meta CSAT (≥ 8.5 pts)', '#10B981', [5, 5], 'right');
-        drawHLine(scales.y1, 6.5, '⚠ Alerta Crítica CSAT (≤ 6.5 pts)', '#F43F5E', [5, 5], 'right');
+        // Gráfica 2: Ecuación CSAT
+        drawHLine(scales.y1, 8.5, '✓ Umbral Meta CSAT (≥ 8.5 pts)', '#10B981', {
+          zone: 'Zona Verde (Excelencia)',
+          desc: 'Nivel óptimo de satisfacción del cliente con soporte posventa garantizado (caso Abril: 9.4 pts).'
+        });
+        drawHLine(scales.y1, 6.5, '⚠ Alerta Crítica CSAT (≤ 6.5 pts)', '#F43F5E', {
+          zone: 'Zona Roja (Tensión Técnica)',
+          desc: 'Sobrecarga severa de talleres mecánicos por exceso de rovers sin personal de alistamiento.'
+        });
         break;
 
       case 3:
-        // Gráfica 3: Retención (Eje y)
-        drawHLine(scales.y, 1700, 'ℹ Paridad Base Flota (100% Retención)', '#F59E0B', [4, 4], 'left');
+        // Gráfica 3: Retención > 100%
+        drawHLine(scales.y, 1700, 'ℹ Paridad Base Flota (100% Retención)', '#F59E0B', {
+          align: 'left',
+          zone: 'Línea Base de Paridad',
+          desc: 'Punto de equilibrio donde el churn es 0%. Valores superiores a 1.700 certifican expansión neta acumulada.'
+        });
         break;
 
       case 4:
         // Gráfica 4: Rendimientos Decrecientes
-        drawHLine(scales.y, 3500, '⚠ Umbral Saturación Pauta ($3.500 USD)', '#F59E0B', [5, 5], 'left');
-        drawHLine(scales.y1, 40.0, '✓ CPA Óptimo ($40.00 USD)', '#10B981', [4, 4], 'right');
-        drawHLine(scales.y1, 42.0, '⚠ CPA Alerta ($42.00 USD)', '#F43F5E', [4, 4], 'right');
+        drawHLine(scales.y, 3500, '⚠ Umbral Saturación Pauta ($3.500 USD)', '#F59E0B', {
+          align: 'left',
+          zone: 'Límite de Inversión Óptima',
+          desc: 'A partir de $3.500 USD en pauta ciega, cada dólar adicional incrementa drásticamente el CPA unitario.'
+        });
+        drawHLine(scales.y1, 40.0, '✓ CPA Óptimo ($40.00 USD)', '#10B981', {
+          zone: 'Zona Verde',
+          desc: 'Costo de adquisición controlado alcanzado en Abril ($39.74 USD).'
+        });
+        drawHLine(scales.y1, 42.0, '⚠ CPA Alerta ($42.00 USD)', '#F43F5E', {
+          zone: 'Zona Roja',
+          desc: 'Nivel crítico de saturación publicitaria registrado en Mayo ($42.39 USD).'
+        });
         break;
 
       case 5:
-        // Gráfica 5: Embudo Visitas vs Conversión (Eje derecho y1)
-        drawHLine(scales.y1, 5.5, '✓ Meta Eficiencia CR (≥ 5.50%)', '#10B981', [5, 5], 'right');
-        drawHLine(scales.y1, 5.0, 'ℹ Base Histórica CR (5.00%)', '#94A3B8', [4, 4], 'right');
+        // Gráfica 5: Embudo Visitas vs Conversión
+        drawHLine(scales.y1, 5.5, '✓ Meta Eficiencia CR (≥ 5.50%)', '#10B981', {
+          zone: 'Zona Verde (Conversión Alta)',
+          desc: 'Excelente desempeño del landing page marciano convirtiendo tráfico calificado.'
+        });
+        drawHLine(scales.y1, 5.0, 'ℹ Base Histórica CR (5.00%)', '#94A3B8', {
+          zone: 'Línea Base Promedio',
+          desc: 'Tasa promedio histórica de transformación de visitantes a compradores de rovers.'
+        });
         break;
 
       case 6:
-        // Gráfica 6: Margen Limpio por Rover (Eje x)
-        drawVLine(scales.x, 60.0, '✓ Umbral Mínimo Viabilidad ($60 USD)', '#10B981', [5, 5], 'top');
+        // Gráfica 6: Margen Limpio por Rover
+        drawVLine(scales.x, 60.0, '✓ Umbral Mínimo Viabilidad ($60 USD)', '#10B981', {
+          align: 'top',
+          zone: 'Mínimo Financiero',
+          desc: 'Garantiza una utilidad libre neta superior al 60% por cada rover vendido tras descontar el CPA.'
+        });
         break;
 
       case 7:
-        // Gráfica 7: Ratio Maestro CSAT/CPA (Eje y)
-        drawHLine(scales.y, 0.20, '✓ Umbral Meta Excelencia (≥ 0.2000)', '#10B981', [5, 5], 'right');
-        drawHLine(scales.y, 0.15, '⚠ Alerta Crítica (< 0.1500)', '#F43F5E', [5, 5], 'right');
+        // Gráfica 7: Ratio Maestro CSAT/CPA
+        drawHLine(scales.y, 0.20, '✓ Meta Excelencia (≥ 0.2000 pts/USD)', '#10B981', {
+          zone: 'Zona Verde (Alta Eficiencia)',
+          desc: 'Devuelve más de 0.20 puntos de satisfacción por cada dólar gastado (logrado en Abril: 0.2365).'
+        });
+        drawHLine(scales.y, 0.15, '⚠ Alerta Crítica (< 0.1500 pts/USD)', '#F43F5E', {
+          zone: 'Zona Roja (Desperdicio)',
+          desc: 'Volumen desordenado con alta captación pero satisfacción destruida (caso Febrero: 0.1082).'
+        });
         break;
 
       case 8:
-        // Gráfica 8: ROAS (Eje derecho y1)
-        drawHLine(scales.y1, 2.50, '⚠ Umbral Break-Even (2.50x)', '#F59E0B', [5, 5], 'right');
-        drawHLine(scales.y1, 2.56, 'ℹ Multiplicador Empírico (~2.56x)', '#38BDF8', [3, 3], 'left');
+        // Gráfica 8: ROAS 2.56x
+        drawHLine(scales.y1, 2.50, '⚠ Umbral Break-Even (2.50x)', '#F59E0B', {
+          zone: 'Punto de Equilibrio',
+          desc: 'Retorno publicitario mínimo requerido para cubrir costos totales de la operación.'
+        });
+        drawHLine(scales.y1, 2.56, 'ℹ Multiplicador Empírico (~2.56x)', '#38BDF8', {
+          align: 'left',
+          zone: 'Constante Calibrada',
+          desc: 'Por cada $1 invertido en pauta directa se generan $2.56 USD en ventas brutas de vehículos.'
+        });
         break;
 
       case 9:
         // Gráfica 9: Cartera Total
-        drawHLine(scales.y, 1750, '✓ Trayectoria Base Expansión (+55%)', '#10B981', [3, 3], 'left');
+        drawHLine(scales.y, 1750, '✓ Trayectoria Base Expansión (+55%)', '#10B981', {
+          align: 'left',
+          zone: 'Meta de Crecimiento',
+          desc: 'Crecimiento acumulado sostenido de la flota corporativa activa en el mercado marciano.'
+        });
         break;
 
       case 10:
         // Gráfica 10: Reasignación 15%
-        drawHLine(scales.y, 4000, '🎯 Presupuesto Plan Junio ($4.000 USD)', '#10B981', [4, 4], 'left');
+        drawHLine(scales.y, 4000, '🎯 Presupuesto Plan Junio ($4.000 USD)', '#10B981', {
+          align: 'left',
+          zone: 'Presupuesto Estratégico',
+          desc: 'Distribución equilibrada: $3.400 USD a Pauta Neta (85%) y $600 USD a Soporte Posventa (15%).'
+        });
         break;
+    }
+
+    // 3. Renderizado de Tooltip Flotante Ejecutivo al hacer Hover
+    if (hoveredThreshold) {
+      const ht = hoveredThreshold;
+      const tipW = 270;
+      const pad = 10;
+      ctx.font = 'normal 10px "Plus Jakarta Sans", sans-serif';
+      const descLines = wrapCanvasLines(ctx, ht.desc, tipW - pad * 2);
+      const tipH = 48 + (descLines.length * 13);
+
+      let tipX = ht.mouseX ? (ht.mouseX + 14) : (ht.bbox.x);
+      let tipY = ht.mouseY ? (ht.mouseY - tipH - 10) : (ht.bbox.y - tipH - 8);
+
+      // Limitar a los bordes visibles del canvas
+      if (tipX + tipW > right) tipX = right - tipW - 8;
+      if (tipX < left + 8) tipX = left + 8;
+      if (tipY < top + 8) tipY = (ht.mouseY ? ht.mouseY + 18 : ht.bbox.y + ht.bbox.h + 8);
+      if (tipY + tipH > bottom) tipY = bottom - tipH - 8;
+
+      // Caja del Tooltip Flotante con efecto Glassmorphism
+      drawRoundedRect(ctx, tipX, tipY, tipW, tipH, 8);
+      ctx.fillStyle = 'rgba(12, 10, 16, 0.97)';
+      ctx.fill();
+
+      ctx.strokeStyle = ht.color;
+      ctx.lineWidth = 1.6;
+      ctx.shadowColor = ht.color;
+      ctx.shadowBlur = 14;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Encabezado del Tooltip
+      ctx.font = 'bold 10px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = ht.color;
+      ctx.fillText(ht.label, tipX + pad, tipY + 18);
+
+      // Subtítulo de Zona
+      ctx.font = 'bold 8.5px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#94A3B8';
+      ctx.fillText(ht.zone.toUpperCase(), tipX + pad, tipY + 31);
+
+      // Línea divisoria fina
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 1;
+      ctx.moveTo(tipX + pad, tipY + 36);
+      ctx.lineTo(tipX + tipW - pad, tipY + 36);
+      ctx.stroke();
+
+      // Descripción en texto blanco limpio
+      ctx.font = 'normal 9.5px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#E2E8F0';
+      let lineY = tipY + 49;
+      for (const line of descLines) {
+        ctx.fillText(line, tipX + pad, lineY);
+        lineY += 13;
+      }
     }
 
     ctx.restore();
@@ -2132,7 +2466,9 @@ const thresholdPlugin = {
 };
 
 function renderizarGraficaActiva() {
-  const ctx = document.getElementById('lienzo-grafico').getContext('2d');
+  const canvas = document.getElementById('lienzo-grafico');
+  const ctx = canvas.getContext('2d');
+  initThresholdCanvasListener(canvas);
   if (chartInstance) chartInstance.destroy();
 
   const isMarte = (currentTheme === 'marte');
@@ -2200,51 +2536,6 @@ function renderizarGraficaActiva() {
               pointRadius: 14,
               pointStyle: 'triangle',
               order: -5
-            },
-            // Umbrales Normativos
-            {
-              type: 'line',
-              label: 'Meta CSAT (≥ 8.5)',
-              data: [{ x: 30, y: 8.5 }, { x: 48, y: 8.5 }],
-              borderColor: '#10B981',
-              borderDash: [5, 5],
-              borderWidth: 2,
-              pointRadius: 0,
-              showLine: true,
-              order: -10
-            },
-            {
-              type: 'line',
-              label: 'Alerta Crítica CSAT (< 7.0)',
-              data: [{ x: 30, y: 7.0 }, { x: 48, y: 7.0 }],
-              borderColor: '#F43F5E',
-              borderDash: [5, 5],
-              borderWidth: 2,
-              pointRadius: 0,
-              showLine: true,
-              order: -10
-            },
-            {
-              type: 'line',
-              label: 'CPA Óptimo ($40.00)',
-              data: [{ x: 40.0, y: 2 }, { x: 40.0, y: 10.5 }],
-              borderColor: '#34D399',
-              borderDash: [4, 4],
-              borderWidth: 1.5,
-              pointRadius: 0,
-              showLine: true,
-              order: -10
-            },
-            {
-              type: 'line',
-              label: 'CPA Alerta ($42.00)',
-              data: [{ x: 42.0, y: 2 }, { x: 42.0, y: 10.5 }],
-              borderColor: '#FB7185',
-              borderDash: [4, 4],
-              borderWidth: 1.5,
-              pointRadius: 0,
-              showLine: true,
-              order: -10
             }
           ]
         },
@@ -2277,28 +2568,6 @@ function renderizarGraficaActiva() {
               pointRadius: [6, 6, 6, 6, 6, 9],
               pointBackgroundColor: ['#10B981', '#F43F5E', '#10B981', '#10B981', '#F59E0B', colorSimulacion],
               order: -5,
-              yAxisID: 'y1'
-            },
-            {
-              type: 'line',
-              label: 'Umbral Meta CSAT (≥ 8.5)',
-              data: [8.5, 8.5, 8.5, 8.5, 8.5, 8.5],
-              borderColor: '#10B981',
-              borderDash: [5, 5],
-              borderWidth: 2,
-              pointRadius: 0,
-              order: -10,
-              yAxisID: 'y1'
-            },
-            {
-              type: 'line',
-              label: 'Alerta Crítica CSAT (≤ 6.5)',
-              data: [6.5, 6.5, 6.5, 6.5, 6.5, 6.5],
-              borderColor: '#F43F5E',
-              borderDash: [5, 5],
-              borderWidth: 2,
-              pointRadius: 0,
-              order: -10,
               yAxisID: 'y1'
             },
             // Barras de volumen con order: 2 (se dibujan POR DEBAJO)
@@ -2334,17 +2603,7 @@ function renderizarGraficaActiva() {
           labels: [...datosReales.meses, 'Simulación'],
           datasets: [
             { label: 'Clientes Inicio (Base Flota)', data: [...datosReales.clientes_ini, 1700], backgroundColor: barHistoricoColor, borderRadius: 4, order: 2 },
-            { label: 'Clientes Fin Retenidos', data: [...datosReales.clientes_fin, 1700 + Math.round(simState.clientes * 0.9)], backgroundColor: [lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, colorSimulacion], borderRadius: 4, order: 2 },
-            {
-              type: 'line',
-              label: 'Paridad 100% Retención',
-              data: [...datosReales.clientes_ini, 1700],
-              borderColor: '#F59E0B',
-              borderDash: [4, 4],
-              borderWidth: 2,
-              pointRadius: 0,
-              order: -10
-            }
+            { label: 'Clientes Fin Retenidos', data: [...datosReales.clientes_fin, 1700 + Math.round(simState.clientes * 0.9)], backgroundColor: [lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, lineHistoricoColor, colorSimulacion], borderRadius: 4, order: 2 }
           ]
         },
         plugins: [thresholdPlugin],
@@ -2360,10 +2619,7 @@ function renderizarGraficaActiva() {
           labels: [...datosReales.meses, 'Simulación'],
           datasets: [
             { label: 'Gasto Marketing ($ USD)', data: [...datosReales.pauta, simState.gasto], borderColor: lineHistoricoColor, borderWidth: 2, pointRadius: [4,4,4,4,4,8], pointBackgroundColor: lineHistoricoColor, yAxisID: 'y', order: 0 },
-            { label: 'CPA Resultante ($ USD)', data: [...datosReales.cpa, simState.cpa], borderColor: colorSimulacion, borderWidth: 2.5, borderDash: [4, 4], pointRadius: [4,4,4,4,4,9], pointBackgroundColor: colorSimulacion, yAxisID: 'y1', order: -5 },
-            { label: 'Umbral Saturación Pauta ($3.500 USD)', data: [3500, 3500, 3500, 3500, 3500, 3500], borderColor: '#F59E0B', borderDash: [4, 4], borderWidth: 1.8, pointRadius: 0, yAxisID: 'y', order: -10 },
-            { label: 'CPA Óptimo ($40.00 USD)', data: [40, 40, 40, 40, 40, 40], borderColor: '#10B981', borderDash: [4, 4], borderWidth: 1.8, pointRadius: 0, yAxisID: 'y1', order: -10 },
-            { label: 'CPA Alerta ($42.00 USD)', data: [42, 42, 42, 42, 42, 42], borderColor: '#F43F5E', borderDash: [4, 4], borderWidth: 1.8, pointRadius: 0, yAxisID: 'y1', order: -10 }
+            { label: 'CPA Resultante ($ USD)', data: [...datosReales.cpa, simState.cpa], borderColor: colorSimulacion, borderWidth: 2.5, borderDash: [4, 4], pointRadius: [4,4,4,4,4,9], pointBackgroundColor: colorSimulacion, yAxisID: 'y1', order: -5 }
           ]
         },
         plugins: [thresholdPlugin],
@@ -2394,28 +2650,6 @@ function renderizarGraficaActiva() {
               pointRadius: [5, 5, 5, 5, 5, 9],
               pointBackgroundColor: colorSimulacion,
               order: -5,
-              yAxisID: 'y1'
-            },
-            {
-              type: 'line',
-              label: 'Base Histórica CR (5.00%)',
-              data: [5.0, 5.0, 5.0, 5.0, 5.0, 5.0],
-              borderColor: '#94A3B8',
-              borderDash: [4, 4],
-              borderWidth: 1.5,
-              pointRadius: 0,
-              order: -10,
-              yAxisID: 'y1'
-            },
-            {
-              type: 'line',
-              label: 'Meta Eficiencia CR (5.50%)',
-              data: [5.5, 5.5, 5.5, 5.5, 5.5, 5.5],
-              borderColor: '#10B981',
-              borderDash: [4, 4],
-              borderWidth: 2,
-              pointRadius: 0,
-              order: -10,
               yAxisID: 'y1'
             },
             // Barras con order: 2 (se dibujan POR DEBAJO)
@@ -2485,26 +2719,6 @@ function renderizarGraficaActiva() {
               borderWidth: 1.5,
               borderRadius: 4,
               order: 2
-            },
-            {
-              type: 'line',
-              label: 'Meta Excelencia (≥ 0.2000 pts/USD)',
-              data: [0.20, 0.20, 0.20, 0.20, 0.20, 0.20],
-              borderColor: '#10B981',
-              borderDash: [5, 5],
-              borderWidth: 2,
-              pointRadius: 0,
-              order: -10
-            },
-            {
-              type: 'line',
-              label: 'Alerta Crítica (< 0.1500 pts/USD)',
-              data: [0.15, 0.15, 0.15, 0.15, 0.15, 0.15],
-              borderColor: '#F43F5E',
-              borderDash: [5, 5],
-              borderWidth: 2,
-              pointRadius: 0,
-              order: -10
             }
           ]
         },
@@ -2548,17 +2762,6 @@ function renderizarGraficaActiva() {
               pointRadius: 5,
               pointBackgroundColor: colorSimulacion,
               order: -5,
-              yAxisID: 'y1'
-            },
-            {
-              type: 'line',
-              label: 'Umbral Break-Even (2.50x)',
-              data: [2.50, 2.50, 2.50, 2.50, 2.50, 2.50],
-              borderColor: '#F59E0B',
-              borderDash: [5, 5],
-              borderWidth: 2,
-              pointRadius: 0,
-              order: -10,
               yAxisID: 'y1'
             }
           ]
