@@ -495,7 +495,7 @@ function actualizarInterpretacionGrafica() {
 }
 
 function renderizarGraficaActiva() {
-  const canvas = document.getElementById('chart-canvas');
+  const canvas = document.getElementById('lienzo-grafico') || document.getElementById('chart-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   if (chartInstance) chartInstance.destroy();
