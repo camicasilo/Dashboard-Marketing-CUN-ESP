@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-  <link rel="stylesheet" href="./style.css?v=3.3.0">
+  <link rel="stylesheet" href="./style.css?v=3.4.0">
 </head>
 <!-- ABRE SIEMPRE CON EL MODO MARTE POR DEFECTO -->
 <body id="app-body" class="theme-dark bg-[#110809] text-[#FED7AA] min-h-screen md:h-screen w-full md:w-screen overflow-y-auto md:overflow-hidden flex flex-col font-sans select-none">
@@ -436,6 +436,33 @@
         <!-- LIENZO DINÁMICO REACTIVO (CHART.JS) CON ALTURA MÍNIMA GARANTIZADA EN MÓVIL -->
         <div class="flex-1 h-64 sm:h-72 md:h-auto min-h-[270px] md:min-h-0 relative mt-1 w-full">
           <canvas id="lienzo-grafico"></canvas>
+        </div>
+
+        <!-- ===================================================================== -->
+        <!-- CONSOLA DE DILEMAS GERENCIALES (BANCO DE 20 PREGUNTAS ESTRATÉGICAS)   -->
+        <!-- ===================================================================== -->
+        <div id="consola-dilemas-gerenciales" class="mt-1.5 p-2 rounded-lg flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2 shrink-0">
+          <div class="flex items-center gap-1.5 shrink-0">
+            <span class="text-sm">🎯</span>
+            <span class="text-xs font-black uppercase tracking-wider text-orange-400 flex items-center gap-1">
+              Dilemas del Gerente <span class="hidden lg:inline text-[10px] text-slate-400 font-normal">(20 Preguntas Clave)</span>
+            </span>
+          </div>
+          <div class="flex-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 text-xs">
+            <select id="sel-categoria-dilema" onchange="filtrarPreguntasDilema()" class="bg-[#1C0C10] border border-[#571C1D] text-slate-200 text-xs rounded-lg px-2 py-1 font-bold focus:outline-none focus:border-orange-500 shrink-0">
+              <option value="todas">Todas las Categorías (20 Dilemas)</option>
+              <option value="crisis">⚠️ Riesgo y Quiebra (Qué NO hacer)</option>
+              <option value="finanzas">💰 Rentabilidad y ROAS</option>
+              <option value="retencion">🛡️ Fidelización y Soporte (CX)</option>
+              <option value="escala">📈 Escala y Plan Junio (Óptimo)</option>
+            </select>
+            <select id="sel-pregunta-dilema" onchange="ejecutarDilemaSeleccionado()" class="flex-1 bg-[#1C0C10] border border-[#571C1D] text-slate-200 text-xs rounded-lg px-2.5 py-1 font-semibold focus:outline-none focus:border-orange-500 truncate">
+              <!-- Inyectado dinámicamente por JS -->
+            </select>
+            <button onclick="ejecutarDilemaSeleccionado()" class="btn-interactive shrink-0 px-3 py-1 rounded-lg bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-500 hover:to-amber-400 text-white font-extrabold text-xs transition shadow flex items-center justify-center gap-1">
+              <span>Simular</span> <span>→</span>
+            </button>
+          </div>
         </div>
 
         <!-- PIE DE LECTURA DIRECTA -->
@@ -938,6 +965,6 @@
     </div>
   </div>
 
-  <script src="./script.js?v=3.3.0"></script>
+  <script src="./script.js?v=3.4.0"></script>
 </body>
 </html>

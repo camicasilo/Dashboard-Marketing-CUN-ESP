@@ -128,14 +128,275 @@ function toggleTheme() {
 // ==========================================================================
 // MODELO PARAMÉTRICO DE SIMULACIÓN EN TIEMPO REAL
 // ==========================================================================
+
+// ==========================================================================
+// BANCO DE 20 DILEMAS GERENCIALES DETERMINISTAS (PREGUNTAS DE NEGOCIO BI)
+// ==========================================================================
+const dilemasGerenciales = [
+  // --- BLOQUE 1: RIESGO Y QUIEBRA (QUÉ NO HACER) ---
+  {
+    id: 1,
+    cat: 'crisis',
+    pregunta: '1. ¿Qué pasa si quemo $6.000 USD en pauta con 0% a soporte?',
+    gasto: 6000, soporte: 0, visitas: 2500,
+    titulo: 'Colapso Dual: Quiebra Financiera y Satisfacción Destruida',
+    explicacion: 'Al meter $6.000 USD a tráfico frío sin un solo dólar en repuestos, el ROAS se hunde a 1.91x (insolvencia) y la satisfacción colapsa a 3.2/10.',
+    veredicto: 'RECHAZADO ROTUNDAMENTE ❌ (Destruye caja y flota)',
+    tipoVeredicto: 'danger'
+  },
+  {
+    id: 2,
+    cat: 'crisis',
+    pregunta: '2. ¿Qué pasa si repito el error de Febrero (0% CX para captar barato)?',
+    gasto: 3300, soporte: 0, visitas: 1650,
+    titulo: 'Crisis de Febrero: Falsa Eficiencia Publicitaria',
+    explicacion: 'El CPA parece barato ($38.82 USD) pero el taller colapsa y el CSAT cae a 4.2/10. Los 85 clientes nuevos jamás renovarán sus contratos.',
+    veredicto: 'RECHAZADO ❌ (La pauta ciega destruye el valor de vida del cliente)',
+    tipoVeredicto: 'danger'
+  },
+  {
+    id: 3,
+    cat: 'crisis',
+    pregunta: '3. ¿Qué ocurre si saturo de pauta ($4.500) en tráfico frío sin soporte?',
+    gasto: 4500, soporte: 0, visitas: 1900,
+    titulo: 'Efecto Mayo Extremo: Ley de Rendimientos Decrecientes',
+    explicacion: 'El CPA se dispara a $42.39 USD (Zona Roja) y 91 clientes quedan sin alistamiento mecánico, llevando el CSAT a 4.4/10.',
+    veredicto: 'RECHAZADO ❌ (Inversión sobrepagada e ineficiente)',
+    tipoVeredicto: 'danger'
+  },
+  {
+    id: 4,
+    cat: 'crisis',
+    pregunta: '4. ¿Qué pasa si opero con presupuesto enano ($1.500 USD)?',
+    gasto: 1500, soporte: 5, visitas: 900,
+    titulo: 'Sub-inversión Crítica: Incapacidad de Cubrir Costos Fijos',
+    explicacion: 'Apenas captas 47 clientes y facturas $4.771 USD. Aunque el ROAS dé 3.18x, el volumen absoluto no cubre la estructura operativa en Marte.',
+    veredicto: 'RIESGOSO ⚠️ (Incapaz de sostener la presencia marciana)',
+    tipoVeredicto: 'warning'
+  },
+  {
+    id: 5,
+    cat: 'crisis',
+    pregunta: '5. ¿Qué pasa si el tráfico sube a 2.500 visitas con solo 5% a soporte?',
+    gasto: 3500, soporte: 5, visitas: 2500,
+    titulo: 'Cuello de Botella Operativo en Talleres Mecánicos',
+    explicacion: 'Entran 113 clientes pero solo asignas $175 USD de soporte. Cada taller recibe avalanchas de quejas y el CSAT cae a 5.8/10.',
+    veredicto: 'RECHAZADO ❌ (El embudo captó bien pero el taller murió)',
+    tipoVeredicto: 'danger'
+  },
+
+  // --- BLOQUE 2: RENTABILIDAD Y ROAS ---
+  {
+    id: 6,
+    cat: 'finanzas',
+    pregunta: '6. ¿Cuál es el presupuesto antes de que el ROAS caiga de 2.50x?',
+    gasto: 4200, soporte: 10, visitas: 1600,
+    titulo: 'Límite de Solvencia Financiera (Umbral Break-Even)',
+    explicacion: 'Al superar los $4.100 USD en pauta directa sin soporte coordinado, el ROAS cae a 2.38x. Cada dólar adicional genera pérdidas netas.',
+    veredicto: 'PUNTO DE CORTE FINANCIERO ⚠️ (No superar $4.000 USD)',
+    tipoVeredicto: 'warning'
+  },
+  {
+    id: 7,
+    cat: 'finanzas',
+    pregunta: '7. ¿Cómo maximizar el Margen Limpio por Rover (> $68 USD)?',
+    gasto: 2500, soporte: 12, visitas: 1300,
+    titulo: 'Economía Unitaria Blindada: Margen Neto de Alta Rentabilidad',
+    explicacion: 'Pauta moderada con tráfico altamente calificado mantiene el CPA en $33.10 USD, dejando un margen limpio récord de $68.40 USD (67.4%).',
+    veredicto: 'APROBADO PARA EFICIENCIA UNITARIA ⭐',
+    tipoVeredicto: 'success'
+  },
+  {
+    id: 8,
+    cat: 'finanzas',
+    pregunta: '8. ¿Qué nivel de gasto hace que el CPA supere los $42 USD de alarma?',
+    gasto: 3900, soporte: 8, visitas: 1580,
+    titulo: 'Límite de Saturación de Audiencias (Caso Mayo Real)',
+    explicacion: 'Con $3.900 USD y 8% a posventa, el CPA llega exactamente a $42.39 USD. Es el techo histórico de tolerancia antes del sobrecosto.',
+    veredicto: 'ALERTA DE SATURACIÓN ⚠️ (Pauta al borde de la ineficiencia)',
+    tipoVeredicto: 'warning'
+  },
+  {
+    id: 9,
+    cat: 'finanzas',
+    pregunta: '9. ¿Es rentable gastar $5.000 USD mensuales en este modelo?',
+    gasto: 5000, soporte: 15, visitas: 2000,
+    titulo: 'Sobreinversión Innecesaria en Audiencias Marcianas',
+    explicacion: 'Facturas $10.252 USD pero gastaste $5.000 USD. El ROAS cae a 2.05x (muy por debajo de 2.50x). El mercado marciano no asimila tanta pauta.',
+    veredicto: 'RECHAZADO ❌ (Destruye margen neto por volumen forzado)',
+    tipoVeredicto: 'danger'
+  },
+  {
+    id: 10,
+    cat: 'finanzas',
+    pregunta: '10. ¿Cómo garantizar que cada $1 invertido retorne al menos $2.55?',
+    gasto: 3100, soporte: 16, visitas: 1480,
+    titulo: 'Multiplicador Empírico Exacto: El Retorno de Abril (2.55x)',
+    explicacion: 'Inversión de $3.100 USD genera exactamente $7.917 USD en ventas brutas, devolviendo $2.55 USD por cada dólar con CSAT de 9.4.',
+    veredicto: 'APROBADO POR JUNTA DIRECTIVA ⭐',
+    tipoVeredicto: 'success'
+  },
+
+  // --- BLOQUE 3: RETENCIÓN, FIDELIZACIÓN Y POSVENTA (CX) ---
+  {
+    id: 11,
+    cat: 'retencion',
+    pregunta: '11. ¿Por qué la retención de flota supera el 100% en el caso?',
+    gasto: 3100, soporte: 16, visitas: 1480,
+    titulo: 'Expansión Neta de Flota: Ecuación con Crecimiento de Cartera',
+    explicacion: 'La base inició en 1.700 contratos y terminó en 1.778. Como los nuevos superaron a las bajas (churn 0%), la retención matemática da 113.6%.',
+    veredicto: 'COMPROBADO Y JUSTIFICADO ANTE EL PROFESOR ⭐',
+    tipoVeredicto: 'success'
+  },
+  {
+    id: 12,
+    cat: 'retencion',
+    pregunta: '12. ¿Cuánto soporte se requiere para blindar CSAT > 9.0 permanente?',
+    gasto: 3400, soporte: 15, visitas: 1550,
+    titulo: 'Regla del 15% de Soporte: Blindaje de Calidad Percibida',
+    explicacion: 'Al destinar $510 USD a talleres mecánicos (15%), la atención es inmediata y el CSAT se estabiliza sólidamente en 9.1/10.',
+    veredicto: 'APROBADO CANÓNICO ⭐',
+    tipoVeredicto: 'success'
+  },
+  {
+    id: 13,
+    cat: 'retencion',
+    pregunta: '13. ¿Qué pasa si destino el 30% del presupuesto a posventa?',
+    gasto: 3500, soporte: 30, visitas: 1500,
+    titulo: 'Hiper-Fidelización VIP: Excelente Calidad con Pauta Sacrificada',
+    explicacion: 'El CSAT vuela a 9.5/10, pero dejas solo $2.450 USD a captación (68 rovers). Excelente para lealtad pero desacelera la expansión.',
+    veredicto: 'ESTRATEGIA DEFENSIVA VÁLIDA 🛡️ (Prioriza fidelizar sobre captar)',
+    tipoVeredicto: 'warning'
+  },
+  {
+    id: 14,
+    cat: 'retencion',
+    pregunta: '14. ¿Qué ocurre si el CSAT cae a la zona tibia (6.5 a 7.5)?',
+    gasto: 2800, soporte: 8, visitas: 1300,
+    titulo: 'Zona de Indiferencia y Vulnerabilidad Competitiva',
+    explicacion: 'Con solo 8% de soporte ($224 USD), el CSAT se queda en 7.5. Los clientes operan pero 1 de cada 4 evaluará rescindir en el próximo ciclo.',
+    veredicto: 'RIESGO LATENTE ⚠️ (Subir soporte a mínimo 12%)',
+    tipoVeredicto: 'warning'
+  },
+  {
+    id: 15,
+    cat: 'retencion',
+    pregunta: '15. ¿Por qué Abril fue el Mes de Oro histórico de la compañía?',
+    gasto: 3100, soporte: 16, visitas: 1480,
+    titulo: 'El Hito de Abril: 16% CX, CSAT 9.4 y CPA $39.74 USD',
+    explicacion: 'Reasignar $496 USD a soporte logró el récord de satisfacción con costo de captación controlado y Ratio Maestro supremo de 0.2365.',
+    veredicto: 'MODELO DE REFERENCIA HISTÓRICA ⭐',
+    tipoVeredicto: 'success'
+  },
+
+  // --- BLOQUE 4: ESCALA Y PLAN JUNIO (ESTRATEGIA ÓPTIMA) ---
+  {
+    id: 16,
+    cat: 'escala',
+    pregunta: '16. ¿Por qué el SIM recomienda 15% CX ($600) para el Plan Junio?',
+    gasto: 4000, soporte: 15, visitas: 1700,
+    titulo: 'Propuesta Canónica del SIM para Junio ($4.000 USD / 15% CX)',
+    explicacion: 'Destina $3.400 USD a captar 87 rovers y $600 USD a posventa. Logra ROAS de 2.50x, CSAT de 9.1/10 y Margen Limpio de $66.37 USD.',
+    veredicto: 'PROPUESTA OFICIAL A DEFENDER EN EL ACA ⭐⭐⭐',
+    tipoVeredicto: 'success'
+  },
+  {
+    id: 17,
+    cat: 'escala',
+    pregunta: '17. ¿Cómo absorber 90 nuevos clientes sin colapsar el taller?',
+    gasto: 3800, soporte: 18, visitas: 1650,
+    titulo: 'Escalamiento Equilibrado con Absorción Operativa Óptima',
+    explicacion: 'Se captan 86 clientes y se inyectan $684 USD a talleres mecánicos. La satisfacción se mantiene en 9.3/10 sin demoras de alistamiento.',
+    veredicto: 'APROBADO PARA CRECIMIENTO RÁPIDO ⭐',
+    tipoVeredicto: 'success'
+  },
+  {
+    id: 18,
+    cat: 'escala',
+    pregunta: '18. ¿Qué nivel de visitas mantiene una tasa CR por encima de 5.2%?',
+    gasto: 3000, soporte: 14, visitas: 1400,
+    titulo: 'Tráfico Web Calificado vs Tráfico Frío de Relleno',
+    explicacion: 'Con 1.400 visitas de alta intención de compra, el CR se ubica en 5.24% y el CPA baja a $35.15 USD, evitando el desperdicio de clics.',
+    veredicto: 'ALTA EFICIENCIA EN EMBUDO ⭐',
+    tipoVeredicto: 'success'
+  },
+  {
+    id: 19,
+    cat: 'escala',
+    pregunta: '19. ¿Cómo lograr un Ratio Maestro superior a 0.22 puntos/USD?',
+    gasto: 3200, soporte: 16, visitas: 1500,
+    titulo: 'Productividad Directiva de 360°: Felicidad por Dólar Invertido',
+    explicacion: 'Genera 0.2310 puntos de satisfacción por cada $1 USD gastado en pauta neta ($36.80 CPA / 8.5 CSAT), superando el umbral de excelencia.',
+    veredicto: 'EXCELENCIA DIRECTIVA TOTAL ⭐',
+    tipoVeredicto: 'success'
+  },
+  {
+    id: 20,
+    cat: 'escala',
+    pregunta: '20. ¿Cuál es la sustentación óptima para defender ante la Junta?',
+    gasto: 4000, soporte: 15, visitas: 1700,
+    titulo: 'Dictamen de Cierre: El Equilibrio que Salva y Expande la Empresa',
+    explicacion: 'Demuestra con los 8 KPIs en mano que no se puede pautar a ciegas: el 15% en posventa protege la cartera y maximiza el EBITDA.',
+    veredicto: 'ESTRATEGIA MAESTRA APROBADA CON HONORES 🏆',
+    tipoVeredicto: 'success'
+  }
+];
+
+let dilemaActivoId = null;
+
+function inicializarConsolaDilemas() {
+  const selPregunta = document.getElementById('sel-pregunta-dilema');
+  const selCategoria = document.getElementById('sel-categoria-dilema');
+  if (!selPregunta || !selCategoria) return;
+
+  filtrarPreguntasDilema();
+}
+
+function filtrarPreguntasDilema() {
+  const selPregunta = document.getElementById('sel-pregunta-dilema');
+  const selCategoria = document.getElementById('sel-categoria-dilema');
+  if (!selPregunta || !selCategoria) return;
+
+  const cat = selCategoria.value;
+  const lista = (cat === 'todas') 
+    ? dilemasGerenciales 
+    : dilemasGerenciales.filter(d => d.cat === cat);
+
+  selPregunta.innerHTML = '';
+  lista.forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d.id;
+    opt.textContent = d.pregunta;
+    selPregunta.appendChild(opt);
+  });
+}
+
+function ejecutarDilemaSeleccionado() {
+  const selPregunta = document.getElementById('sel-pregunta-dilema');
+  if (!selPregunta) return;
+
+  const id = parseInt(selPregunta.value);
+  const dilema = dilemasGerenciales.find(d => d.id === id);
+  if (!dilema) return;
+
+  dilemaActivoId = id;
+  presetOrigen = `dilema_${id}`;
+
+  rngGasto.value = dilema.gasto;
+  rngSoporte.value = dilema.soporte;
+  rngVisitas.value = dilema.visitas;
+
+  calcularParametros();
+}
+
 function calcularParametros() {
   const gasto = parseFloat(rngGasto.value);
   const soporte = parseFloat(rngSoporte.value);
   const visitas = parseFloat(rngVisitas.value);
 
-  // Conversión calibrada con los datos reales
-  const factorSaturacion = Math.max(0.85, 1 - (visitas - 1100) * 0.0001);
-  const tasaConv = Math.min(6.2, Math.max(4.5, (5.2 * factorSaturacion)));
+  // Conversión calibrada con los datos reales empíricos (Ene-May + Plan Junio)
+  const factorSaturacion = Math.max(0.82, 1 - Math.max(0, visitas - 1300) * 0.00012);
+  const tasaConv = Math.min(6.2, Math.max(4.5, (5.35 * factorSaturacion)));
   const clientes = Math.round(visitas * (tasaConv / 100));
 
   const gastoCX = Math.round(gasto * (soporte / 100));
@@ -207,36 +468,97 @@ function actualizarDiagnostico() {
   let badgeClase = 'badge-exito';
   let html = '';
 
-  if (simState.csat < 5.5) {
-    badge = 'PELIGRO: CRISIS TIPO FEBRERO';
-    badgeClase = 'badge-alerta';
+  // 1. SI HAY UN DILEMA GERENCIAL ACTIVO SELECCIONADO: RESPONDER DIRECTAMENTE LA PREGUNTA
+  const dilema = dilemaActivoId ? dilemasGerenciales.find(d => d.id === dilemaActivoId) : null;
+  if (dilema && (simState.gasto === dilema.gasto && simState.soporte === dilema.soporte && simState.visitas === dilema.visitas)) {
+    badge = (dilema.tipoVeredicto === 'danger') ? 'PELIGRO DETECTADO' : (dilema.tipoVeredicto === 'warning' ? 'ALERTA DIRECTIVA' : 'DECISIÓN RECOMENDADA');
+    badgeClase = (dilema.tipoVeredicto === 'danger') ? 'badge-alerta' : (dilema.tipoVeredicto === 'warning' ? 'badge-advertencia' : 'badge-exito');
+    
+    const veredictoColorClase = (dilema.tipoVeredicto === 'danger') ? 'text-rose-400' : (dilema.tipoVeredicto === 'warning' ? 'text-amber-400' : 'text-emerald-400');
+    const veredictoBgClase = (dilema.tipoVeredicto === 'danger') ? 'bg-rose-950/50 border-rose-800 text-rose-300' : (dilema.tipoVeredicto === 'warning' ? 'bg-amber-950/50 border-amber-800 text-amber-300' : 'bg-emerald-950/50 border-emerald-800 text-emerald-300');
+
     html = `
-      <p class="text-rose-400 font-bold text-xs font-bold">⚠️ Estás repitiendo la crisis de febrero de 2026.</p>
-      <p class="text-slate-200 text-xs leading-normal">Captaste <strong>${simState.clientes} clientes</strong> pero solo dejaste un <strong>${simState.soporte}% en soporte</strong>. El CPA parece barato ($${simState.cpa.toFixed(2)}), pero la satisfacción cayó a <strong>${simState.csat.toFixed(1)}/10</strong>. Los clientes no volverán a comprar repuestos ni misiones.</p>
-      <div class="p-2 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300 text-xs font-bold">
-        <strong>Solución:</strong> Sube la palanca de soporte a mínimo 12-15%.
+      <p class="font-bold text-xs ${veredictoColorClase}">🎯 ${dilema.titulo}</p>
+      <p class="text-slate-200 text-xs leading-normal">
+        <strong>Impacto en los 8 KPIs:</strong> Ventas: $${simState.ventas.toLocaleString()} USD | ROAS: <strong>${simState.roas}x</strong> | Clientes: ${simState.clientes} | CSAT: <strong>${simState.csat.toFixed(1)}/10</strong> | CPA: $${simState.cpa.toFixed(2)} USD | Margen: $${simState.margen.toFixed(2)} USD.
+      </p>
+      <p class="text-slate-300 text-xs leading-normal">${dilema.explicacion}</p>
+      <div class="p-1.5 rounded border text-xs font-bold ${veredictoBgClase}">
+        <strong>Veredicto del Gerente:</strong> ${dilema.veredicto}
       </div>
     `;
-  } else if (simState.cpa > 43.0) {
-    badge = 'ALERTA: RENDIMIENTOS DECRECIENTES';
+  }
+  // 2. SIMULACIÓN LIBRE: EVALUACIÓN HOLÍSTICA DE SALUD DE LOS 8 KPIS EN TIEMPO REAL
+  // PRIORIDAD 1: QUIEBRA / INSOLVENCIA FINANCIERA (ROAS < 2.50x BREAK-EVEN)
+  else if (simState.roas < 2.50) {
+    badge = 'PELIGRO: PÉRDIDA FINANCIERA (ROAS < 2.50x)';
+    badgeClase = 'badge-alerta';
+    html = `
+      <p class="text-rose-400 font-bold text-xs">⚠️ Quiebra Financiera: Retorno por debajo del Break-Even (2.50x).</p>
+      <p class="text-slate-200 text-xs leading-normal">
+        Estás invirtiendo <strong>$${simState.gasto.toLocaleString()} USD</strong> para facturar <strong>$${simState.ventas.toLocaleString()} USD</strong>, generando un ROAS deficitario de <strong>${simState.roas}x</strong>. 
+        ${simState.csat >= 8.5 ? 'Aunque la satisfacción es alta (' + simState.csat.toFixed(1) + '/10) por el ' + simState.soporte + '% en soporte, la empresa está quemando caja.' : 'Operación en rojo tanto en retorno como en servicio técnico.'}
+      </p>
+      <div class="p-1.5 rounded bg-rose-950/50 border border-rose-800 text-rose-300 text-xs font-bold">
+        <strong>Veredicto:</strong> Ajusta la inversión publicitaria a máximo $4.000 USD o aumenta las ventas para recuperar el ROAS ≥ 2.50x.
+      </div>
+    `;
+  }
+  // PRIORIDAD 2: COLAPSO OPERATIVO POR PAUTA CIEGA (CSAT < 6.5 o SOPORTE < 8% CON VOLUMEN)
+  else if (simState.csat < 6.5 || (simState.soporte < 8 && simState.clientes > 60)) {
+    badge = 'PELIGRO: CRISIS TIPO FEBRERO (COLAPSO CX)';
+    badgeClase = 'badge-alerta';
+    html = `
+      <p class="text-rose-400 font-bold text-xs">⚠️ Crisis Operativa: Talleres mecánicos colapsados en Marte.</p>
+      <p class="text-slate-200 text-xs leading-normal">
+        Captaste <strong>${simState.clientes} rovers</strong> pero solo asignaste <strong>${simState.soporte}% a soporte ($${simState.gastoCX} USD)</strong>. 
+        El CSAT se destruye a <strong>${simState.csat.toFixed(1)}/10 (Zona Roja)</strong>. Deserción masiva y pérdida de contratos garantizada.
+      </p>
+      <div class="p-1.5 rounded bg-rose-950/50 border border-rose-800 text-rose-300 text-xs font-bold">
+        <strong>Veredicto:</strong> Reasigna entre 12% y 16% del presupuesto a posventa para blindar la operación.
+      </div>
+    `;
+  }
+  // PRIORIDAD 3: SATURACIÓN PUBLICITARIA / RENDIMIENTOS DECRECIENTES (CPA > 42.0 o CR < 4.8%)
+  else if (simState.cpa > 42.0 || simState.tasaConv < 4.8) {
+    badge = 'ALERTA: RENDIMIENTOS DECRECIENTES (MAYO)';
     badgeClase = 'badge-advertencia';
     html = `
-      <p class="text-amber-400 font-bold text-xs font-bold">⚠️ Saturación publicitaria en curso (Efecto Mayo).</p>
-      <p class="text-slate-200 text-xs leading-normal">El CPA subió a <strong>$${simState.cpa.toFixed(2)} USD</strong>. Estás pagando una prima muy alta por atraer tráfico frío a la misión.</p>
+      <p class="text-amber-400 font-bold text-xs">⚠️ Saturación de Pauta: Costo de captación encarecido.</p>
+      <p class="text-slate-200 text-xs leading-normal">
+        El CPA se disparó a <strong>$${simState.cpa.toFixed(2)} USD</strong> y la conversión cayó a <strong>${simState.tasaConv.toFixed(2)}%</strong>. 
+        Estás saturando las audiencias marcianas con ${simState.visitas.toLocaleString()} visitas frías. Cada cliente nuevo cuesta más de lo que aporta.
+      </p>
+      <div class="p-1.5 rounded bg-amber-950/50 border border-amber-800 text-amber-300 text-xs font-bold">
+        <strong>Veredicto:</strong> Disminuye la pauta fría y concentra la captación en tráfico calificado.
+      </div>
     `;
-  } else if (simState.csat >= 8.8 && simState.cpa <= 41.0) {
-    badge = 'EXCELENCIA ESTRATÉGICA (TIPO ABRIL)';
+  }
+  // PRIORIDAD 4: EXCELENCIA ESTRATÉGICA INTEGRAL (LOS 8 KPIS EN ZONA VERDE)
+  else if (simState.roas >= 2.50 && simState.csat >= 8.8 && simState.cpa <= 41.0 && simState.margen >= 60.0) {
+    badge = 'EXCELENCIA ESTRATÉGICA (EQUILIBRIO SIM)';
     badgeClase = 'badge-exito';
     html = `
-      <p class="text-emerald-400 font-bold text-xs font-bold">⭐ Punto de Oro Gerencial.</p>
-      <p class="text-slate-200 text-xs leading-normal">Con <strong>${simState.soporte}% en soporte</strong> mantienes la satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong> y el margen limpio en <strong>$${simState.margen.toFixed(2)} USD</strong> por vehículo. Es la propuesta a defender en el ACA.</p>
+      <p class="text-emerald-400 font-bold text-xs">⭐ Punto de Oro Gerencial (Tipo Abril / Plan Junio).</p>
+      <p class="text-slate-200 text-xs leading-normal">
+        Armonía perfecta en los 8 KPIs: ROAS solvente de <strong>${simState.roas}x</strong>, CSAT blindado en <strong>${simState.csat.toFixed(1)}/10</strong>, 
+        CPA eficiente de <strong>$${simState.cpa.toFixed(2)} USD</strong>, margen limpio de <strong>$${simState.margen.toFixed(2)} USD</strong> y Ratio de <strong>${simState.ratio}</strong>.
+      </p>
+      <div class="p-1.5 rounded bg-emerald-950/50 border border-emerald-800 text-emerald-300 text-xs font-bold">
+        <strong>Veredicto:</strong> Estrategia canónica a defender ante la Junta Directiva y en el informe ACA.
+      </div>
     `;
-  } else {
+  }
+  // PRIORIDAD 5: OPERACIÓN ESTABLE / MARGEN DE MEJORA
+  else {
     badge = 'ZONA ESTABLE DE CONTROL';
     badgeClase = 'badge-advertencia';
     html = `
-      <p class="text-slate-200 font-bold text-xs font-bold">ℹ️ Operación en rango aceptable.</p>
-      <p class="text-slate-200 text-xs leading-normal">Margen de <strong>$${simState.margen.toFixed(2)} USD</strong> y satisfacción en <strong>${simState.csat.toFixed(1)}/10</strong>. Se puede optimizar aumentando el cuidado de los clientes.</p>
+      <p class="text-slate-200 font-bold text-xs">ℹ️ Operación en rango aceptable con margen de optimización.</p>
+      <p class="text-slate-200 text-xs leading-normal">
+        ROAS de <strong>${simState.roas}x</strong>, Margen de <strong>$${simState.margen.toFixed(2)} USD</strong> y CSAT en <strong>${simState.csat.toFixed(1)}/10</strong>. 
+        Ajusta la palanca de soporte al 15% para maximizar el valor de la empresa.
+      </p>
     `;
   }
 
@@ -1806,6 +2128,7 @@ function inicializarDashboard() {
   aplicarTema(temaGuardado);
   calcularParametros();
   cambiarTab(1);
+  inicializarConsolaDilemas();
   renderKatexMath();
 
   // El tour SIEMPRE se inicia de primeras automáticamente al cargar el dashboard

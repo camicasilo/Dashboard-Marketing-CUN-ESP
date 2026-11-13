@@ -974,3 +974,76 @@ body.theme-light #tour-card .bg-slate-800\/80 {
   border: 1.5px solid #CBD5E1 !important;
   color: #0F172A !important;
 }
+
+
+/* ==========================================================================
+   CONSOLA DE DILEMAS GERENCIALES (PREGUNTAS DE NEGOCIO PARA EL GERENTE)
+   ========================================================================== */
+#consola-dilemas-gerenciales {
+  background: rgba(20, 10, 14, 0.95);
+  border: 1px solid rgba(87, 28, 29, 0.8);
+  border-radius: 0.625rem;
+  transition: all 0.2s ease;
+}
+
+body.theme-light #consola-dilemas-gerenciales {
+  background-color: #FFFFFF !important;
+  border: 1.5px solid #CBD5E1 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.theme-light #sel-categoria-dilema,
+body.theme-light #sel-pregunta-dilema {
+  background-color: #F8FAFC !important;
+  border: 1.5px solid #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+/* ==========================================================================
+   CORRECCIÓN DEFINITIVA DE BADGES OSCUROS EN MODO CLARO
+   ========================================================================== */
+body.theme-light .bg-blue-950,
+body.theme-light .bg-blue-950\/80,
+body.theme-light .bg-slate-900,
+body.theme-light .bg-slate-900\/80 {
+  background-color: #F1F5F9 !important;
+  color: #0F172A !important;
+  border-color: #CBD5E1 !important;
+}
+
+body.theme-light .bg-cyan-950,
+body.theme-light .bg-cyan-950\/80 {
+  background-color: #E0F2FE !important;
+  color: #0369A1 !important;
+  border-color: #BAE6FD !important;
+}
+
+body.theme-light .text-cyan-300 {
+  color: #0284C7 !important;
+}
+
+body.theme-light .text-indigo-300 {
+  color: #4F46E5 !important;
+}
+
+body.theme-light #modal-calculo code {
+  background-color: #F1F5F9 !important;
+  color: #0F172A !important;
+  border-color: #CBD5E1 !important;
+}
+
+body.theme-light #modal-calculo button[onclick="toggleModalCalculo()"] {
+  background: #EA580C !important;
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+}
+body.theme-light #modal-calculo button[onclick="toggleModalCalculo()"]:hover {
+  background: #C2410C !important;
+}
+
+/* Badge Lealtad VIP en Escenario 3 */
+body.theme-light .bg-purple-950 {
+  background-color: #F3E8FF !important;
+  color: #6B21A8 !important;
+  border: 1.5px solid #C084FC !important;
+}
