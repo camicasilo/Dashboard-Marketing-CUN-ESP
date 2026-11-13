@@ -1797,7 +1797,11 @@ rngGasto.addEventListener('input', onSliderInput);
 rngSoporte.addEventListener('input', onSliderInput);
 rngVisitas.addEventListener('input', onSliderInput);
 
-window.addEventListener('DOMContentLoaded', () => {
+let dashboardIniciado = false;
+function inicializarDashboard() {
+  if (dashboardIniciado) return;
+  dashboardIniciado = true;
+
   const temaGuardado = localStorage.getItem('sim_theme') || 'dark';
   aplicarTema(temaGuardado);
   calcularParametros();
@@ -1806,10 +1810,18 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // El tour SIEMPRE se inicia de primeras automáticamente al cargar el dashboard
   localStorage.removeItem('sim_tour_completed');
-  setTimeout(iniciarTour, 500);
-});
+  setTimeout(iniciarTour, 250);
+}
+
+// Arranque dual infalible: si el DOM ya estaba listo, arranca de inmediato; si no, espera DOMContentLoaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', inicializarDashboard);
+} else {
+  inicializarDashboard();
+}
 
 window.addEventListener('load', () => {
+  inicializarDashboard();
   renderKatexMath();
 });
 
