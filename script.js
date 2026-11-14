@@ -201,7 +201,7 @@ const dilemasGerenciales = [
     cat: 'finanzas',
     pregunta: '7. ¿Cómo maximizar el Margen Limpio por Rover (> $68 USD)?',
     gasto: 2500, soporte: 12, visitas: 1300,
-    titulo: 'Economía Unitaria Blindada: Margen Neto de Alta Rentabilidad',
+    titulo: 'Economía Unitaria Sostenible: Margen Neto de Alta Rentabilidad',
     explicacion: 'Pauta moderada con tráfico altamente calificado mantiene el CPA en $33.10 USD, dejando un margen limpio récord de $68.40 USD (67.4%).',
     veredicto: 'APROBADO PARA EFICIENCIA UNITARIA ⭐',
     tipoVeredicto: 'success'
@@ -251,9 +251,9 @@ const dilemasGerenciales = [
   {
     id: 12,
     cat: 'retencion',
-    pregunta: '12. ¿Cuánto soporte se requiere para blindar CSAT > 9.0 permanente?',
+    pregunta: '12. ¿Cuánto soporte se requiere para asegurar CSAT > 9.0 permanente?',
     gasto: 3400, soporte: 15, visitas: 1550,
-    titulo: 'Regla del 15% de Soporte: Blindaje de Calidad Percibida',
+    titulo: 'Regla del 15% de Soporte: Salvaguarda de la Calidad Percibida',
     explicacion: 'Al destinar $510 USD a talleres mecánicos (15%), la atención es inmediata y el CSAT se estabiliza sólidamente en 9.1/10.',
     veredicto: 'APROBADO CANÓNICO ⭐',
     tipoVeredicto: 'success'
@@ -281,7 +281,7 @@ const dilemasGerenciales = [
   {
     id: 15,
     cat: 'retencion',
-    pregunta: '15. ¿Por qué Abril fue el Mes de Oro histórico de la compañía?',
+    pregunta: '15. ¿Por qué Abril fue el mes de mayor equilibrio operativo y calidad histórica de la compañía?',
     gasto: 3100, soporte: 16, visitas: 1480,
     titulo: 'El Hito de Abril: 16% CX, CSAT 9.4 y CPA $39.74 USD',
     explicacion: 'Reasignar $496 USD a soporte logró el récord de satisfacción con costo de captación controlado y Ratio Maestro supremo de 0.2365.',
@@ -515,7 +515,7 @@ function actualizarDiagnostico() {
         El CSAT se destruye a <strong>${simState.csat.toFixed(1)}/10 (Zona Roja)</strong>. Deserción masiva y pérdida de contratos garantizada.
       </p>
       <div class="p-1.5 rounded bg-rose-950/50 border border-rose-800 text-rose-300 text-xs font-bold">
-        <strong>Veredicto:</strong> Reasigna entre 12% y 16% del presupuesto a posventa para blindar la operación.
+        <strong>Veredicto:</strong> Reasigna entre 12% y 16% del presupuesto a posventa para salvaguardar la operación.
       </div>
     `;
   }
@@ -539,9 +539,9 @@ function actualizarDiagnostico() {
     badge = 'EXCELENCIA ESTRATÉGICA (EQUILIBRIO SIM)';
     badgeClase = 'badge-exito';
     html = `
-      <p class="text-emerald-400 font-bold text-xs">⭐ Punto de Oro Gerencial (Tipo Abril / Plan Junio).</p>
+      <p class="text-emerald-400 font-bold text-xs">⭐ Punto de Equilibrio Gerencial (Tipo Abril / Plan Junio).</p>
       <p class="text-slate-200 text-xs leading-normal">
-        Armonía perfecta en los 8 KPIs: ROAS solvente de <strong>${simState.roas}x</strong>, CSAT blindado en <strong>${simState.csat.toFixed(1)}/10</strong>, 
+        Armonía perfecta en los 8 KPIs: ROAS solvente de <strong>${simState.roas}x</strong>, CSAT asegurado en <strong>${simState.csat.toFixed(1)}/10</strong>, 
         CPA eficiente de <strong>$${simState.cpa.toFixed(2)} USD</strong>, margen limpio de <strong>$${simState.margen.toFixed(2)} USD</strong> y Ratio de <strong>${simState.ratio}</strong>.
       </p>
       <div class="p-1.5 rounded bg-emerald-950/50 border border-emerald-800 text-emerald-300 text-xs font-bold">
@@ -637,16 +637,16 @@ function actualizarExplicacionEscenarios() {
       </div>
     `;
   }
-  // 4. Mes de Abril: Mes de Oro - Equilibrio Virtuoso
+  // 4. Mes de Abril: Punto Óptimo - Equilibrio Virtuoso
   else if (presetOrigen === 'abril' || (simState.gasto === 3100 && simState.soporte === 16 && simState.visitas === 1480)) {
     activeHeaderId = 'abril';
     activeCanonId = 0;
-    badgeTexto = 'Abril (Mes de Oro - Equilibrio Virtuoso)';
+    badgeTexto = 'Abril (Punto Óptimo - Equilibrio Virtuoso)';
     badgeClase = 'badge-exito';
     contenido = `
       <div class="space-y-1">
         <p class="font-bold text-emerald-400 flex items-center justify-between">
-          <span>⭐ Abril (Mes de Oro - Equilibrio Virtuoso)</span>
+          <span>⭐ Abril (Equilibrio Virtuoso y Récord de Calidad)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Récord de Calidad</span>
         </p>
         <p class="text-slate-200 text-xs leading-normal">
@@ -686,7 +686,7 @@ function actualizarExplicacionEscenarios() {
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Plan Junio Recomendado</span>
         </p>
         <p class="text-slate-200 text-xs leading-normal">
-          <strong>Diagnóstico Directivo:</strong> La propuesta canónica del Sistema de Información de Marketing para el Plan Junio ($4.000 USD). Reasigna $600 USD (15%) a posventa y $3.400 USD a pauta neta, logrando <strong>CSAT blindado en Zona Verde (${simState.csat.toFixed(1)}/10 &gt; 9.0)</strong>, CPA optimizado de <strong>$${simState.cpa.toFixed(2)} USD</strong> y <strong>margen limpio de $${simState.margen.toFixed(2)} USD</strong> por unidad.
+          <strong>Diagnóstico Directivo:</strong> La propuesta canónica del Sistema de Información de Marketing para el Plan Junio ($4.000 USD). Reasigna $600 USD (15%) a posventa y $3.400 USD a pauta neta, logrando <strong>CSAT asegurado en Zona Verde (${simState.csat.toFixed(1)}/10 &gt; 9.0)</strong>, CPA optimizado de <strong>$${simState.cpa.toFixed(2)} USD</strong> y <strong>margen limpio de $${simState.margen.toFixed(2)} USD</strong> por unidad.
         </p>
       </div>
     `;
@@ -700,7 +700,7 @@ function actualizarExplicacionEscenarios() {
     contenido = `
       <div class="space-y-1">
         <p class="font-bold text-cyan-300 flex items-center justify-between">
-          <span>🔵 Escenario 3: Hiper-Fidelización / Blindaje Total (20-30% CX)</span>
+          <span>🔵 Escenario 3: Hiper-Fidelización y Salvaguarda de Cartera (20-30% CX)</span>
           <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">Lealtad VIP</span>
         </p>
         <p class="text-slate-200 text-xs leading-normal">
@@ -768,10 +768,10 @@ function actualizarExplicacionEscenarios() {
       <div class="space-y-1">
         <p class="font-bold text-emerald-400 flex items-center justify-between">
           <span>🟢 Escenario 2: Estrategia SIM / Equilibrio Óptimo (15% CX)</span>
-          <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Punto de Oro</span>
+          <span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Punto Óptimo</span>
         </p>
         <p class="text-slate-200 text-xs leading-normal">
-          <strong>Diagnóstico:</strong> CSAT blindado en Zona Verde (${simState.csat.toFixed(1)}/10), CPA optimizado en $${simState.cpa.toFixed(2)} USD y margen limpio de $${simState.margen.toFixed(2)} USD.
+          <strong>Diagnóstico:</strong> CSAT asegurado en Zona Verde (${simState.csat.toFixed(1)}/10), CPA optimizado en $${simState.cpa.toFixed(2)} USD y margen limpio de $${simState.margen.toFixed(2)} USD.
         </p>
       </div>
     `;
@@ -1087,12 +1087,12 @@ function actualizarInterpretacionGrafica() {
             <ul class="list-disc pl-3.5 space-y-0.5">
               <li><strong>Eje X (Horizontal):</strong> Dos escenarios comparados: Estrategia Actual (Gasto ciego) vs Estrategia Optimizada SIM.</li>
               <li><strong>Eje Y (Vertical):</strong> Presupuesto total de marketing en dólares ($0 a $4.500 USD).</li>
-              <li><strong>Elementos:</strong> Barra apilada: Segmento oscuro = Pauta en captación. <span class="${tagColor} font-bold">Segmento ${colorNeonNombre}</span> = Dinero reasignado a blindar el soporte técnico y posventa (CX).</li>
+              <li><strong>Elementos:</strong> Barra apilada: Segmento oscuro = Pauta en captación. <span class="${tagColor} font-bold">Segmento ${colorNeonNombre}</span> = Dinero reasignado a salvaguardar el soporte técnico y posventa (CX).</li>
             </ul>
             <p class="mt-1"><strong>🎯 La propuesta final que aprueba el ACA:</strong></p>
-            <p>Muestra el escenario actual (gastar los $3.900 USD completos en pauta ciega arriesgando saturación) versus la estrategia recomendada: $3.315 USD a captación y $585 USD (15 %) destinados a blindar el soporte técnico y posventa, asegurando que la satisfacción nunca vuelva a caer de 9,0.</p>
+            <p>Muestra el escenario actual (gastar los $3.900 USD completos en pauta ciega arriesgando saturación) versus la estrategia recomendada: $3.315 USD a captación y $585 USD (15 %) destinados a salvaguardar el soporte técnico y posventa, asegurando que la satisfacción nunca vuelva a caer de 9,0.</p>
             <p class="mt-1 p-1 rounded bg-slate-900/80 border border-slate-700/60">
-              👉 <strong>Tu decisión hoy:</strong> Destinas <strong class="text-white">$${simState.pautaNeta} USD</strong> a captación y <strong class="text-white">$${simState.gastoCX} USD (${simState.soporte}%)</strong> a soporte, blindando la lealtad de la marca.
+              👉 <strong>Tu decisión hoy:</strong> Destinas <strong class="text-white">$${simState.pautaNeta} USD</strong> a captación y <strong class="text-white">$${simState.gastoCX} USD (${simState.soporte}%)</strong> a soporte, asegurando la lealtad de la marca.
             </p>
           </div>
         </div>
@@ -1166,7 +1166,7 @@ function obtenerDiagnosticoTooltip(tab, items) {
     case 9:
       return 'Expansión de Flota: Crecimiento compuesto proyectado (+55% sobre base Enero).';
     case 10:
-      return 'Regla SIM: Reasignar 15% ($600 USD) a Soporte Técnico CX para blindar operaciones.';
+      return 'Regla SIM: Reasignar 15% ($600 USD) a Soporte Técnico CX para salvaguardar las operaciones.';
     default:
       return '';
   }
@@ -2264,7 +2264,7 @@ const tourPasos = [
         <li><strong>Ventas Totales & ROAS:</strong> Facturación estimada y retorno bruto de inversión.</li>
         <li><strong>Nuevos Clientes & Tasa CR:</strong> Eficiencia de transformación en embudo.</li>
         <li><strong>CPA (Costo por Adquisición):</strong> Semáforo de eficiencia en captación.</li>
-        <li><strong>CSAT (Satisfacción del Cliente):</strong> Alerta temprana para blindar la retención de la flota corporativa.</li>
+        <li><strong>CSAT (Satisfacción del Cliente):</strong> Alerta temprana para salvaguardar la retención de la flota corporativa.</li>
       </ul>
     `
   },
